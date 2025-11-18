@@ -14,10 +14,10 @@ Este proyecto es un sitio web para "Nantynails", una plataforma que ofrece curso
     *   **Navbar:** Barra de navegación fija en la parte superior, con fondo oscuro. **El enlace a "Testimonios" ha sido eliminado.**
     *   **Hero Section:** Sección principal de bienvenida con una **imagen de fondo fija (`nailshands.png`) con efecto parallax**. El texto se superpone de forma legible gracias a un *overlay* semi-transparente. El botón "Explorar opciones" ahora tiene una clase específica (`btn-hero`) para estilos personalizados.
     *   **Sección "Encuentra tu Camino":** Utiliza tarjetas con imágenes de cabecera evocadoras, con un contenedor de imagen de altura fija y un efecto de zoom suave al pasar el ratón. Las tarjetas tienen transiciones más suaves en sus efectos hover.
-    *   **Secciones de Contenido:** Secciones dedicadas para Cursos, Insumos y Servicios Personalizados.
+    *   **Secciones de Contenido:** Secciones dedicadas para Cursos, Insumos y Servicios Personalizados. **Las tarjetas en las secciones "Nuestros Cursos" e "Insumos para tu Negocio" ahora comparten el mismo estilo y comportamiento de las tarjetas de "Encuentra tu Camino", incluyendo la estructura de imagen y los efectos de hover.**
     *   **Tarjetas:** Componentes tipo "card" con un aspecto limpio y moderno, sombras suaves y bordes redondeados. Incluyen imagen, título, descripción, precio y un botón de acción. Las transiciones de hover son más suaves.
     *   **Footer:** Pie de página con un **color oscuro intenso** (`--navbar-footer-color`) y **más secciones de información**, incluyendo una descripción de la empresa, enlaces rápidos, contacto, horarios de atención. **Los enlaces a Twitter y YouTube han sido reemplazados por un enlace a TikTok. La sección de suscripción a boletines ha sido eliminada.**
-    *   **Botón Flotante Personalizado:** Un botón flotante con texto "Contáctanos" y un icono (configurable) en lugar del botón de WhatsApp. Cuenta con un efecto de `glow` alrededor que es personalizable en color (`--glow-color`) y color de fondo (`--button-float-bg`), con el texto y el icono en blanco (`--button-float-text`). Es responsivo.
+    *   **Botón Flotante Personalizado:** Un botón flotante que, por defecto, es **compacto y solo muestra un icono**. Al hacer `hover`, **se alarga suavemente para mostrar el texto "Contáctanos"** y activa un efecto de `glow` personalizable en color (`--glow-color`). El texto y el icono son blancos (`--button-float-text`), y el color de fondo se controla con `--button-float-bg`. Es responsivo, ajustando su tamaño y comportamiento en móviles.
 *   **Paleta de Colores (Temática clara, cálida y vibrante):**
     *   **Fondo principal:** `--background-color: #f8f0ed;` (blanco roto más cálido)
     *   **Texto primario:** `--primary-color: #3b2f2f;` (marrón oscuro profundo)
@@ -37,9 +37,8 @@ Este proyecto es un sitio web para "Nantynails", una plataforma que ofrece curso
     *   **Efecto `hover` en Navbar y Footer:** Los enlaces cambian de color al pasar el ratón.
     *   **Efecto `hover` en logo:** Ligera escala al pasar el ratón.
     *   **Efecto `hover` en botones:** Cambian de color, se elevan ligeramente y tienen una sombra suave.
-    *   **Efecto `hover` en `service-card` (tarjetas de 'Encuentra tu Camino'):** La tarjeta se eleva sutilmente y la imagen de cabecera (`service-card-img`) realiza un zoom suave.
-    *   **Efecto `hover` en `card-img-top` (imágenes de cursos/insumos):** Zoom sutil al pasar el ratón para destacar el producto/curso con transiciones suaves.
-    *   **Efecto `hover` en el Botón Flotante:** Transformación de traslación y escala, con una sombra (`box-shadow`) que crea el efecto de `glow` utilizando `--glow-color`.
+    *   **Efecto `hover` en `service-card` (tarjetas de 'Encuentra tu Camino', 'Nuestros Cursos', 'Insumos'):** La tarjeta se eleva sutilmente y la imagen de cabecera (`service-card-img`) realiza un zoom suave.
+    *   **Efecto `hover` en el Botón Flotante:** Transición suave de `width` y `padding` para la expansión, y animación de `opacity` y `max-width` para el texto, junto con el efecto de `glow` utilizando `box-shadow` y `--glow-color`.
     *   **Scroll Suave:** Navegación suave entre secciones con un offset para el navbar fijo.
 
 ### **Funcionalidades Implementadas**
@@ -50,16 +49,18 @@ Este proyecto es un sitio web para "Nantynails", una plataforma que ofrece curso
 ---
 ## Plan de Acción para la Solicitud Actual
 
-*   **Modificaciones en `index.html`:**
-    *   **Navegación:** Eliminación del `nav-item` y `nav-link` correspondiente a "Testimonios".
-    *   **Footer:** Sustitución de los enlaces a Facebook y YouTube por un enlace a TikTok en la sección de redes sociales. Eliminación completa de la sección "Suscríbete" (título, párrafo y formulario).
-    *   **Botón Flotante:** Reemplazo del botón flotante de WhatsApp por un nuevo botón `<a>` con la clase `floating-button`, que incluye un icono (`<i class="bi bi-chat-dots-fill"></i>`) y el texto "Contáctanos". Este botón ahora enlaza directamente al footer (`#footer`).
-*   **Modificaciones en `css/style.css`:**
-    *   **Variables de Color:** Se han añadido nuevas variables CSS (`--glow-color`, `--button-float-bg`, `--button-float-text`) para facilitar la personalización del botón flotante.
-    *   **Botón del Hero Section:** Se ha creado la clase `.btn-hero` para aplicar estilos específicos al botón de la sección principal, diferenciándolo de otros botones `btn-primary`.
-    *   **Botón Flotante:** Se han definido los estilos para `.floating-button`, incluyendo su posición fija, tamaño, colores de fondo y texto, y el efecto de `glow` al pasar el ratón, controlando el color del `glow` con `--glow-color`. Se han añadido media queries para asegurar su responsividad en dispositivos móviles.
+*   **Unificación de Estilos de Tarjetas:**
+    *   **HTML:** Se ha aplicado la clase `service-card` a todas las tarjetas en las secciones "Nuestros Cursos" e "Insumos para tu Negocio". Las imágenes dentro de estas tarjetas ahora están envueltas en un `div` con la clase `service-card-img-container` y las imágenes mismas usan la clase `service-card-img` (en lugar de `card-img-top`).
+    *   **CSS:** Se han eliminado los estilos obsoletos asociados a `.card-img-top` y se ha asegurado que los estilos existentes para `.service-card` y sus elementos internos se apliquen de manera uniforme a todas las tarjetas de contenido, garantizando consistencia visual y de animación.
 
 ## Historial de Cambios Recientes
+*   **Comportamiento del Botón Flotante (Compacto en reposo, expandido al hover):**
+    *   **CSS:** Se han ajustado los estilos iniciales del `.floating-button` para que sea más compacto, con un `width` fijo para mostrar solo el icono y un `padding` reducido. El `<span>` que contiene el texto "Contáctanos" se ha configurado con `opacity: 0` y `max-width: 0` para que esté oculto y no ocupe espacio.
+    *   **CSS:** Al hacer `hover` sobre `.floating-button`, se aplican transiciones suaves (`cubic-bezier`) para expandir el `width` a `auto`, aumentar el `padding`, y hacer que el `<span>` sea visible (`opacity: 1`, `max-width` mayor) con un ligero retraso para un efecto escalonado. El efecto `glow` se mantiene y se aplica a este estado expandido.
+    *   **CSS Media Queries:** Se han adaptado los estilos del botón flotante para pantallas más pequeñas, asegurando que el comportamiento compacto/expandido sea adecuado en móviles.
+*   **Modificaciones de Navegación, Footer y Botón Flotante:**
+    *   **HTML:** Eliminación del `nav-item` y `nav-link` correspondiente a "Testimonios". Sustitución de los enlaces a Facebook y YouTube por un enlace a TikTok en la sección de redes sociales del footer. Eliminación completa de la sección "Suscríbete" (título, párrafo y formulario) del footer. Reemplazo del botón flotante de WhatsApp por un nuevo botón `<a>` con la clase `floating-button`, que incluye un icono (`<i class="bi bi-chat-dots-fill"></i>`) y el texto "Contáctanos". Este botón ahora enlaza directamente al footer (`#footer`).
+    *   **CSS:** Se han añadido nuevas variables CSS (`--glow-color`, `--button-float-bg`, `--button-float-text`) para facilitar la personalización del botón flotante. Se ha creado la clase `.btn-hero` para aplicar estilos específicos al botón de la sección principal, diferenciándolo de otros botones `btn-primary`. Se han definido los estilos para `.floating-button`, incluyendo su posición fija, tamaño, colores de fondo y texto, y el efecto de `glow` al pasar el ratón, controlando el color del `glow` con `--glow-color`. Se han añadido media queries para asegurar su responsividad en dispositivos móviles.
 *   **Ajuste de Colores de la Página y Mejora del Footer:**
     *   **CSS:** Se ha actualizado la paleta de colores en `:root` para utilizar tonos más llamativos y con mejor contraste, incluyendo un rosa salmón vibrante como color de acento y un marrón oscuro profundo para el texto principal. Se ajustaron los colores del texto y enlaces para asegurar la legibilidad.
     *   **CSS:** Se ha establecido un color oscuro intenso (`--navbar-footer-color`) para el fondo del footer y se ha asegurado que el texto tenga un color claro (`#f8f0ed`) para un buen contraste.

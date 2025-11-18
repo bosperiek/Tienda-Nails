@@ -215,7 +215,7 @@
       ESTILOS DE COMPONENTES (TARJETAS, BOTONES, ETC.)
       ------------------------------------------------- */
    
-   /* Estilo de las tarjetas */
+   /* Estilo de las tarjetas (general) */
    .card {
      background-color: var(--card-background-color);
      border: 1px solid #eee;
@@ -249,7 +249,7 @@
      color: var(--secondary-color);
    }
    
-   /* Estilos para las tarjetas de la sección "Encuentra tu Camino" */
+   /* Estilos para las tarjetas de servicio (Encuentra tu Camino, Cursos, Insumos) */
    .service-card-img-container {
      height: 200px;
      overflow: hidden;
@@ -266,18 +266,6 @@
    }
    
    .service-card:hover .service-card-img {
-     transform: scale(1.05);
-   }
-   
-   /* Animación para imágenes de tarjetas generales */
-   .card-img-top {
-     transition: transform 0.5s ease;
-     overflow: hidden;
-     border-top-left-radius: 15px;
-     border-top-right-radius: 15px;
-   }
-   
-   .card:hover .card-img-top {
      transform: scale(1.05);
    }
    
@@ -339,7 +327,7 @@
         right: 40px;
         background-color: var(--button-float-bg); 
         color: var(--button-float-text);
-        padding: 12px 20px;
+        padding: 12px 15px;
         border-radius: 30px;
         text-decoration: none;
         display: flex;
@@ -348,34 +336,135 @@
         font-weight: 500;
         box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         z-index: 100;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         border: 2px solid transparent;
+        overflow: hidden;
+        width: 60px;
+        justify-content: center;
     }
     
     .floating-button i {
-        margin-right: 8px;
+        margin-right: 0;
         font-size: 1.3rem;
         color: var(--button-float-text);
+        transition: margin-right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+    
+    .floating-button span {
+        opacity: 0;
+        max-width: 0;
+        white-space: nowrap;
+        transition: opacity 0.3s ease-out, max-width 0.3s ease-out;
     }
     
     .floating-button:hover {
+        padding: 12px 20px;
+        width: auto;
         transform: translateY(-5px) scale(1.05);
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3), 0 0 20px 5px var(--glow-color); /* Efecto glow */
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3), 0 0 20px 5px var(--glow-color);
         color: var(--button-float-text);
         border-color: var(--glow-color);
     }
+    
+    .floating-button:hover i {
+        margin-right: 8px;
+    }
+    
+    .floating-button:hover span {
+        opacity: 1;
+        max-width: 150px;
+        transition: opacity 0.4s ease-in 0.1s, max-width 0.4s ease-in 0.1s;
+    }
+
+    /* Estilos para el Modal */
+    .modal-content {
+        background-color: var(--background-color);
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+    
+    .modal-header {
+        background-color: var(--accent-color);
+        color: var(--button-float-text);
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        border-bottom: none;
+    }
+    
+    .modal-header .modal-title {
+        font-family: var(--font-family-headings);
+    }
+    
+    .btn-close {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
+    
+    .modal-body {
+        color: var(--primary-color);
+    }
+    
+    .modal-body h6 {
+        font-family: var(--font-family-headings);
+        color: var(--primary-color);
+        font-size: 1.2rem;
+    }
+    
+    .modal-body ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    
+    .modal-body ul li {
+        padding-left: 1.5em;
+        text-indent: -1.5em;
+    }
+    
+    .modal-body ul li::before {
+        content: "✓";
+        color: var(--accent-color);
+        margin-right: 0.5em;
+        font-weight: bold;
+    }
+    
+    .modal-footer {
+        border-top: 1px solid #e0e0e0;
+        background-color: #ffffff;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+    }
+    
 
     /* Media queries para el botón flotante en móviles */
     @media (max-width: 768px) {
         .floating-button {
             bottom: 20px;
             right: 20px;
-            padding: 10px 15px;
+            padding: 10px 12px;
             font-size: 0.95rem;
+            width: 50px;
         }
     
         .floating-button i {
             font-size: 1.1rem;
+            margin-right: 0;
+        }
+
+        .floating-button:hover {
+            padding: 10px 15px;
+        }
+
+        .floating-button:hover i {
             margin-right: 6px;
+        }
+
+        .floating-button span {
+            max-width: 0;
+            opacity: 0;
+        }
+
+        .floating-button:hover span {
+            opacity: 1;
+            max-width: 100px;
         }
     }
