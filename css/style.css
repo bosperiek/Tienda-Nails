@@ -1,0 +1,381 @@
+/* -------------------------------------------------
+   ESTILOS BASE Y VARIABLES
+   ------------------------------------------------- */
+   @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500&display=swap");
+
+   /* Reset and base styles */
+   *,
+   *::before,
+   *::after {
+     box-sizing: border-box;
+     margin: 0;
+     padding: 0;
+   }
+   
+   /* Define la nueva paleta de colores y la tipografía */
+   :root {
+     --background-color: #f8f0ed; /* Un blanco roto más cálido */
+     --primary-color: #3b2f2f;    /* Un marrón oscuro profundo */
+     --secondary-color: #6a5d5d;  /* Un gris-marrón medio */
+     --accent-color: #e67e9f;     /* Un rosa salmón más vibrante */
+     --hover-color: #d85c82;      /* Un rosa más intenso para hover */
+     --card-background-color: #ffffff;
+     --navbar-footer-color: #2c2121; /* Un marrón muy oscuro para navbar y footer */
+     --font-family-headings: "Playfair Display", serif;
+     --font-family-body: "Montserrat", sans-serif;
+     --glow-color: #e67e9f; /* Color para el efecto de glow del botón flotante */
+     --button-float-bg: #e67e9f; /* Color de fondo del botón flotante */
+     --button-float-text: #ffffff;
+   }
+   
+   /* Regla para el body sin padding-top */
+   body {
+     font-family: var(--font-family-body);
+     background-color: var(--background-color);
+     color: var(--primary-color);
+     overflow-x: hidden; /* Previene el desbordamiento horizontal por las animaciones */
+   }
+   
+   html {
+     scroll-behavior: smooth; /* Scroll suave para los enlaces */
+   }
+   
+   /* -------------------------------------------------
+      ESTILOS DE LA BARRA DE NAVEGACIÓN
+      ------------------------------------------------- */
+
+   #main-navbar {
+     background-color: transparent !important;
+     transition: background-color 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+     box-shadow: none;
+     position: fixed; /* Asegura que el navbar se quede arriba */
+     width: 100%;
+     top: 0;
+     left: 0;
+     z-index: 1030; /* Para que esté por encima del contenido */
+   }
+   
+   #main-navbar.scrolled {
+     background-color: rgba(255, 255, 255, 0.95) !important;
+     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+   }
+   
+   /* Logo y enlaces en estado inicial (hero section) */
+   #main-navbar .navbar-brand,
+   #main-navbar .nav-link {
+     color: #fff !important; /* Color blanco */
+     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Sombra para legibilidad */
+     transition: color 0.3s ease, text-shadow 0.3s ease;
+   }
+   
+   /* Logo y enlaces al hacer scroll */
+   #main-navbar.scrolled .navbar-brand,
+   #main-navbar.scrolled .nav-link {
+     color: var(--primary-color) !important; /* Color oscuro */
+     text-shadow: none; /* Sin sombra */
+   }
+   
+   /* Ícono de la hamburguesa (para móviles) */
+   #main-navbar .navbar-toggler-icon {
+     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+   }
+   
+   #main-navbar.scrolled .navbar-toggler-icon {
+     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(33, 37, 41, 0.75)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+   }
+
+   /* -------------------------------------------------
+      MENÚ EN DISPOSITIVOS MÓVILES (Despliegue hacia abajo)
+      ------------------------------------------------- */
+   @media (max-width: 991.98px) {
+     #main-navbar .navbar-collapse {
+       position: absolute;
+       top: 100%; /* Se posiciona justo debajo del navbar */
+       left: 0;
+       width: 100%;
+       background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+       box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+       transition: background-color 0.3s ease, box-shadow 0.3s ease;
+       padding-bottom: 10px; /* Pequeño padding para los enlaces */
+       padding-top: 10px;
+     }
+   
+     #main-navbar.scrolled .navbar-collapse {
+       background-color: rgba(255, 255, 255, 0.95); /* Fondo sólido al hacer scroll */
+     }
+   
+     #main-navbar .navbar-nav {
+       flex-direction: column; /* Apila los enlaces verticalmente */
+       align-items: center; /* Centra los enlaces */
+     }
+   
+     #main-navbar .nav-item {
+       margin: 5px 0; /* Espacio vertical entre enlaces */
+     }
+   
+     #main-navbar .nav-link {
+       padding: 8px 12px !important;
+       font-size: 1rem;
+       white-space: nowrap;
+     }
+   
+     /* Enlaces en móvil siempre blancos sobre fondo oscuro */
+     #main-navbar .nav-link {
+       color: #fff !important;
+       text-shadow: none;
+     }
+   
+     #main-navbar.scrolled .nav-link {
+       color: var(--primary-color) !important;
+     }
+   }
+
+   /* -------------------------------------------------
+      ESTILOS DE SECCIONES
+      ------------------------------------------------- */
+   
+    .hero-section {
+        position: relative;
+        background: url('../imagenes/nailshands.png') no-repeat center center/cover;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Overlay oscuro */
+        z-index: 1;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-section h1 {
+        color: var(--accent-color); /* El color salmon/peach para el título */
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    }
+    
+    .hero-section p {
+        color: #FFFFFF; /* El subtítulo sigue siendo blanco */
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    }
+
+    .btn-hero {
+        background-color: var(--accent-color);
+        border-color: var(--accent-color);
+        color: #ffffff;
+        border-radius: 50px;
+        padding: 12px 30px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-hero:hover {
+        background-color: var(--hover-color);
+        border-color: var(--hover-color);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        color: #ffffff;
+    }
+   
+   /* Clase para las demás secciones, para que respeten el espacio del navbar */
+   .content-section {
+     padding-top: 80px;
+   }
+   
+   /* Títulos de secciones */
+   .section-title {
+     font-family: var(--font-family-headings);
+     color: var(--primary-color);
+     font-size: 2.8rem;
+     margin-bottom: 50px;
+     position: relative;
+     text-align: center;
+     opacity: 0;
+     transform: translateY(20px);
+     transition: opacity 0.8s ease, transform 0.8s ease;
+   }
+   
+   .section-title.visible {
+     opacity: 1;
+     transform: translateY(0);
+   }
+   
+   /* -------------------------------------------------
+      ESTILOS DE COMPONENTES (TARJETAS, BOTONES, ETC.)
+      ------------------------------------------------- */
+   
+   /* Estilo de las tarjetas */
+   .card {
+     background-color: var(--card-background-color);
+     border: 1px solid #eee;
+     border-radius: 15px;
+     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+     transition: transform 0.5s ease, box-shadow 0.5s ease;
+     opacity: 0;
+     transform: translateY(30px);
+   }
+   
+   section .card {
+     transition: transform 0.5s ease, box-shadow 0.5s ease, opacity 0.8s ease, transform 0.8s ease;
+   }
+   
+   .card.visible {
+     opacity: 1;
+     transform: translateY(0);
+   }
+   
+   .card:hover {
+     transform: translateY(-12px);
+     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+   }
+   
+   .card-title {
+     font-family: var(--font-family-headings);
+     color: var(--primary-color);
+   }
+   
+   .card-text {
+     color: var(--secondary-color);
+   }
+   
+   /* Estilos para las tarjetas de la sección "Encuentra tu Camino" */
+   .service-card-img-container {
+     height: 200px;
+     overflow: hidden;
+     border-top-left-radius: 15px;
+     border-top-right-radius: 15px;
+   }
+   
+   .service-card-img {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+     background-color: #f0f0f0;
+     transition: transform 0.5s ease;
+   }
+   
+   .service-card:hover .service-card-img {
+     transform: scale(1.05);
+   }
+   
+   /* Animación para imágenes de tarjetas generales */
+   .card-img-top {
+     transition: transform 0.5s ease;
+     overflow: hidden;
+     border-top-left-radius: 15px;
+     border-top-right-radius: 15px;
+   }
+   
+   .card:hover .card-img-top {
+     transform: scale(1.05);
+   }
+   
+   /* Botones */
+   .btn-primary {
+     background-color: var(--accent-color);
+     border-color: var(--accent-color);
+     border-radius: 50px;
+     padding: 10px 25px;
+     font-weight: 500;
+     transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+   }
+   
+   .btn-primary:hover {
+     background-color: var(--hover-color);
+     border-color: var(--hover-color);
+     transform: translateY(-3px);
+     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+   }
+   
+   /* Testimonios */
+   .testimonial-card {
+     background: var(--card-background-color);
+     padding: 30px;
+     border-radius: 15px;
+     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+     opacity: 0;
+     transform: translateY(30px);
+     transition: opacity 0.8s ease, transform 0.8s ease;
+   }
+   
+   .testimonial-card.visible {
+     opacity: 1;
+     transform: translateY(0);
+   }
+   
+   .stars {
+     color: #f1c40f;
+   }
+   
+   /* Footer */
+   #footer {
+     background-color: var(--navbar-footer-color); /* Fondo oscuro del footer */
+     color: var(--background-color); /* Texto claro para contraste */
+   }
+   
+   #footer a {
+     color: var(--accent-color); /* Enlaces en el footer con el color de acento */
+   }
+
+   #footer .text-accent-color {
+        color: var(--accent-color) !important;
+   }
+   
+   /* Botón Flotante Personalizado */
+    .floating-button {
+        position: fixed;
+        bottom: 40px;
+        right: 40px;
+        background-color: var(--button-float-bg); 
+        color: var(--button-float-text);
+        padding: 12px 20px;
+        border-radius: 30px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        font-size: 1.1rem;
+        font-weight: 500;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 100;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .floating-button i {
+        margin-right: 8px;
+        font-size: 1.3rem;
+        color: var(--button-float-text);
+    }
+    
+    .floating-button:hover {
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.3), 0 0 20px 5px var(--glow-color); /* Efecto glow */
+        color: var(--button-float-text);
+        border-color: var(--glow-color);
+    }
+
+    /* Media queries para el botón flotante en móviles */
+    @media (max-width: 768px) {
+        .floating-button {
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            font-size: 0.95rem;
+        }
+    
+        .floating-button i {
+            font-size: 1.1rem;
+            margin-right: 6px;
+        }
+    }
