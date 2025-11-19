@@ -324,10 +324,10 @@ section .card {
     align-items: center;
     font-size: 1.1rem;
     font-weight: 500;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 20px 5px var(--glow-color);
     z-index: 100;
     transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    border: 2px solid transparent;
+    border: 2px solid var(--glow-color);
     overflow: hidden;
     width: 60px;
     justify-content: center;
@@ -351,9 +351,7 @@ section .card {
     padding: 12px 20px;
     width: auto;
     transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 20px 5px var(--glow-color);
     color: var(--button-float-text);
-    border-color: var(--glow-color);
 }
 
 .floating-button:hover i {
