@@ -76,3 +76,27 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
 });
+
+
+    // --- 5. FUNCIONALIDAD PARA LEER MÁS EN TESTIMONIOS ---
+    const readMoreBtns = document.querySelectorAll('.read-more-btn');
+    
+    readMoreBtns.forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            // Prevenir propagación del evento
+            e.stopPropagation();
+            
+            // Obtener SOLO el texto de ESTA tarjeta
+            const testimonialText = this.previousElementSibling;
+            
+            // Toggle para ESTA tarjeta únicamente
+            if (testimonialText.classList.contains('expanded')) {
+                testimonialText.classList.remove('expanded');
+                this.textContent = 'Leer más';
+            } else {
+                testimonialText.classList.add('expanded');
+                this.textContent = 'Leer menos';
+            }
+        });
+    });
+

@@ -295,11 +295,18 @@
      opacity: 0;
      transform: translateY(30px);
      transition: opacity 0.8s ease, transform 0.8s ease;
+     display: flex; /* Añadido */
+     flex-direction: column; /* Añadido */
+     height: 100%; /* Asegura que la tarjeta ocupe toda la altura disponible */
    }
    
    .testimonial-card.visible {
      opacity: 1;
      transform: translateY(0);
+   }
+
+   .testimonial-card p.mb-3 { /* Selecciona específicamente el párrafo del testimonio */
+     flex-grow: 1; /* Permite que el párrafo crezca para ocupar el espacio */
    }
    
    .stars {
@@ -468,3 +475,111 @@
             max-width: 100px;
         }
     }
+
+    /* -------------------------------------------------
+   AJUSTES PARA TABLETS (ENTRE 768PX Y 992PX)
+   ------------------------------------------------- */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  
+  /* Hacer que el precio y el botón se centren y apilen verticalmente */
+  .course-card .d-flex,
+  .product-card .d-flex {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Agregar un pequeño espacio entre el precio y el botón */
+  .course-card .price-tag,
+  .product-card .price-tag {
+    margin-bottom: 10px; 
+    margin-right: 0; /* Quitamos el margen derecho que tenían */
+  }
+}
+
+
+/* Contenedor principal de testimonios */
+#testimonios .row {
+  /* Importante: No alinear las tarjetas por altura */
+  align-items: flex-start;
+}
+
+/* Cada columna debe ser independiente */
+#testimonios .col-md-4 {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilos para las tarjetas de testimonios */
+.testimonial-card {
+  background: var(--card-background-color);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  /* Altura fija base para consistencia */
+  height: 420px;
+  display: flex;
+  flex-direction: column;
+  /* Permitir que la tarjeta crezca si es necesario */
+  overflow: visible;
+}
+
+.testimonial-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Contenedor del contenido del testimonio */
+.testimonial-content {
+  position: relative;
+  flex-grow: 1; /* Ocupa el espacio disponible */
+  display: flex;
+  flex-direction: column;
+}
+
+.testimonial-text {
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+  /* Altura base para el texto truncado */
+  max-height: 120px;
+  position: relative;
+  flex-grow: 1;
+}
+
+.testimonial-text.expanded {
+  /* Altura suficiente para mostrar todo el contenido */
+  max-height: 300px;
+}
+
+/* Botón de leer más */
+.read-more-btn {
+  background: none;
+  border: none;
+  color: var(--accent-color);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 5px 0;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+  margin-top: 10px;
+  align-self: flex-start;
+}
+
+.read-more-btn:hover {
+  color: var(--hover-color);
+  text-decoration: underline;
+}
+
+/* Efecto de desvanecimiento para el texto truncado */
+.testimonial-text:not(.expanded)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  background: linear-gradient(transparent, var(--card-background-color));
+}
