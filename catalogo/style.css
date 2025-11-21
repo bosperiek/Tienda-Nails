@@ -1,396 +1,461 @@
+/* -------------------------------------------------
+   1. VARIABLES Y FUENTES (Identidad de Marca)
+   ------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+
+@font-face {
+  font-family: 'Love Script';
+  src: url('../imagenes/Love script.ttf') format('truetype');
+  font-display: swap;
+}
+
 :root {
-    --primary: #d63384; /* Rosa fuerte */
-    --bg: #f8f9fa; /* Gris muy claro */
-    --card-bg: #ffffff;
-    --text: #333333;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* PALETA DE COLORES */
+  --bg-body: #f8f0ed; /* Blanco roto cálido */
+  --bg-card: #ffffff; /* Blanco puro */
+
+  --text-main: #3b2f2f; /* Marrón oscuro */
+  --text-light: #6a5d5d; /* Gris marrón */
+
+  --accent: #e67e9f; /* Rosa Salmón (Identidad original) */
+  --accent-hover: #d85c82; /* Rosa Intenso */
+
+  --navbar-bg: #2c2121;
+
+  /* SOMBRAS (Estilo Original de referencia) */
+  --shadow-card: 0 4px 15px rgba(0, 0, 0, 0.05);
+  --shadow-modal: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+  /* EFECTO GLOW (Brillo para el botón flotante) */
+  --glow-color: #e67e9f;
+
+  /* TIPOGRAFÍAS */
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Montserrat', sans-serif;
+}
+
+/* --- Configuración Global --- */
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* -------------------------------------------------
+      2. NAVBAR
+      ------------------------------------------------- */
+#main-navbar {
+  background-color: var(--navbar-bg) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 0.8rem 1rem;
+}
+
+#main-navbar .navbar-brand {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: #fff !important;
+  font-size: 1.4rem;
+}
+
+#main-navbar .nav-link {
+  font-family: var(--font-body);
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9) !important;
+  transition: color 0.3s ease;
+}
+
+#main-navbar .nav-link:hover,
+#main-navbar .nav-link.active {
+  color: var(--accent) !important;
+}
+
+/* -------------------------------------------------
+      3. HEADER DEL CATÁLOGO
+      ------------------------------------------------- */
+header {
+  background: var(--bg-card);
+  padding: 2rem 1rem;
+  text-align: center;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(230, 126, 159, 0.1);
+}
+
+header h1 {
+  font-family: var(--font-heading);
+  margin: 0;
+  color: var(--text-main);
+  font-weight: 700;
+}
+
+header p {
+  color: var(--text-light);
+  margin-top: 5px;
+  font-weight: 300;
+}
+
+.search-container {
+  margin-top: 1.5rem;
+}
+
+#buscador {
+  padding: 10px 20px;
+  width: 100%;
+  max-width: 450px;
+  border: 2px solid #eee;
+  background-color: #fff;
+  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+#buscador:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(230, 126, 159, 0.1);
+}
+
+#sort {
+  border-radius: 50px;
+  border: 2px solid #eee;
+  padding: 10px 30px 10px 15px;
+  font-family: var(--font-body);
+  color: var(--text-light);
+  cursor: pointer;
+}
+
+.categories {
+  margin-top: 1.2rem;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.category-btn {
+  background: #fff;
+  border: 1px solid #eee;
+  padding: 6px 14px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-light);
+  transition: all 0.3s ease;
+}
+
+.category-btn:hover,
+.category-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+#cart-button {
+  background-color: var(--accent);
+  border: none;
+  border-radius: 50px;
+  padding: 8px 18px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(230, 126, 159, 0.3);
+}
+#cart-button:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+/* -------------------------------------------------
+      4. GRID DE PRODUCTOS Y TARJETAS (Estilo Fusionado)
+      ------------------------------------------------- */
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px 60px;
+}
+
+/* --- TARJETA (CARD) BASADA EN TU REFERENCIA --- */
+.card {
+  background-color: var(--bg-card);
+  /* Borde y radio idénticos al estilo original */
+  border: 1px solid #eee;
+  border-radius: 15px;
+  /* Sombra suave original */
+  box-shadow: var(--shadow-card);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* SIN TRANSFORM EN HOVER (Como pediste para que no se mueva) */
+}
+
+/* Imagen (Mantenemos tamaño compacto) */
+.card-img-container {
+  position: relative;
+  width: 100%;
+  height: 190px;
+  background-color: #faf7fb;
+  overflow: hidden;
+  /* Ajuste del borde superior para coincidir con la tarjeta */
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Cuerpo de la tarjeta */
+.card-body {
+  padding: 16px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-title {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.card-text {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.card-price {
+  color: var(--accent);
+  font-weight: 700;
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+}
+
+/* Botón Añadir (Estilo botón primario de referencia) */
+.btn-add {
+  background-color: var(--accent);
+  border: 1px solid var(--accent);
+  color: #ffffff;
+  padding: 10px;
+  border-radius: 50px;
+  margin-top: 12px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.9rem;
+  width: 100%;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-add:hover {
+  background-color: var(--accent-hover);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* -------------------------------------------------
+      5. BOTÓN FLOTANTE (Con Glow/Brillo Original)
+      ------------------------------------------------- */
+.floating-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(
+    --accent
+  ); /* Usando rosa o verde según prefieras, el original usa rosa/verde */
+  /* Aquí fuerzo el verde de WhatsApp pero con el GLOW de tu estilo */
+  background-color: #25d366;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  z-index: 1000;
+  /* EL EFECTO DE BRILLO EXACTO DE TU REFERENCIA */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 20px 5px var(--glow-color);
+  border: 2px solid var(--glow-color);
+  transition: all 0.3s ease;
+}
+
+.floating-button:hover {
+  background-color: #1ebe57;
+  transform: translateY(-3px);
+}
+
+/* -------------------------------------------------
+      6. MODALES (Estilo Exacto de Referencia)
+      ------------------------------------------------- */
+.modal-content {
+  background-color: var(--bg-card);
+  border: none;
+  /* Borde y sombra idénticos al estilo original */
+  border-radius: 15px;
+  box-shadow: var(--shadow-modal);
+}
+
+.modal-header {
+  /* Encabezado sólido en color de acento */
+  background-color: var(--accent);
+  color: #ffffff;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom: none;
+}
+
+.modal-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+}
+
+/* Botón de cierre en blanco para contrastar */
+.btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+  opacity: 0.8;
+}
+.btn-close:hover {
+  opacity: 1;
+}
+
+.modal-body {
+  color: var(--text-main);
+  font-family: var(--font-body);
+  padding: 20px;
+}
+
+.modal-footer {
+  border-top: 1px solid #e0e0e0;
+  background-color: #ffffff;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+/* Modal de Ajustes (Local) */
+#settings-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(44, 33, 33, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1300;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+#settings-modal[aria-hidden='false'] {
+  visibility: visible;
+  opacity: 1;
+}
+#settings-modal .modal-content {
+  background: white;
+  padding: 25px;
+  width: 480px;
+  max-width: 90%;
+}
+
+/* -------------------------------------------------
+      7. RESPONSIVE DESIGN & GRID (Tu lógica de columnas)
+      ------------------------------------------------- */
+
+/* CASO 1: MÓVIL (Menos de 768px) -> 1 COLUMNA */
+@media (max-width: 767.98px) {
+  #grid-productos > div {
+    width: 100% !important;
+    flex: 0 0 100%;
+    max-width: 100%;
   }
-  
-  /* --- Configuración Global --- */
-  html, body {
-    width: 100%;
-    overflow-x: hidden; /* ¡CLAVE! Evita que la pantalla se mueva de lado a lado */
-    margin: 0;
-    padding: 0;
-  }
-  
-  body {
-    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  
-  /* Box sizing para evitar desbordes */
-  *, *::before, *::after { box-sizing: border-box; }
-  
-  /* --- Layout (Contenedores) --- */
-  /* Ajustamos el padding para que en móvil no quede pegado al borde */
-  header .container, main .container, footer .container {
-    padding-left: 20px; 
-    padding-right: 20px;
-    overflow: hidden; /* Seguridad extra */
-  }
-  
-  @media (min-width: 992px) {
-    header .container, main .container, footer .container { 
-      padding-left: 20px; 
-      padding-right: 20px; 
-    }
-  }
-  
-  /* --- Header --- */
+
   header {
-    background: white;
-    padding: 2rem 1rem;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    margin-bottom: 2rem;
+    padding: 1.5rem 1rem;
   }
-  
-  h1 {
-    margin: 0;
-    color: var(--primary);
+  header .row {
+    gap: 1rem;
   }
-  p {
-    color: #666;
-    margin-top: 5px;
+  header .col-md-5 {
+    order: 3;
+    width: 100%;
   }
-  
+  header .col-md-4 {
+    order: 1;
+  }
+  header .col-md-3 {
+    order: 2;
+  }
+
   .search-container {
-    margin-top: 1.5rem;
+    margin-top: 0.5rem;
   }
-  
-  #buscador {
-    padding: 12px 20px;
-    width: 100%;
-    max-width: 400px;
-    border: 2px solid #eee;
-    border-radius: 50px;
-    font-size: 1rem;
-    outline: none;
-    transition: border-color 0.3s;
-  }
-  
-  #buscador:focus {
-    border-color: var(--primary);
-  }
-  
-  /* --- Categorías --- */
-  .categories {
-    margin-top: 1rem;
-    display: flex;
-    gap: 8px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  
-  .category-btn {
-    background: #fff;
-    border: 1px solid #eee;
-    padding: 6px 12px;
-    border-radius: 999px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    color: #444;
-    transition: 0.3s;
-  }
-  
-  .category-btn:hover {
-    border-color: var(--primary);
-  }
-  
-  .category-btn.active {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
-  }
-  
-  /* --- Grid de Productos --- */
-  main {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 16px 40px;
-  }
-  
-  /* --- Tarjetas (Cards) --- */
-  .card {
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.98),
-      rgba(255, 255, 255, 0.95)
-    );
-    position: relative;
-    border-radius: 18px;
-    overflow: hidden;
-    box-shadow: 0 6px 18px rgba(16, 24, 40, 0.06),
-      0 2px 6px rgba(214, 51, 132, 0.04);
-    transition: transform 0.18s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.18s;
-    display: flex;
-    flex-direction: column;
-    border: none;
-    width: 100%; 
-    margin: 0;
-  }
-  
-  .card:active {
-    transform: translateY(-2px);
-  }
-  .card:focus-within {
-    box-shadow: 0 8px 22px rgba(16, 24, 40, 0.08),
-      0 4px 10px rgba(214, 51, 132, 0.06);
-  }
-  
-  /* Imagen */
+
   .card-img-container {
-    position: relative;
-    width: 100%;
-    height: 220px;
-    background-color: #faf7fb;
-    overflow: hidden;
-    border-bottom-left-radius: 14px;
-    border-bottom-right-radius: 14px;
+    height: 180px;
   }
-  
-  .card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 12px;
-    opacity: 0;
-    transition: opacity 0.28s ease, transform 0.28s ease;
-    transform: scale(1.01);
-  }
-  
-  .card-img.visible {
-    opacity: 1;
-    transform: scale(1);
-  }
-  
-  /* Cuerpo de la tarjeta */
   .card-body {
     padding: 14px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
   }
-  
+}
+
+/* CASO 2: TABLET (Entre 768px y 991px) -> 3 COLUMNAS */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  #grid-productos > div {
+    width: 33.3333% !important;
+    flex: 0 0 33.3333%;
+    max-width: 33.3333%;
+  }
+
+  .card-img-container {
+    height: 170px;
+  }
+  .card-body {
+    padding: 12px;
+  }
   .card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1rem, 1.8vw, 1.08rem);
-    font-weight: 600;
-    margin: 0 0 8px 0;
-    line-height: 1.25;
-    color: #2b2b2b;
-    /* Se eliminó el line-clamp para mostrar todo el texto */
-  }
-  
-  .card-price {
-    color: var(--primary);
-    font-weight: 800;
-    font-size: 1.15rem;
-    letter-spacing: 0.2px;
-  }
-  
-  /* Botones */
-  .btn-add {
-    background: linear-gradient(90deg, var(--primary), #b12b72);
-    color: #fff;
-    border: none;
-    padding: 10px 12px;
-    border-radius: 12px;
-    margin-top: 12px;
-    cursor: pointer;
-    font-weight: 700;
-    width: 100%;
-    box-shadow: 0 6px 14px rgba(214, 51, 132, 0.12);
-  }
-  .btn-add:active {
-    transform: translateY(1px);
-  }
-  
-  .btn-like {
-    background: transparent;
-    border: none;
-    cursor: pointer;
     font-size: 0.95rem;
-    color: #888;
   }
-  .btn-like.liked {
-    color: var(--primary);
-    font-weight: 700;
-  }
-  
-  /* --- Más categorías --- */
-  .more-categories {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-top: 8px;
-    padding: 8px;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.6);
-    max-height: 180px;
-    overflow: auto;
-  }
-  .more-toggle {
-    border-style: dashed;
-  }
-  
-  /* --- Modal de ajustes --- */
-  #settings-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1300;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity 0.18s;
-  }
-  #settings-modal[aria-hidden='false'] {
-    visibility: visible;
-    opacity: 1;
-  }
-  #settings-modal .modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 480px;
-    max-width: 95%;
-    position: relative;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
-  }
-  #settings-modal .modal-close {
-    position: absolute;
-    right: 12px;
-    top: 10px;
-    background: transparent;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-  }
-  #settings-modal h3 {
-    margin-top: 0;
-    color: var(--primary);
-  }
-  #settings-modal label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-  }
-  #settings-modal input[type='text'] {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-  }
-  #settings-modal .actions {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
-    margin-top: 12px;
-  }
-  .btn.primary {
-    background: var(--primary);
-    color: #fff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  .btn.primary:hover {
-    opacity: 0.95;
-  }
-  
-  /* --- RESPONSIVE DESIGN (Móvil y Tablet) --- */
-  
-  /* 1. Ajustes para MÓVIL (Menos de 768px) */
-  @media (max-width: 767.98px) {
-    
-    /* Header ajustado */
-    header {
-      padding: 1rem 0.75rem;
-    }
-    header .row { align-items: center; }
-    header .col-md-5 { order: 3; width: 100%; }
-    header .col-md-4 { order: 1; }
-    header .col-md-3 { order: 2; }
-    
-    .search-container {
-      margin-top: 0.8rem;
-    }
-    #buscador {
-      width: 100%;
-    }
-  
-    /* Tarjetas Compactas para 2 columnas */
-    .card {
-      border-radius: 14px;
-      padding: 6px;
-      box-shadow: 0 6px 14px rgba(16, 24, 40, 0.05);
-    }
-    .card-body {
-      padding: 10px; /* Menos relleno interno */
-    }
-    .card-img-container {
-      height: 160px !important; /* Imagen más baja */
-    }
-    .card-title {
-      font-size: 0.95rem;
-      line-height: 1.2;
-    }
-    .card-price {
-      font-size: 1.0rem;
-    }
-    .btn-add {
-      padding: 8px 10px;
-      font-size: 0.9rem;
-      border-radius: 10px;
-    }
-    .btn-like {
-      font-size: 0.95rem;
-    }
-  
-    /* CORRECCIÓN DE GRID (2 columnas sin que se caigan) */
-    .row.g-3 {
-      --bs-gutter-x: 12px; /* Espacio reducido horizontalmente */
-      --bs-gutter-y: 12px;
-    }
-    
-    /* Ajuste del modal */
-    .modal-dialog {
-      max-width: 92%;
-      margin: 0 4%;
-    }
-    .modal-content {
-      border-radius: 12px;
-    }
-  }
-  
-  /* 2. Ajustes para TABLET (Entre 768px y 992px) */
-  @media (min-width: 768px) and (max-width: 991.98px) {
-    .card-img-container {
-      height: 190px !important;
-    }
-    .card-title {
-      font-size: 1.04rem;
-    }
-    .card-body {
-      padding: 12px;
-    }
-    .btn-add {
-      padding: 10px 12px;
-      font-size: 0.98rem;
-    }
-    
-    /* CORRECCIÓN DE GRID (3 columnas) */
-    .row.g-3 {
-      --bs-gutter-x: 18px; /* Espacio mediano */
-    }
-  }
+}
+
+/* FOOTER ESTILOS */
+footer {
+  background-color: var(--navbar-bg) !important;
+  color: #fff;
+}
+footer h5 {
+  font-family: var(--font-heading);
+  color: var(--accent);
+}
+footer ul li {
+  margin-bottom: 8px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
