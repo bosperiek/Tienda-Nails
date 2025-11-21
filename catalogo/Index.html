@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catálogo Nanty Nails</title>
+    <!-- Bootstrap CSS (CDN) -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Fuentes elegantes para UI (Playfair Display para títulos, Inter para cuerpo) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- Header: título, buscador, categorías y botón carrito -->
+    <header class="py-4 bg-white border-bottom">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-4">
+            <h1 class="h4 mb-0 text-primary">💅 Nanty Nails Shop</h1>
+            <p class="text-muted mb-0">Catálogo de Insumos Profesionales</p>
+          </div>
+          <div class="col-md-5">
+            <div class="d-flex gap-2">
+              <input
+                type="text"
+                id="buscador"
+                class="form-control"
+                placeholder="🔍 Buscar producto (ej: monómero, pincel)..."
+              />
+              <select
+                id="sort"
+                class="form-select w-auto"
+                aria-label="Ordenar productos"
+              >
+                <option value="">Orden: Predeterminado</option>
+                <option value="price-asc">Precio: menor → mayor</option>
+                <option value="price-desc">Precio: mayor → menor</option>
+                <option value="name-asc">Nombre A → Z</option>
+                <option value="name-desc">Nombre Z → A</option>
+              </select>
+            </div>
+            <!-- Contenedor dinámico de categorías (se genera desde main.js) -->
+            <div
+              id="categories"
+              class="categories d-flex flex-wrap gap-2 mt-3"
+              aria-label="Filtrar por categoría"
+            ></div>
+          </div>
+          <div class="col-md-3 text-end">
+            <!-- Cart button: abre modal de carrito -->
+            <div class="d-inline-block">
+              <button
+                id="cart-button"
+                class="btn btn-primary"
+                aria-label="Ver carrito"
+                data-bs-toggle="modal"
+                data-bs-target="#cartModal"
+              >
+                🧺 Carrito
+                <span id="cart-count" class="badge bg-white text-primary ms-2"
+                  >0</span
+                >
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main: grid de productos y control de paginación -->
+    <main class="py-4">
+      <div class="container">
+        <div id="grid-productos" class="row g-3"></div>
+        <nav
+          id="pagination"
+          aria-label="Paginación de productos"
+          class="d-flex justify-content-center mt-3"
+          hidden
+        ></nav>
+        <div id="loading" class="loading mt-3 text-center" hidden>
+          Cargando...
+        </div>
+      </div>
+    </main>
+
+    <!-- Modal del carrito (Bootstrap) - muestra items desde localStorage -->
+    <div
+      class="modal fade"
+      id="cartModal"
+      tabindex="-1"
+      aria-labelledby="cartModalLabel"
+      aria-hidden="true"
+    >
+      <div
+        class="modal-dialog modal-dialog-scrollable modal-sm modal-dialog-centered"
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="cartModalLabel">Tu carrito</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div id="cart-items" class="cart-items"></div>
+          </div>
+          <div class="modal-footer d-flex flex-column align-items-stretch">
+            <div
+              class="w-100 d-flex justify-content-between align-items-center mb-2"
+            >
+              <div class="cart-total">
+                Total: <span id="cart-total">$0.00</span>
+              </div>
+              <div>
+                <button
+                  id="clear-cart"
+                  class="btn btn-outline-secondary btn-sm"
+                >
+                  Vaciar
+                </button>
+              </div>
+            </div>
+            <button id="confirm-cart" class="btn btn-primary w-100">
+              Confirmar compra (WhatsApp)
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de ajustes (localStorage) - editable sólo en local -->
+    <div id="settings-modal" class="modal" aria-hidden="true">
+      <div class="modal-content">
+        <button id="close-settings" class="modal-close" aria-label="Cerrar">
+          ✕
+        </button>
+        <h3>Ajustes (solo visible localmente)</h3>
+        <label for="wa-number-input">Número WhatsApp (sin +):</label>
+        <input id="wa-number-input" type="text" placeholder="5614782629" />
+        <div
+          style="
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+          "
+        >
+          <button id="save-wa-number" class="btn primary">Guardar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer simple -->
+    <footer class="site-footer">
+      <div class="container">
+        <p>© Nanty Nails Shop — Catálogo simple</p>
+      </div>
+    </footer>
+
+    <script src="datos.js"></script>
+
+    <!-- Bootstrap JS Bundle (Popper included) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
