@@ -1,48 +1,48 @@
 /* -------------------------------------------------
    ESTILOS BASE Y VARIABLES
    ------------------------------------------------- */
-   @font-face {
-    font-family: 'Love Script';
-    src: url('../imagenes/Love script.ttf') format('truetype');
+@font-face {
+  font-family: 'Love Script';
+  src: url('../imagenes/Love script.ttf') format('truetype');
 }
 
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500&display=swap');
 
 /* Reset and base styles */
 *,
 *::before,
 *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 /* Define la nueva paleta de colores y la tipografía */
 :root {
-    --background-color: #f8f0ed; /* Un blanco roto más cálido */
-    --primary-color: #3b2f2f;    /* Un marrón oscuro profundo */
-    --secondary-color: #6a5d5d;  /* Un gris-marrón medio */
-    --accent-color: #e67e9f;     /* Un rosa salmón más vibrante */
-    --hover-color: #d85c82;      /* Un rosa más intenso para hover */
-    --card-background-color: #ffffff;
-    --navbar-footer-color: #2c2121; /* Un marrón muy oscuro para navbar y footer */
-    --font-family-headings: "Playfair Display", serif;
-    --font-family-body: "Montserrat", sans-serif;
-    --glow-color: #e67e9f; /* Color para el efecto de glow del botón flotante */
-    --button-float-bg: #e67e9f; /* Color de fondo del botón flotante */
-    --button-float-text: #ffffff;
+  --background-color: #f8f0ed; /* Un blanco roto más cálido */
+  --primary-color: #3b2f2f; /* Un marrón oscuro profundo */
+  --secondary-color: #6a5d5d; /* Un gris-marrón medio */
+  --accent-color: #e67e9f; /* Un rosa salmón más vibrante */
+  --hover-color: #d85c82; /* Un rosa más intenso para hover */
+  --card-background-color: #ffffff;
+  --navbar-footer-color: #2c2121; /* Un marrón muy oscuro para navbar y footer */
+  --font-family-headings: 'Playfair Display', serif;
+  --font-family-body: 'Montserrat', sans-serif;
+  --glow-color: #e67e9f; /* Color para el efecto de glow del botón flotante */
+  --button-float-bg: #e67e9f; /* Color de fondo del botón flotante */
+  --button-float-text: #ffffff;
 }
 
 /* Regla para el body sin padding-top */
 body {
-    font-family: var(--font-family-body);
-    background-color: var(--background-color);
-    color: var(--primary-color);
-    overflow-x: hidden; /* Previene el desbordamiento horizontal por las animaciones */
+  font-family: var(--font-family-body);
+  background-color: var(--background-color);
+  color: var(--primary-color);
+  overflow-x: hidden; /* Previene el desbordamiento horizontal por las animaciones */
 }
 
 html {
-    scroll-behavior: smooth; /* Scroll suave para los enlaces */
+  scroll-behavior: smooth; /* Scroll suave para los enlaces */
 }
 
 /* -------------------------------------------------
@@ -50,89 +50,94 @@ html {
    ------------------------------------------------- */
 
 #main-navbar {
-    background-color: transparent !important;
-    transition: background-color 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
-    box-shadow: none;
-    position: fixed; /* Asegura que el navbar se quede arriba */
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 1030; /* Para que esté por encima del contenido */
+  background-color: transparent !important;
+  transition: background-color 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+  box-shadow: none;
+  position: fixed; /* Asegura que el navbar se quede arriba */
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1030; /* Para que esté por encima del contenido */
 }
 
 #main-navbar.scrolled {
-    background-color: rgba(255, 255, 255, 0.95) !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Logo y enlaces en estado inicial (hero section) */
 #main-navbar .navbar-brand,
 #main-navbar .nav-link {
-    color: #fff !important; /* Color blanco */
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Sombra para legibilidad */
-    transition: color 0.3s ease, text-shadow 0.3s ease;
+  color: #fff !important; /* Color blanco */
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Sombra para legibilidad */
+  transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
 /* Logo y enlaces al hacer scroll */
 #main-navbar.scrolled .navbar-brand,
 #main-navbar.scrolled .nav-link {
-    color: var(--primary-color) !important; /* Color oscuro */
-    text-shadow: none; /* Sin sombra */
+  color: var(--primary-color) !important; /* Color oscuro */
+  text-shadow: none; /* Sin sombra */
 }
 
 /* Ícono de la hamburguesa (para móviles) */
 #main-navbar .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
 #main-navbar.scrolled .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(33, 37, 41, 0.75)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(33, 37, 41, 0.75)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
 /* -------------------------------------------------
    MENÚ EN DISPOSITIVOS MÓVILES (Despliegue hacia abajo)
    ------------------------------------------------- */
 @media (max-width: 991.98px) {
-    #main-navbar .navbar-collapse {
-        position: absolute;
-        top: 100%; /* Se posiciona justo debajo del navbar */
-        left: 0;
-        width: 100%;
-        background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        padding-bottom: 10px; /* Pequeño padding para los enlaces */
-        padding-top: 10px;
-    }
+  #main-navbar .navbar-collapse {
+    position: absolute;
+    top: 100%; /* Se posiciona justo debajo del navbar */
+    left: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    padding-bottom: 10px; /* Pequeño padding para los enlaces */
+    padding-top: 10px;
+  }
 
-    #main-navbar.scrolled .navbar-collapse {
-        background-color: rgba(255, 255, 255, 0.95); /* Fondo sólido al hacer scroll */
-    }
+  #main-navbar.scrolled .navbar-collapse {
+    background-color: rgba(
+      255,
+      255,
+      255,
+      0.95
+    ); /* Fondo sólido al hacer scroll */
+  }
 
-    #main-navbar .navbar-nav {
-        flex-direction: column; /* Apila los enlaces verticalmente */
-        align-items: center; /* Centra los enlaces */
-    }
+  #main-navbar .navbar-nav {
+    flex-direction: column; /* Apila los enlaces verticalmente */
+    align-items: center; /* Centra los enlaces */
+  }
 
-    #main-navbar .nav-item {
-        margin: 5px 0; /* Espacio vertical entre enlaces */
-    }
+  #main-navbar .nav-item {
+    margin: 5px 0; /* Espacio vertical entre enlaces */
+  }
 
-    #main-navbar .nav-link {
-        padding: 8px 12px !important;
-        font-size: 1rem;
-        white-space: nowrap;
-    }
+  #main-navbar .nav-link {
+    padding: 8px 12px !important;
+    font-size: 1rem;
+    white-space: nowrap;
+  }
 
-    /* Enlaces en móvil siempre blancos sobre fondo oscuro */
-    #main-navbar .nav-link {
-        color: #fff !important;
-        text-shadow: none;
-    }
+  /* Enlaces en móvil siempre blancos sobre fondo oscuro */
+  #main-navbar .nav-link {
+    color: #fff !important;
+    text-shadow: none;
+  }
 
-    #main-navbar.scrolled .nav-link {
-        color: var(--primary-color) !important;
-    }
+  #main-navbar.scrolled .nav-link {
+    color: var(--primary-color) !important;
+  }
 }
 
 /* -------------------------------------------------
@@ -140,81 +145,83 @@ html {
    ------------------------------------------------- */
 
 .hero-section {
-    position: relative;
-    background: url('../imagenes/nailshands.png') no-repeat center center/cover;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: relative;
+  background: url('../imagenes/insumos-profesionales-unas-acabado-gel-nude-desktop.webp')
+    no-repeat center center/cover;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Overlay oscuro */
-    z-index: 1;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Overlay oscuro */
+  z-index: 1;
 }
 
 .hero-content {
-    position: relative;
-    z-index: 2;
+  position: relative;
+  z-index: 2;
 }
 
 .hero-section h1 {
-    font-family: 'Love Script', var(--font-family-headings);
-    color: var(--accent-color); /* El color salmon/peach para el título */
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  font-family: 'Love Script', var(--font-family-headings);
+  color: var(--accent-color); /* El color salmon/peach para el título */
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
 }
 
 .hero-section p {
-    color: #FFFFFF; /* El subtítulo sigue siendo blanco */
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+  color: #ffffff; /* El subtítulo sigue siendo blanco */
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
 }
 
 .btn-hero {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
-    color: #ffffff;
-    border-radius: 50px;
-    padding: 12px 30px;
-    font-weight: 600;
-    font-size: 1.1rem;
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #ffffff;
+  border-radius: 50px;
+  padding: 12px 30px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease, transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .btn-hero:hover {
-    background-color: var(--hover-color);
-    border-color: var(--hover-color);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-    color: #ffffff;
+  background-color: var(--hover-color);
+  border-color: var(--hover-color);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  color: #ffffff;
 }
 
 /* Clase para las demás secciones, para que respeten el espacio del navbar */
 .content-section {
-    padding-top: 80px;
+  padding-top: 80px;
 }
 
 /* Títulos de secciones */
 .section-title {
-    font-family: var(--font-family-headings);
-    color: var(--primary-color);
-    font-size: 2.8rem;
-    margin-bottom: 50px;
-    position: relative;
-    text-align: center;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
+  font-family: var(--font-family-headings);
+  color: var(--primary-color);
+  font-size: 2.8rem;
+  margin-bottom: 50px;
+  position: relative;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
 .section-title.visible {
-    opacity: 1;
-    transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* -------------------------------------------------
@@ -223,203 +230,205 @@ html {
 
 /* Estilo de las tarjetas (general) */
 .card {
-    background-color: var(--card-background-color);
-    border: 1px solid #eee;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    transition: transform 0.5s ease, box-shadow 0.5s ease;
-    opacity: 0;
-    transform: translateY(30px);
+  background-color: var(--card-background-color);
+  border: 1px solid #eee;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  opacity: 0;
+  transform: translateY(30px);
 }
 
 section .card {
-    transition: transform 0.5s ease, box-shadow 0.5s ease, opacity 0.8s ease, transform 0.8s ease;
+  transition: transform 0.5s ease, box-shadow 0.5s ease, opacity 0.8s ease,
+    transform 0.8s ease;
 }
 
 .card.visible {
-    opacity: 1;
-    transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .card:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  transform: translateY(-12px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
 .card-title {
-    font-family: var(--font-family-headings);
-    color: var(--primary-color);
+  font-family: var(--font-family-headings);
+  color: var(--primary-color);
 }
 
 .card-text {
-    color: var(--secondary-color);
+  color: var(--secondary-color);
 }
 
 /* Estilos para las tarjetas de servicio (Encuentra tu Camino, Cursos, Insumos) */
 .service-card-img-container {
-    height: 200px;
-    overflow: hidden;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
+  height: 200px;
+  overflow: hidden;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
 }
 
 .service-card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    background-color: #f0f0f0;
-    transition: transform 0.5s ease;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background-color: #f0f0f0;
+  transition: transform 0.5s ease;
 }
 
 .service-card:hover .service-card-img {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 /* Botones */
 .btn-primary {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
-    border-radius: 50px;
-    padding: 10px 25px;
-    font-weight: 500;
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  border-radius: 50px;
+  padding: 10px 25px;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .btn-primary:hover {
-    background-color: var(--hover-color);
-    border-color: var(--hover-color);
-    transform: translateY(-3px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  background-color: var(--hover-color);
+  border-color: var(--hover-color);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 .stars {
-    color: #f1c40f;
+  color: #f1c40f;
 }
 
 /* Footer */
 #footer {
-    background-color: var(--navbar-footer-color); /* Fondo oscuro del footer */
-    color: var(--background-color); /* Texto claro para contraste */
+  background-color: var(--navbar-footer-color); /* Fondo oscuro del footer */
+  color: var(--background-color); /* Texto claro para contraste */
 }
 
 #footer a {
-    color: var(--accent-color); /* Enlaces en el footer con el color de acento */
+  color: var(--accent-color); /* Enlaces en el footer con el color de acento */
 }
 
 #footer .text-accent-color {
-    color: var(--accent-color) !important;
+  color: var(--accent-color) !important;
 }
 
 /* Botón Flotante Personalizado */
 .floating-button {
-    position: fixed;
-    bottom: 40px;
-    right: 40px;
-    background-color: var(--button-float-bg);
-    color: var(--button-float-text);
-    padding: 12px 15px;
-    border-radius: 30px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    font-size: 1.1rem;
-    font-weight: 500;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 20px 5px var(--glow-color);
-    z-index: 100;
-    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-    border: 2px solid var(--glow-color);
-    overflow: hidden;
-    width: 60px;
-    justify-content: center;
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  background-color: var(--button-float-bg);
+  color: var(--button-float-text);
+  padding: 12px 15px;
+  border-radius: 30px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: 500;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 20px 5px var(--glow-color);
+  z-index: 100;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 2px solid var(--glow-color);
+  overflow: hidden;
+  width: 60px;
+  justify-content: center;
 }
 
 .floating-button i {
-    margin-right: 0;
-    font-size: 1.3rem;
-    color: var(--button-float-text);
-    transition: margin-right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  margin-right: 0;
+  font-size: 1.3rem;
+  color: var(--button-float-text);
+  transition: margin-right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 .floating-button span {
-    opacity: 0;
-    max-width: 0;
-    white-space: nowrap;
-    transition: opacity 0.3s ease-out, max-width 0.3s ease-out;
+  opacity: 0;
+  max-width: 0;
+  white-space: nowrap;
+  transition: opacity 0.3s ease-out, max-width 0.3s ease-out;
 }
 
 .floating-button:hover {
-    padding: 12px 20px;
-    width: auto;
-    transform: translateY(-5px) scale(1.05);
-    color: var(--button-float-text);
+  padding: 12px 20px;
+  width: auto;
+  transform: translateY(-5px) scale(1.05);
+  color: var(--button-float-text);
 }
 
 .floating-button:hover i {
-    margin-right: 8px;
+  margin-right: 8px;
 }
 
 .floating-button:hover span {
-    opacity: 1;
-    max-width: 150px;
-    transition: opacity 0.4s ease-in 0.1s, max-width 0.4s ease-in 0.1s;
+  opacity: 1;
+  max-width: 150px;
+  transition: opacity 0.4s ease-in 0.1s, max-width 0.4s ease-in 0.1s;
 }
 
 /* Estilos para el Modal */
 .modal-content {
-    background-color: var(--background-color);
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  background-color: var(--background-color);
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .modal-header {
-    background-color: var(--accent-color);
-    color: var(--button-float-text);
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-    border-bottom: none;
+  background-color: var(--accent-color);
+  color: var(--button-float-text);
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom: none;
 }
 
 .modal-header .modal-title {
-    font-family: var(--font-family-headings);
+  font-family: var(--font-family-headings);
 }
 
 .btn-close {
-    filter: invert(1) grayscale(100%) brightness(200%);
+  filter: invert(1) grayscale(100%) brightness(200%);
 }
 
 .modal-body {
-    color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .modal-body h6 {
-    font-family: var(--font-family-headings);
-    color: var(--primary-color);
-    font-size: 1.2rem;
+  font-family: var(--font-family-headings);
+  color: var(--primary-color);
+  font-size: 1.2rem;
 }
 
 .modal-body ul {
-    list-style-type: none;
-    padding-left: 0;
+  list-style-type: none;
+  padding-left: 0;
 }
 
 .modal-body ul li {
-    padding-left: 1.5em;
-    text-indent: -1.5em;
+  padding-left: 1.5em;
+  text-indent: -1.5em;
 }
 
 .modal-body ul li::before {
-    content: "✓";
-    color: var(--accent-color);
-    margin-right: 0.5em;
-    font-weight: bold;
+  content: '✓';
+  color: var(--accent-color);
+  margin-right: 0.5em;
+  font-weight: bold;
 }
 
 .modal-footer {
-    border-top: 1px solid #e0e0e0;
-    background-color: #ffffff;
-    border-bottom-left-radius: 15px;
-    border-bottom-right-radius: 15px;
+  border-top: 1px solid #e0e0e0;
+  background-color: #ffffff;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 
 /* -------------------------------------------------
@@ -428,165 +437,157 @@ section .card {
 
 /* Media queries para el botón flotante en móviles */
 @media (max-width: 768px) {
-    .floating-button {
-        bottom: 20px;
-        right: 20px;
-        padding: 10px 12px;
-        font-size: 0.95rem;
-        width: 50px;
-    }
+  .hero-section {
+    background-image: url('../imagenes/insumos-profesionales-unas-acabado-gel-nude-movil.webp');
+    min-height: 65vh;
+    background-position: center;
+    background-size: cover; /* <-- CAMBIA ESTE NOMBRE */
+  }
 
-    .floating-button i {
-        font-size: 1.1rem;
-        margin-right: 0;
-    }
+  .floating-button {
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    width: 50px;
+  }
 
-    .floating-button:hover {
-        padding: 10px 15px;
-    }
+  .floating-button i {
+    font-size: 1.1rem;
+    margin-right: 0;
+  }
 
-    .floating-button:hover i {
-        margin-right: 6px;
-    }
+  .floating-button:hover {
+    padding: 10px 15px;
+  }
 
-    .floating-button span {
-        max-width: 0;
-        opacity: 0;
-    }
+  .floating-button:hover i {
+    margin-right: 6px;
+  }
 
-    .floating-button:hover span {
-        opacity: 1;
-        max-width: 100px;
-    }
+  .floating-button span {
+    max-width: 0;
+    opacity: 0;
+  }
+
+  .floating-button:hover span {
+    opacity: 1;
+    max-width: 100px;
+  }
 }
 
 /* AJUSTES PARA TABLETS (ENTRE 768PX Y 992PX) */
 @media (min-width: 768px) and (max-width: 991.98px) {
+  /* Hacer que el precio y el botón se centren y apilen verticalmente */
+  .course-card .d-flex,
+  .product-card .d-flex {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
 
-    /* Hacer que el precio y el botón se centren y apilen verticalmente */
-    .course-card .d-flex,
-    .product-card .d-flex {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    /* Agregar un pequeño espacio entre el precio y el botón */
-    .course-card .price-tag,
-    .product-card .price-tag {
-        margin-bottom: 10px;
-        margin-right: 0; /* Quitamos el margen derecho que tenían */
-    }
+  /* Agregar un pequeño espacio entre el precio y el botón */
+  .course-card .price-tag,
+  .product-card .price-tag {
+    margin-bottom: 10px;
+    margin-right: 0; /* Quitamos el margen derecho que tenían */
+  }
 }
 
 /* AJUSTES PARA MÓVILES (PEQUEÑO ESPACIO A LOS LADOS) */
 @media (max-width: 575.98px) {
-    /* Selecciona el contenedor principal y aumenta su padding horizontal */
-    .container {
-        padding-left: 2rem; /* 32px de espacio a la izquierda */
-        padding-right: 2rem; /* 32px de espacio a la derecha */
-    }
+  /* Selecciona el contenedor principal y aumenta su padding horizontal */
+  .container {
+    padding-left: 2rem; /* 32px de espacio a la izquierda */
+    padding-right: 2rem; /* 32px de espacio a la derecha */
+  }
 }
 
 /* -------------------------------------------------
-   ESTILOS ESPECÍFICOS PARA TESTIMONIOS
+   ESTILOS ESPECÍFICOS PARA TESTIMONIOS (CORREGIDO)
    ------------------------------------------------- */
-
-/* Contenedor principal de testimonios */
-#testimonios .row {
-    /* Importante: No alinear las tarjetas por altura */
-    align-items: flex-start;
-}
-
-/* Cada columna debe ser independiente */
-#testimonios .col-md-4 {
-    display: flex;
-    flex-direction: column;
-}
 
 /* Estilos para las tarjetas de testimonios */
 .testimonial-card {
-    background: var(--card-background-color);
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-    /* Altura fija base para consistencia */
-    height: 420px;
-    display: flex;
-    flex-direction: column;
-    /* Permitir que la tarjeta crezca si es necesario */
-    overflow: visible;
+  background: var(--card-background-color);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  /* Altura flexible para adaptarse al contenido y a Bootstrap */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .testimonial-card.visible {
-    opacity: 1;
-    transform: translateY(0);
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* Estilos para el nombre y negocio en las tarjetas de testimonio */
 .testimonial-card h6 {
-    font-size: 1rem;
-    margin-bottom: 0.2rem;
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
 }
 
 .testimonial-card small {
-    display: block;
-    color: var(--secondary-color);
-    font-size: 0.85rem;
-    margin-top: 0.2rem;
+  display: block;
+  color: var(--secondary-color);
+  font-size: 0.85rem;
+  margin-top: 0.2rem;
 }
 
 /* Contenedor del contenido del testimonio */
 .testimonial-content {
-    position: relative;
-    flex-grow: 1; /* Ocupa el espacio disponible */
-    display: flex;
-    flex-direction: column;
+  position: relative;
+  flex-grow: 1; /* Ocupa el espacio disponible */
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px; /* Espacio antes de la sección del autor */
 }
 
 .testimonial-text {
-    overflow: hidden;
-    transition: max-height 0.5s ease;
-    /* Altura base para el texto truncado */
-    max-height: 120px;
-    position: relative;
-    flex-grow: 1;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+  /* Altura base para el texto truncado */
+  max-height: 120px;
+  position: relative;
 }
 
 .testimonial-text.expanded {
-    /* Altura suficiente para mostrar todo el contenido */
-    max-height: 300px;
+  /* Altura suficiente para mostrar todo el contenido */
+  max-height: none;
 }
 
 /* Botón de leer más */
 .read-more-btn {
-    background: none;
-    border: none;
-    color: var(--accent-color);
-    font-weight: 600;
-    cursor: pointer;
-    padding: 5px 0;
-    font-size: 0.9rem;
-    transition: color 0.3s ease;
-    margin-top: 10px;
-    align-self: flex-start;
+  background: none;
+  border: none;
+  color: var(--accent-color);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 5px 0;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+  margin-top: 10px;
+  align-self: flex-start;
 }
 
 .read-more-btn:hover {
-    color: var(--hover-color);
-    text-decoration: underline;
+  color: var(--hover-color);
+  text-decoration: underline;
 }
 
 /* Efecto de desvanecimiento para el texto truncado */
 .testimonial-text:not(.expanded)::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 30px;
-    background: linear-gradient(transparent, var(--card-background-color));
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30px;
+  background: linear-gradient(transparent, var(--card-background-color));
 }

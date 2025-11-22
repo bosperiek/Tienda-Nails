@@ -1,4 +1,8 @@
 const misProductos = [
+
+
+
+
     {
         "category": "temporada-navidad",
         "data": "Stiker navidad 10",
