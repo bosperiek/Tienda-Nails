@@ -5,7 +5,8 @@
 
 @font-face {
   font-family: 'Love Script';
-  src: url('../imagenes/Love script.ttf') format('truetype');
+  /* Ruta corregida para estar en la raíz */
+  src: url('imagenes/Love script.ttf') format('truetype');
   font-display: swap;
 }
 

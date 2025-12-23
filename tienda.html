@@ -11,7 +11,7 @@
       rel="stylesheet"
     />
 
-    <!-- Bootstrap Icons (Agregado para el Footer y Nav) -->
+    <!-- Bootstrap Icons -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
@@ -28,32 +28,27 @@
       rel="stylesheet"
     />
 
-    <!-- Tu archivo de estilos -->
-    <link rel="stylesheet" href="style.css" />
+    <!-- Tu archivo de estilos renombrado -->
+    <link rel="stylesheet" href="tienda-style.css" />
 
     <style></style>
   </head>
 
-  <!-- Agregué padding-top para que la barra de navegación fija no tape el contenido -->
   <body style="padding-top: 76px">
-    <!-- ========================================== -->
-    <!-- INICIO DEL NAV (Integrado) -->
-    <!-- ========================================== -->
+    <!-- NAV -->
     <nav
       id="main-navbar"
       class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"
     >
       <div class="container">
-        <a class="navbar-brand" href="../index.html">
-          <!-- Asegúrate de tener esta imagen o cambia el src -->
+        <a class="navbar-brand" href="index.html">
           <img
-            src="../imagenes/logo4.svg"
+            src="imagenes/logo4.svg"
             alt="Nanty Nails"
             class="logo-img"
             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'"
           />
           <span style="display: none">Nanty Nails</span>
-          <!-- Fallback si no hay imagen -->
         </a>
         <button
           class="navbar-toggler"
@@ -66,7 +61,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link" href="../index.html">Inicio</a>
+              <a class="nav-link" href="index.html">Inicio</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#footer">Contacto</a>
@@ -75,14 +70,13 @@
         </div>
       </div>
     </nav>
-    <!-- FIN DEL NAV -->
 
-    <!-- Header del Catálogo (Título, buscador, categorías y carrito) -->
+    <!-- Header del Catálogo -->
     <header class="py-4 bg-white border-bottom">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-12 col-lg-8 text-center">
-            <!-- 1. Buscador (Centrado, grande y redondeado) -->
+            <!-- Buscador -->
             <div class="mb-3">
               <input
                 type="text"
@@ -92,7 +86,7 @@
               />
             </div>
 
-            <!-- 2. Controles: Ordenar y Carrito (Centrados abajo del buscador) -->
+            <!-- Controles -->
             <div
               class="d-flex justify-content-center align-items-center gap-3 mb-4 flex-wrap"
             >
@@ -123,7 +117,7 @@
               </button>
             </div>
 
-            <!-- 3. Categorías (Centradas y ordenadas) -->
+            <!-- Categorías -->
             <div
               id="categories"
               class="categories d-flex flex-wrap justify-content-center gap-2"
@@ -134,7 +128,7 @@
       </div>
     </header>
 
-    <!-- Main: grid de productos y control de paginación -->
+    <!-- Main -->
     <main class="py-4" style="min-height: 60vh">
       <div class="container">
         <div id="grid-productos" class="row g-3"></div>
@@ -150,7 +144,7 @@
       </div>
     </main>
 
-    <!-- Modal del carrito (Bootstrap) - muestra items desde localStorage -->
+    <!-- Modal del carrito -->
     <div
       class="modal fade"
       id="cartModal"
@@ -198,14 +192,13 @@
       </div>
     </div>
 
-    <!-- Modal de ajustes (localStorage) - editable sólo en local -->
+    <!-- Modal de ajustes -->
     <div
       id="settings-modal"
       class="modal"
       aria-hidden="true"
       style="display: none"
     >
-      <!-- Oculto por defecto con style -->
       <div class="modal-content">
         <button id="close-settings" class="modal-close" aria-label="Cerrar">
           ✕
@@ -226,9 +219,7 @@
       </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- FOOTER INTEGRADO -->
-    <!-- ========================================== -->
+    <!-- FOOTER -->
     <footer id="footer" class="content-section py-5 bg-dark text-white">
       <div class="container">
         <div class="row">
@@ -260,12 +251,16 @@
                 >
               </li>
               <li>
-                <a href="#servicios" class="text-white text-decoration-none"
+                <a
+                  href="index.html#servicios"
+                  class="text-white text-decoration-none"
                   >Servicios</a
                 >
               </li>
               <li>
-                <a href="#cursos" class="text-white text-decoration-none"
+                <a
+                  href="index.html#cursos"
+                  class="text-white text-decoration-none"
                   >Cursos</a
                 >
               </li>
@@ -320,8 +315,7 @@
       <span>Contáctanos</span>
     </a>
 
-    <!-- Modal de Ajustes (localStorage) -->
-
+    <!-- Modal Imagen -->
     <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content bg-dark border-0">
@@ -348,9 +342,8 @@
 
     <!-- Scripts -->
     <script src="datos.js"></script>
-
-    <!-- Bootstrap JS Bundle (Popper included) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="main.js"></script>
+    <!-- Script renombrado -->
+    <script src="tienda-main.js"></script>
   </body>
 </html>
