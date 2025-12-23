@@ -223,7 +223,7 @@ main {
 .card-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .card-body {
@@ -429,14 +429,29 @@ main {
   max-width: 90%;
 }
 
+/* Evita que el modal sea gigante en pantallas pequeñas */
+#imageModal .modal-dialog {
+  margin: 10px; /* Margen pequeño en las orillas en móvil */
+}
+
+#modalImage {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
+}
+
+/* Estilo visual para que la gente sepa que se puede hacer clic */
+.card-img-container:hover .card-img {
+  filter: brightness(0.9);
+}
+
 /* -------------------------------------------------
       7. RESPONSIVE DESIGN & GRID
       ------------------------------------------------- */
 @media (max-width: 767.98px) {
   #grid-productos > div {
-    width: 100% !important;
-    flex: 0 0 100%;
-    max-width: 100%;
+    width: 50% !important;
+    flex: 0 0 50%;
+    max-width: 50%;
   }
   header {
     padding: 1.5rem 1rem;

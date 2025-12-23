@@ -1,5 +1,40 @@
 const misProductos = [
     {
+        "category": "Fantasy Nails",
+        "data": "Diluyente Restaurador de Esmalte Activgel Fantasy Nails 118 ml",
+        "data2": "$50.00",
+        "altTexto": "Diluyente Activgel Fantasy Nails para restaurar la densidad de esmaltes y geles, botella blanca de 118ml con tapa rosa y fórmula profesional.",
+        "image": "imagenes/diluyente-activgel-fantasy-nails-restaurador-esmalte-118ml.webp"
+    },
+    {
+        "category": "Fantasy Nails",
+        "data": "Polvo Acrílico Colección Acuaria Tono Baby Aqua Mint Fantasy Nails 1oz",
+        "data2": "$80.00",
+        "altTexto": "Acrílico Colección Acuaria Fantasy Nails tono Baby Aqua Mint, mostrando un bote de 1oz de polvo acrílico de color verde menta suave pastel ideal para técnicas de baby boomer o diseños marinos.",
+        "image": "imagenes/acrilico-coleccion-acuaria-fantasy-nails-baby-aqua-mint-1oz.webp"
+    },
+    {
+        "category": "Fantasy Nails",
+        "data": "Polvo Acrílico Make-Cover Tono Almond Mix Fantasy Nails 1oz",
+        "data2": "$80.00",
+        "altTexto": "Acrílico Make-Cover Fantasy Nails tono Almond Mix, bote de 1oz de polvo acrílico color nude almendra diseñado para maquillaje de uñas y técnica de reversa.",
+        "image": "imagenes/polvo-acrilico-make-cover-almond-mix-fantasy-nails-1oz-nude.webp"
+    },
+    {
+        "category": "Fantasy Nails",
+        "data": "Gel Base Coat Paso 1 Fantasy Nails Adherencia Pro UV 15 ml",
+        "data2": "$70.00",
+        "altTexto": "Base Coat Fantasy Nails Paso 1, presentación en caja de 15ml de gel base transparente Pro UV diseñado para adherir los colores de gel a la uña natural.",
+        "image": "imagenes/gel-base-coat-fantasy-nails-adherencia-uv-15ml.webp"
+    },
+    {
+        "category": "Fantasy Nails",
+        "data": "Gel Base Traslúcida Colección Candy Fantasy Nails 15ml",
+        "data2": "$70.00",
+        "altTexto": "Gel Base Traslúcida Candy Fantasy Nails en presentación de 15ml, mostrando el empaque de este gel de adherencia con color translúcido suave tipo jelly ideal para manicuras naturales.",
+        "image": "imagenes/gel-base-traslucida-candy-fantasy-nails-efecto-jelly-color-suave.webp"
+    },
+    {
         "category": "temporada-navidad",
         "data": "Stiker navidad 10",
         "data2": "$15.00",
@@ -234,7 +269,7 @@ const misProductos = [
         "data": "Base rubber lechoso kalanzi",
         "data2": "$35.00",
         "altTexto": "Base Rubber marca Kalanzi tono Lechoso (blanco milky), gel nivelador soak-off para lámpara UV/LED en presentación de 10 ml.",
-        "image": "imagenes/base-rubber-lechoso-kalanzi-uv-led-10mli.webp"
+        "image": "imagenes/base-rubber-lechoso-kalanzi-uv-led-10ml.webp"
     },
     {
         "category": "basicos-economicos",
@@ -248,28 +283,28 @@ const misProductos = [
         "data": "Decoración metálica navideña",
         "data2": "$10.00",
         "altTexto": "",
-        "image": "imagenes/decoraci-n-met-lica-navide-a.webp"
+        "image": "imagenes/decoracion-metalica-navidena-dorada-mix-arboles-copos.webp"
     },
     {
         "category": "basicos-economicos",
-        "data": "Foil Navideño",
+        "data": "Foil para Uñas Navidad",
         "data2": "$10.00",
-        "altTexto": "",
-        "image": "imagenes/foil-navide-o.webp"
+        "altTexto": "Papel foil para uñas con fondo negro y diseños navideños holográficos plateados, incluyendo Santa Claus, galletas de jengibre, pinos y copos de nieve.",
+        "image": "imagenes/foil-transfer-unas-navidad-negro-holografico.webp"
     },
     {
         "category": "basicos-economicos",
-        "data": "Foil Navideño",
+        "data": "Foil para Uñas Navidad Transparente",
         "data2": "$10.00",
-        "altTexto": "",
-        "image": "imagenes/foil-navide-o.webp"
+        "altTexto": "Papel foil para uñas con fondo transparente y diseños navideños holográficos plateados, incluyendo copos de nieve, muñecos de jengibre, ángeles y árboles.",
+        "image": "imagenes/foil-transfer-unas-navidad-transparente-plata-holografico.webp"
     },
     {
         "category": "basicos-economicos",
-        "data": "Foil Navideño copos",
+        "data": "Foil Navideño copos de nieve",
         "data2": "$10.00",
-        "altTexto": "Dijes metálicos 3D con forma de copos de nieve navideños en colores dorado y plateado con cristales, decoración elegante para temporada invernal.",
-        "image": "imagenes/dijes-copos-de-nieve-metalicos-navidenos-dorado-y-plata.webp"
+        "altTexto": "Rollo de papel foil para transferencia en uñas con diseño de copos de nieve blancos sobre fondo transparente, ideal para decoración navideña y efectos invernales.",
+        "image": "imagenes/papel-foil-navideno-copos-de-nieve-blancos-transparentes.webp"
     },
     {
         "category": "basicos-economicos",
@@ -457,8 +492,8 @@ const misProductos = [
         "category": "dijes-y-cristales",
         "data": "Copos navideños",
         "data2": "$20.00",
-        "altTexto": "",
-        "image": "imagenes/copos-navide-os.webp"
+        "altTexto": "Dijes metálicos 3D con forma de copos de nieve navideños en colores dorado y plateado con cristales, decoración elegante para temporada invernal.",
+        "image": "imagenes/dijes-copos-de-nieve-metalicos-navidenos-dorado-y-plata.webp"
     },
     {
         "category": "dijes-y-cristales",
@@ -514,77 +549,77 @@ const misProductos = [
         "data": "Dijes de Cruz Dorada con Cristales 3D para Uñas",
         "data2": "$20.00",
         "altTexto": "Mix de dijes metálicos en forma de cruz color dorado con incrustaciones de cristal, decoración 3D con diseños variados para uñas elegantes.",
-        "image": "imagenes/ijes-cruz-dorada-metalica-con-cristales-3d-nail-art.webp"
+        "image": "imagenes/dijes-cruz-dorada-metalica-con-cristales-3d-nail-art.webp"
     },
     {
         "category": "dijes-y-cristales",
-        "data": "Dije corazón dorado y plata",
+        "data": "Dijes Corazón 3D Texturizados - Dorado y Plata",
         "data2": "$20.00",
-        "altTexto": "",
-        "image": "imagenes/dije-coraz-n-dorado-y-plata.webp"
+        "altTexto": "Set de dijes metálicos para uñas con forma de corazón y textura brillante en colores dorado y plateado sobre fondo rosa.",
+        "image": "imagenes/dijes-corazon-3d-metal-dorado-plata-nail-art.webp"
     },
     {
         "category": "dijes-y-cristales",
-        "data": "Dije cristal dorado",
+        "data": "Dijes de flor cristal zirconia oro 3D",
         "data2": "$20.00",
-        "altTexto": "",
-        "image": "imagenes/dije-cristal-dorado.webp"
+        "altTexto": "Dijes de joyería para uñas con diseño de flor brillante hechos de metal dorado y cristales tipo zirconia corte marquise para decoración elegante.",
+        "image": "imagenes/dijes-joyeria-flor-cristal-zirconia-oro-3d.webp"
     },
     {
         "category": "dijes-y-cristales",
-        "data": "Dije Kitty kuromi",
+        "data": "Dijes Resina Kawaii Kitty y Kuromi 3D",
         "data2": "$20.00",
-        "altTexto": "",
-        "image": "imagenes/dije-kitty-kuromi.webp"
+        "altTexto": "Mix de dijes de resina para uñas con figuras de personajes kawaii como Hello Kitty y Kuromi en colores rosa y negro para decoración 3D.",
+        "image": "imagenes/dijes-resina-kawaii-kitty-kuromi-anime-3d.webp"
     },
     {
         "category": "dijes-y-cristales",
-        "data": "Dije mariposa con perlas",
+        "data": "Dijes Mariposa Metal y Perlas 3D",
         "data2": "$20.00",
-        "altTexto": "",
-        "image": "imagenes/dije-mariposa-con-perlas.webp"
+        "altTexto": "Set de dijes metálicos 3D en forma de mariposa con incrustaciones de perlas en colores dorado y plateado para decoración de uñas elegante.",
+        "image": "imagenes/dijes-mariposa-con-perlas-metal-oro-plata-3d.webp"
     },
     {
         "category": "dijes-y-cristales",
-        "data": "Dije metálico gatito",
+        "data": "Dijes Gato Metal con Cristales y Moño",
         "data2": "$20.00",
-        "altTexto": "",
-        "image": "imagenes/dije-met-lico-gatito.webp"
+        "altTexto": "Set de dijes metálicos para uñas con figura de gato sentado y moño decorados con cristales strass en colores plata dorado rojo y rosa.",
+        "image": "imagenes/dijes-gato-metal-cristales-mono-strass-kawaii.webp"
     },
     {
         "category": "dijes-y-cristales",
-        "data": "Dije metálico marihuana",
+        "data": "Dijes Hoja Cannabis Verde 3D",
         "data2": "$20.00",
-        "altTexto": "",
-        "image": "imagenes/dije-met-lico-marihuana.webp"
+        "altTexto": "Set de dijes metálicos para uñas con diseño de hoja de marihuana cannabis en color verde brillante con borde dorado para decoración nail art.",
+        "image": "imagenes/dijes-hoja-marihuana-cannabis-verde-metal-dorado-3d.webp"
     },
     {
         "category": "dijes-y-cristales",
-        "data": "Dije ojito",
+        "data": "Dijes de Ojo Turco (Mal de Ojo) con Cristales para Uñas",
         "data2": "$20.00",
-        "altTexto": "",
-        "image": "imagenes/dije-ojito.webp"
+        "altTexto": "Dijes metálicos en forma de Ojo Turco con incrustaciones de cristales brillantes y centro azul, decoración protectora y mística para diseño de uñas.",
+        "image": "imagenes/set-dijes-ojo-turco-con-cristales-rhinestone-nail-art.webp"
     },
     {
         "category": "dijes-y-cristales",
-        "data": "Dije San Judas",
+        "data": "Dijes San Judas Tadeo 3D Metal y Zirconia",
         "data2": "$20.00",
-        "altTexto": "",
-        "image": "imagenes/dije-san-judas.webp"
+        "altTexto": "Dijes metálicos para uñas con la figura de San Judas Tadeo en acabados dorado y verde esmaltado con incrustaciones de cristales tipo zirconia.",
+        "image": "imagenes/dijes-san-judas-tadeo-metal-verde-oro-3d-nail-art.webp"
     },
     {
         "category": "dijes-y-cristales",
-        "data": "Dije signo zodiaco",
+        "data": "Dijes Metálicos Signos del Zodiaco (Dorados y Blancos) para Uñas",
         "data2": "$20.00",
-        "altTexto": "",
-        "image": "imagenes/dije-signo-zodiaco.webp"
+        "altTexto": "Estuche con dijes metálicos en forma de los nombres de los 12 signos del zodiaco, disponibles en colores dorado y blanco para personalizar diseños de uñas astrológicos.",
+        "image": "imagenes/set-dijes-signos-zodiaco-metalicos-dorado-blanco-unas.webp"
     },
     {
         "category": "dijes-y-cristales",
-        "data": "Escuadras doradas",
+        "data": "Dije Nail Art 3D Escuadra Pistola Metal Dorado",
         "data2": "$20.00",
-        "altTexto": "",
-        "image": "imagenes/escuadras-doradas.webp"
+        "altTexto": "Dijes metálicos dorados para decoración de uñas con diseño 3D de pistola tipo escuadra.",
+        "image": "imagenes/dije-nail-art-3d-pistola-escuadra-dorado.webp"
     },
     {
         "category": "dijes-y-cristales",
@@ -637,10 +672,10 @@ const misProductos = [
     },
     {
         "category": "dijes-y-cristales",
-        "data": "Dije metálico moño",
+        "data": "Dijes Metálicos de Moño (Lazos) 3D para Uñas",
         "data2": "$50.00",
-        "altTexto": "",
-        "image": "imagenes/dije-met-lico-mo-o.webp"
+        "altTexto": "Estuche con dijes metálicos en forma de moños (lazos) en colores dorado y plateado, decoración 3D con textura y relieve para diseños de uñas estilo coquette o elegante.",
+        "image": "imagenes/set-dijes-monos-metalicos-3d-dorado-y-plateado-unas.webp"
     },
     {
         "category": "tips-y-press-on",
@@ -903,73 +938,73 @@ const misProductos = [
     },
     {
         "category": "extractores-de-polvo",
-        "data": "Extractor de polvo 3 ventiladores",
+        "data": "Extractor de Polvo para Uñas 3 Ventiladores Blancos",
         "data2": "$549.00",
-        "altTexto": "",
-        "image": "imagenes/extractor-de-polvo-3-ventiladores.webp"
+        "altTexto": "Máquina recolectora de polvo para manicura color blanco con diseño ergonómico de arco acolchado y rejilla de succión con tres ventiladores.",
+        "image": "imagenes/extractor-polvo-unas-3-ventiladores-blanco.webp"
     },
     {
         "category": "extractores-de-polvo",
-        "data": "Extractor de polvo chico",
-        "data2": "-14%",
-        "altTexto": "",
-        "image": "imagenes/extractor-de-polvo-chico.webp"
+        "data": "Extractor de Polvo para Uñas 1 Ventilador Blanco",
+        "data2": "$300.00",
+        "altTexto": "Extractor de polvo para manicura compacto color blanco con diseño curvo y un solo ventilador con rejilla circular negra.",
+        "image": "imagenes/extractor-polvo-unas-1-ventilador-blanco.webp"
     },
     {
         "category": "extractores-de-polvo",
-        "data": "Extractor de polvo mediano",
+        "data": "Extractor de Polvo para Uñas Mediano Diseño Arco Blanco",
         "data2": "$380.00",
-        "altTexto": "",
-        "image": "imagenes/extractor-de-polvo-mediano.webp"
+        "altTexto": "Extractor de polvo para mesa de manicura tamaño mediano modelo 868-1, color blanco con bordes cromados, rejilla rectangular y cargador incluido.",
+        "image": "imagenes/extractor-polvo-unas-mediano-arco-blanco.webp"
     },
     {
         "category": "extractores-de-polvo",
-        "data": "Extractor de polvo parrilla",
+        "data": "Extractor de Polvo para Uñas Rosa con Rejilla Love Crazy",
         "data2": "$499.00",
-        "altTexto": "",
-        "image": "imagenes/extractor-de-polvo-parrilla.webp"
+        "altTexto": "Extractor de polvo para manicura color rosa pastel con rejilla de ventilación geométrica superior, cojín reposamanos gris y bolsa recolectora incluida.",
+        "image": "imagenes/extractor-polvo-unas-rosa-rejilla-love-crazy.webp"
     },
     {
         "category": "drill-pulidores",
-        "data": "Drill 35000 tornasol",
-        "data2": "-45%",
-        "altTexto": "",
-        "image": "imagenes/drill-35000-tornasol.webp"
+        "data": "Drill para Uñas 35000 RPM Color Tornasol",
+        "data2": "$600.00",
+        "altTexto": "Máquina pulidora (Drill) para uñas profesional de 35000 RPM con acabado tornasol (camaleón), herramienta eléctrica para manicura y pedicura.",
+        "image": "imagenes/drill-unas-profesional-35000-rpm-color-tornasol.webp"
     },
     {
         "category": "drill-pulidores",
-        "data": "Drill Estudiantil",
+        "data": "Drill Pulidor de Uñas Tipo Pluma Portátil Rosa Estudiante",
         "data2": "$110.00",
-        "altTexto": "",
-        "image": "imagenes/drill-estudiantil.webp"
+        "altTexto": "Pulidor eléctrico tipo pluma para uñas color rosa fucsia sobre caja con especificaciones de velocidad variable de 3000 a 20000 rpm.",
+        "image": "imagenes/pulidor-unas-pluma-rosa-portatil-estudiante-drill.webp"
     },
     {
         "category": "drill-pulidores",
         "data": "Drill Pluma portatil",
         "data2": "$346.00",
-        "altTexto": "",
-        "image": "imagenes/drill-pluma-portatil.webp"
+        "altTexto": "Pieza de mano tipo pluma para máquina pulidora de uñas en color negro mate con una línea roja decorativa cerca de la punta metálica.",
+        "image": "imagenes/pluma-pulidor-unas-negro-anillo-rojo-repuesto.webp"
     },
     {
         "category": "drill-pulidores",
-        "data": "Drill profesional 25000",
+        "data": "Drill Pulidor de Uñas Profesional 25000 RPM Blanco",
         "data2": "$533.00",
-        "altTexto": "",
-        "image": "imagenes/drill-profesional-25000.webp"
+        "altTexto": "Kit de drill pulidor eléctrico profesional para uñas de 25000 RPM, motor color blanco con panel frontal morado, incluye pedal negro y pluma con agarre azul.",
+        "image": "imagenes/drill-pulidor-unas-profesional-25000rpm-blanco.webp"
     },
     {
         "category": "drill-pulidores",
-        "data": "Drill Rosa Profesional",
+        "data": "Drill Pulidor Profesional para Uñas Rosa con Pedal",
         "data2": "$490.00",
-        "altTexto": "",
-        "image": "imagenes/drill-rosa-profesional.webp"
+        "altTexto": "Kit de drill eléctrico pulidor de uñas color rosa, incluye pluma de mano plateada con rosa, pedal negro, soporte y set de puntas limadoras.",
+        "image": "imagenes/drill-pulidor-profesional-unas-rosa.webp"
     },
     {
         "category": "drill-pulidores",
-        "data": "Drill semi profesional 2000",
+        "data": "Drill Pulidor Semiprofesional para Uñas 20000 RPM Rosa",
         "data2": "$299.00",
-        "altTexto": "",
-        "image": "imagenes/drill-semi-profesional-2000.webp"
+        "altTexto": "Kit de drill pulidor de uñas eléctrico semiprofesional modelo cuadrado color rosa fucsia, incluye pluma de mano, soporte y estuche de puntas.",
+        "image": "imagenes/drill-pulidor-semiprofesional-unas-20000rpm-rosa.webp"
     },
     {
         "category": "lamparas-escritorio",
@@ -1320,7 +1355,7 @@ const misProductos = [
         "data": "Antihongos producto natural 12 ml",
         "data2": "$65.00",
         "altTexto": "Tratamiento natural para uñas Hongu-Syn de A Lom'e, solución antihongos de 12 ml para cuidado y reparación de la uña.",
-        "image": "imagenes/tratamiento-antihongos-hongu-syn-natural-12mlwebp"
+        "image": "imagenes/tratamiento-antihongos-hongu-syn-natural-12ml.webp"
     },
     {
         "category": "mc",
@@ -1373,31 +1408,31 @@ const misProductos = [
     },
     {
         "category": "mc",
-        "data": "Colección de acrílico HINDU",
+        "data": "Gama Acrílicos Colección Hindú Fantasy Nails",
         "data2": "$150.00",
-        "altTexto": "Colección de polvos acrílicos Fantasy Nails edición Hindú Collection, kit con gama de colores temáticos para diseño de uñas.",
-        "image": "imagenes/coleccion-hindu-fantasy-nails-acrilicos.webp"
+        "altTexto": "Gama Hindú Fantasy Nails con 6 polvos acrílicos, presentando tonos metálicos vibrantes y brillantes.",
+        "image": "imagenes/gama-acrilicos-coleccion-hindu-fantasy-nails.webp"
     },
     {
         "category": "mc",
         "data": "Flake pastel 1oz",
         "data2": "$80.00",
-        "altTexto": "",
-        "image": "imagenes/flake-pastel-1oz.webp"
+        "altTexto": "Tarro de polvo acrílico Make-Cover de 1 onza colección Flake Pastel color rosa suave con textura de hojuelas brillantes para construcción de uñas.",
+        "image": "imagenes/polvo-acrilico-cover-flake-pastel-rosa-1oz.webp"
     },
     {
-        "category": "mc",
+        "category": "Fantasy Nails",
         "data": "Foil Glue Fantasy / pegamento para foil",
         "data2": "$80.00",
-        "altTexto": "",
-        "image": "imagenes/foil-glue-fantasy-pegamento-para-foil.webp"
+        "altTexto": "Frasco de pegamento especial para transferir foil de la marca Fantasy Nails, presentación de 15ml con tapa plateada.",
+        "image": "imagenes/pegamento-para-foil-fantasy-nails-transfer.webp"
     },
     {
         "category": "mc",
-        "data": "Formas orgánic 500 pzas",
+        "data": "Formas Organic Nails 500 Piezas",
         "data2": "$287.00",
-        "altTexto": "",
-        "image": "imagenes/formas-org-nic-500-pzas.webp"
+        "altTexto": "Rollo con 500 moldes o formas para escultura de uñas de la marca Organic Nails, diseño clásico con logotipo en colores magenta y negro.",
+        "image": "imagenes/formas-esculturales-organic-nails-500-piezas-rollo.webp"
     },
     {
         "category": "mc",
@@ -1710,14 +1745,14 @@ const misProductos = [
     {
         "category": "efectos-y-decoracion",
         "data": "Caja dije letra dorado, plata y cobre",
-        "data2": "-31%",
+        "data2": "$35.00",
         "altTexto": "Caja organizadora con dijes metálicos en forma de letras del abecedario en colores dorado, plateado y cobre para decoración de uñas personalizada.",
         "image": "imagenes/caja-dijes-letras-metalicas-dorado-plata-cobre-decoracion.webp"
     },
     {
         "category": "efectos-y-decoracion",
         "data": "Cajita destello tornasol",
-        "data2": "-5%",
+        "data2": "$25.00",
         "altTexto": "Set de decoración para uñas Miss Chula con estrellas holográficas efecto tornasol en 12 colores diferentes, ideal para diseños de encapsulado brillante.",
         "image": "imagenes/set-decoracion-estrellas-holograficas-tornasol-miss-chula.webp"
     },
@@ -1731,7 +1766,7 @@ const misProductos = [
     {
         "category": "efectos-y-decoracion",
         "data": "Cartera dijes kawaii",
-        "data2": "-38%",
+        "data2": "$35.00",
         "altTexto": "Paquete tipo cartera con surtido de dijes Kawaii en 3D de resina, mezcla de figuras tiernas y coloridas (animalitos, flores) para decoración de uñas.",
         "image": "imagenes/cartera-dijes-kawaii-3d-resina-figuras-variadas-nail-art.webp"
     },
@@ -1758,7 +1793,7 @@ const misProductos = [
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Set de Cristales Variados JR Nail Art - Mix de Tamaños y Colores",
+        "data": "Cristales Variados JR Nail Art - Mix de Tamaños y Colores",
         "data2": "$35.00",
         "altTexto": "Estuches de cristales para uñas marca JR Nail Art, set con mix de tamaños y colores variados en organizador de 12 cavidades para decoración y pedrería.",
         "image": "imagenes/set-cristales-variados-jr-nail-art-mix-colores-y-tamanos-jr.webp"
@@ -1786,66 +1821,66 @@ const misProductos = [
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Decoración corazón wg",
+        "data": "Decoración Corazones Metálicos 12 Colores para Uñas WG",
         "data2": "$65.00",
-        "altTexto": "",
-        "image": "imagenes/decoraci-n-coraz-n-wg.webp"
+        "altTexto": "Estuche con 12 frascos de decoración para uñas en forma de corazones metálicos (glitter), variedad de colores brillantes y holográficos para encapsulado.",
+        "image": "imagenes/set-decoracion-corazones-metalicos-glitter-12-colores-wg.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Decoración Corazones Neon",
+        "data": "Decoración Corazones Neón Mate 12 Colores",
         "data2": "$89.00",
-        "altTexto": "",
-        "image": "imagenes/decoraci-n-corazones-neon.webp"
+        "altTexto": "Estuche con 12 frascos de confeti para uñas en forma de corazones, acabado mate en colores neón vibrantes (amarillo, rosa, verde, naranja) para diseños llamativos.",
+        "image": "imagenes/set-decoracion-corazones-neon-mate-12-colores-unas.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Decoración letras",
+        "data": "Decoración Confeti de Letras Holográficas (6 Colores)",
         "data2": "$65.00",
-        "altTexto": "",
-        "image": "imagenes/decoraci-n-letras.webp"
+        "altTexto": "Estuche de 6 frascos con decoración para uñas de confeti en forma de letras del abecedario, acabado holográfico brillante en colores surtidos para encapsulado.",
+        "image": "imagenes/set-decoracion-unas-letras-abecedario-confeti-holografico-6pcs.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Decoración metálica y flores Neon",
+        "data": "Decoración Mix: Flores Neón con Caviar Dorado (6 Piezas)",
         "data2": "$75.00",
-        "altTexto": "",
-        "image": "imagenes/decoraci-n-met-lica-y-flores-neon.webp"
+        "altTexto": "Estuche con 6 frascos de decoración combinada para uñas: cada envase contiene una mezcla lista de flores mate en colores neón y micro balines dorados (caviar).",
+        "image": "imagenes/set-decoracion-mix-flores-neon-y-balines-dorados-unas.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Decoración navideña",
+        "data": "Decoración Navideña",
         "data2": "$59.00",
-        "altTexto": "",
-        "image": "imagenes/decoraci-n-navide-a.webp"
+        "altTexto": "Kit de 6 frascos de decoración navideña para uñas marca Nanty Nails figuras de fimo y confeti con diseños de Santa Claus bastones y coronas en colores rojo y verde para encapsulado.",
+        "image": "imagenes/set-decoracion-navidad-fimo-6-piezas-encapsulado.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Decoración tipo naturaleza flor y mariposas",
+        "data": "Decoración Naturaleza Muerta y Mariposas Flores Secas para Encapsula",
         "data2": "$45.00",
-        "altTexto": "",
-        "image": "imagenes/decoraci-n-tipo-naturaleza-flor-y-mariposas.webp"
+        "altTexto": "Kit de decoración para uñas con naturaleza muerta flores secas y mariposas en variedad de colores en estuches organizadores marca Nanty Nails ideal para técnica de encapsulado y diseños 3D.",
+        "image": "imagenes/set-naturaleza-muerta-flores-secas-mariposas-encapsulado.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Decoración variada",
+        "data": "Decoración variada Cristales, Perlas y Dijes 3D (Dorados y Plateados)",
         "data2": "$22.00",
-        "altTexto": "",
-        "image": "imagenes/decoraci-n-variada.webp"
+        "altTexto": "Cuatro estuches de accesorios para decoración de uñas conteniendo variedad de cristales brillantes perlas y dijes metálicos con formas de corazones y lazos para diseños 3D.",
+        "image": "imagenes/set-4-cajas-decoracion-nail-art-mix-cristales-perlas-dijes-3d.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Decoración variada",
+        "data": "Decoración con Cristales y Pedrería Surtida para Encapsular",
         "data2": "$85.00",
-        "altTexto": "",
-        "image": "imagenes/decoraci-n-variada.webp"
+        "altTexto": "Estuche organizador con 6 botes de decoración variada para uñas que incluye mezcla de cristales pedrería y formas brillantes en colores surtidos para diseños de nail art y encapsulado.",
+        "image": "imagenes/set-6-frascos-decoracion-mix-cristales-pedreria-surtida-encapsulado.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Decoración y moñitos",
+        "data": "Decoración para Uñas Estilo Coquette - Moños 3D de Tela y Mix de Perlas Surtidas",
         "data2": "$110.00",
-        "altTexto": "",
-        "image": "imagenes/decoraci-n-y-mo-itos.webp"
+        "altTexto": "Estuche organizador con decoración para uñas que incluye moñitos de tela 3D en colores surtidos y perlas blancas ideal para diseños estilo coquette y kawaii.",
+        "image": "imagenes/set-decoracion-unas-monos-tela-3d-estilo-coquette-lazos-perlas.webp"
     },
     {
         "category": "efectos-y-decoracion",
@@ -1856,192 +1891,192 @@ const misProductos = [
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Dije colgante",
+        "data": "Dije Colgante de Zirconia y Metal Dorado",
         "data2": "$30.00",
-        "altTexto": "",
-        "image": "imagenes/dije-colgante.webp"
+        "altTexto": "Dije colgante de joyería para uñas con acabado dorado e incrustaciones de cristales brillantes tipo zirconia.",
+        "image": "imagenes/dije-colgante-lujo-unas-zirconia-dorado-3d.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Dije Mariposa miss cherry",
+        "data": "Mariposas de Tela Organza 3D Multicolor con Cristales",
         "data2": "$40.00",
-        "altTexto": "",
-        "image": "imagenes/dije-mariposa-miss-cherry.webp"
+        "altTexto": "Set de decoración para uñas con mariposas de tela tipo organza en colores degradados y centro de pedrería brillante para diseños 3D con volumen.",
+        "image": "imagenes/mariposas-tela-organza-3d-colores-degradados-cristales.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto 3 en 1 negro",
+        "data": "Efecto 3 en 1 Polvo y Glitter color Negro",
         "data2": "$60.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-3-en-1-negro.webp"
+        "altTexto": "Kit de 6 frascos con decoración para uñas tipo efecto 3 en 1 gama negra que incluye glitter, hojuelas y texturas brillantes en empaque holográfico",
+        "image": "imagenes/set-efecto-3-en-1-polvo-glitter-unas-negro.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto 3 en 1 plata",
+        "data": "Efecto 3 en 1 Polvo y Glitter color Plata",
         "data2": "$60.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-3-en-1-plata.webp"
+        "altTexto": "Kit de 6 frascos con decoración para uñas tipo efecto 3 en 1 gama plateada, incluye glitter, hojuelas metálicas y polvos brillantes en empaque holográfico.",
+        "image": "imagenes/set-efecto-3-en-1-polvo-glitter-unas-plata.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto 3 en 1 rojo",
+        "data": "Efecto 3 en 1 Polvo y Glitter color Rojo",
         "data2": "$60.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-3-en-1-rojo.webp"
+        "altTexto": "Kit de 6 frascos con decoración para uñas tipo efecto 3 en 1 gama de tonos rojos y rosas, incluye glitter, hojuelas y polvos brillantes en empaque holográfico.",
+        "image": "imagenes/set-efecto-3-en-1-polvo-glitter-unas-rojo.webp"
     },
     {
         "category": "efectos-y-decoracion",
         "data": "Efecto Acuarela",
         "data2": "$68.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-acuarela.webp"
+        "altTexto": "Set de tres paletas de acuarela sólida con efecto shimmer para uñas, modelos Candy, Autumn Whispers y Grass Green en empaques holográficos.",
+        "image": "imagenes/acuarela-solida-shimmer-para-unas.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto Aurora",
+        "data": "Efecto Aurora Blanco Iridiscente",
         "data2": "$30.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-aurora.webp"
+        "altTexto": "Frasco de polvo fino para decoración de uñas efecto aurora tono blanco iridiscente, incluye aplicador de esponja y empaque de bolsa rosa holográfica.",
+        "image": "imagenes/polvo-efecto-aurora-blanco-iridiscente-unas.webp"
     },
     {
         "category": "efectos-y-decoracion",
         "data": "Efecto aurora destellos diferentes",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-aurora-destellos-diferentes.webp"
+        "altTexto": "Paquete con 4 frascos de polvo para uñas efecto aurora en tonos pastel variados, incluye aplicador de esponja rosa.",
+        "image": "imagenes/set-polvo-efecto-aurora-4-colores-aplicador.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto azúcar de color",
+        "data": "Efecto Azúcar para Uñas Colores Variados",
         "data2": "$80.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-az-car-de-color.webp"
+        "altTexto": "Estuche con 12 frascos de decoración para uñas textura efecto azúcar, incluye gama de colores brillantes como rosa neón, azul, verde, morado y negro.",
+        "image": "imagenes/set-12-polvos-efecto-azucar-unas-colores-variados.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto azúcar glow",
+        "data": "Efecto Azúcar Glow",
         "data2": "$46.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-az-car-glow.webp"
+        "altTexto": "Kit de 6 frascos de polvo para decoración de uñas textura azúcar con efecto glow (brilla en la oscuridad), marca Mussa en caja plateada holográfica.",
+        "image": "imagenes/set-polvo-efecto-azucar-glow-oscuridad-mussa.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto espejo 3 en 1",
+        "data": "Efecto Espejo Mágico 3 Colores para Uñas",
         "data2": "$39.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-espejo-3-en-1.webp"
+        "altTexto": "Dúo de paletas de polvo sólido compacto Solid Magic Mirror Powder con tres tonos metálicos cada una para efecto espejo en uñas, empaque morado",
+        "image": "imagenes/polvo-solido-efecto-espejo-magico-3-colores.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto Espejo colores otoño",
+        "data": "Efecto Espejo 6 Tonos Otoñales con Aplicadores",
         "data2": "$69.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-espejo-colores-oto-o.webp"
+        "altTexto": "Paleta de 6 frascos de polvo metálico efecto espejo en gama de colores otoñales como dorado, verde y cobre, incluye aplicadores de esponja.",
+        "image": "imagenes/set-polvo-efecto-espejo-tonos-otono-aplicadores.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto Espejo sólido diferentes colores",
+        "data": "Efecto Espejo para Uñas Tonos Azul y Verde",
         "data2": "$35.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-espejo-s-lido-diferentes-colores.webp"
+        "altTexto": "Frasco de polvo sólido compacto efecto espejo para uñas en tonos azul y verde, empaque individual en bolsa transparente con aplicador de esponja.",
+        "image": "imagenes/polvo-solido-efecto-espejo-unas-azul-verde.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto flake vidrio",
+        "data": "Flake Vidrio Roto 6 Colores",
         "data2": "$49.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-flake-vidrio.webp"
+        "altTexto": "Estuche con 6 frascos de decoración para uñas con hojuelas irregulares brillantes tipo efecto vidrio roto (flake) en tonos morado, azul, rosa y dorado.",
+        "image": "imagenes/set-decoracion-unas-efecto-flake-vidrio-roto-6-colores.webp"
     },
     {
         "category": "efectos-y-decoracion",
         "data": "Efecto Luminaria",
         "data2": "$75.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-luminaria.webp"
+        "altTexto": "Colección de 4 sets de polvos pigmentos efecto luminaria marca Miss Cherry, cada caja contiene 6 frascos con gamas de colores neón, pasteles, azules y cálidos para decoración de uñas.",
+        "image": "imagenes/set-polvos-pigmento-neon-efecto-luminaria-miss-cherry.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto ojo de gato en polvo xioya",
+        "data": "Polvo Efecto Ojo de Gato Xiaoya Magnético con Aplicador",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-ojo-de-gato-en-polvo-xioya.webp"
+        "altTexto": "Sobres de polvo magnético para decoración de uñas efecto ojo de gato marca Xiaoya, tonos azul y rosa iridiscente con aplicador incluido.",
+        "image": "imagenes/polvo-efecto-ojo-de-gato-xiaoya-magnetico.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto plata 3 en 1",
+        "data": "Efecto 3 en 1 Polvo y Glitter Plata",
         "data2": "$69.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-plata-3-en-1.webp"
+        "altTexto": "Kit de 6 frascos con decoración para uñas tipo efecto 3 en 1 en gama plateada, incluye glitter, hojuelas metálicas y polvos brillantes en empaque holográfico.",
+        "image": "imagenes/set-efecto-3-en-1-polvo-glitter-plata.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto Reflejante miss cherry",
+        "data": "Efecto Reflejante Flash 6 Tonos Miss Cherry",
         "data2": "$73.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-reflejante-miss-cherry.webp"
+        "altTexto": "Estuche con 6 frascos de polvo glitter con efecto reflejante flash para uñas, marca Miss Cherry, incluye tonos metálicos oscuros como plata, dorado, negro, morado y verde.",
+        "image": "imagenes/set-polvo-efecto-reflejante-flash-miss-cherry.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto Rose Gold",
+        "data": "Polvo Efecto Espejo Rose Gold para Uñas con Aplicador",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-rose-gold.webp"
+        "altTexto": "Bolsa holográfica rosa que contiene un frasco de polvo fino cromado efecto espejo en tono Rose Gold (oro rosa) para decoración de uñas y un aplicador de esponja.",
+        "image": "imagenes/polvo-efecto-espejo-rose-gold-unas.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto terciopelo kal",
+        "data": "Efecto Terciopelo Kalanzi Colores Pastel",
         "data2": "$26.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-terciopelo-kal.webp"
+        "altTexto": "Bolsa holográfica marca Kalanzi conteniendo un set de 6 tarros de polvo fino efecto terciopelo en tonos pastel para decoración de uñas.",
+        "image": "imagenes/set-polvos-efecto-terciopelo-kalanzi-colores-pastel.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto térmico",
+        "data": "Efecto Térmico Mussa Glitter Cambia de Color",
         "data2": "$46.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-t-rmico.webp"
+        "altTexto": "Caja holográfica marca Mussa con 6 tarros de polvo glitter con efecto térmico para decoración de uñas en tonos variados.",
+        "image": "imagenes/set-polvos-efecto-termico-mussa-glitter-cambia-color.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto unicornio",
+        "data": "Efecto Unicornio Holográfico Cromado con Aplicador",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-unicornio.webp"
+        "altTexto": "Paquete individual marca Kalanzi con un tarro de polvo efecto unicornio holográfico plateado y una brocha aplicadora de esponja.",
+        "image": "imagenes/polvo-efecto-unicornio-holografico-cromado-plata.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efecto Unicornio de color",
+        "data": "Efecto Unicornio Holográfico Glitter Multicolor",
         "data2": "$58.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-unicornio-de-color.webp"
+        "altTexto": "Caja con set de 6 tarros de polvo para uñas efecto unicornio holográfico en colores vibrantes y oscuros con acabado iridiscente.",
+        "image": "imagenes/set-polvos-efecto-unicornio-holografico-multicolorr.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Efectos 3 en 1 miss cherry",
+        "data": "Efecto Acrílico 3 en 1 (Miss Cherry) Gamas con Glitter",
         "data2": "$79.00",
-        "altTexto": "",
-        "image": "imagenes/efectos-3-en-1-miss-cherry.webp"
+        "altTexto": "Cajas de la marca Miss Cherry mostrando diferentes gamas de polvos acrílicos 3 en 1 (Rojos, Nudes, Verdes y Morados) mezclados con glitter para uñas.",
+        "image": "imagenes/polvo-acrilico-3-en-1-miss-cherry-coleccion-mix-glitter.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Estrellitas Tornasol de color",
+        "data": "Decoración Nail Art Estrellas Glitter Holográfico 12 Colores",
         "data2": "$65.00",
-        "altTexto": "",
-        "image": "imagenes/estrellitas-tornasol-de-color.webp"
+        "altTexto": "Estuche organizador con 12 frascos de glitter en forma de estrellas con acabados metálicos y tornasol en colores variados para diseño de uñas.",
+        "image": "imagenes/set-decoracion-estrellas-glitter-holografico-colores.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Flor 3d",
+        "data": "Decoración Nail Art Flores 3D Resina Rojo",
         "data2": "$35.00",
-        "altTexto": "",
-        "image": "imagenes/flor-3d.webp"
+        "altTexto": "Flores pequeñas de 5 pétalos color rojo intenso en 3D para decoración de uñas, con detalles de centros dorados tipo balín.",
+        "image": "imagenes/decoracion-nail-art-flores-3d-resina-rojo.webp"
     },
     {
         "category": "efectos-y-decoracion",
-        "data": "Flor de resina de colores y balin",
+        "data": "Flores de Resina Colores con Perlas y Balines",
         "data2": "$35.00",
-        "altTexto": "",
-        "image": "imagenes/flor-de-resina-de-colores-y-balin.webp"
+        "altTexto": "Estuche con surtido de flores de resina en colores variados, combinadas con perlas blancas y balines dorados para decoración de uñas 3D.",
+        "image": "imagenes/mix-flores-resina-colores-perlas-balines.webp"
     },
     {
         "category": "efectos-y-decoracion",
@@ -2409,24 +2444,24 @@ const misProductos = [
     },
     {
         "category": "kalanzi",
-        "data": "Efecto unicornio kalanzi",
+        "data": "Efecto Láser Ojo de Gato Holográfico (Kalanzi)",
         "data2": "$40.00",
-        "altTexto": "",
-        "image": "imagenes/efecto-unicornio-kalanzi.webp"
+        "altTexto": "Gama Efecto Láser Ojo de Gato Kalanzi con 6 tonos de gel semipermanente, presentando acabados magnéticos y holográficos vibrantes en colores azul claro, verde lima, morado, rojo, cobre y negro.",
+        "image": "imagenes/gama-gel-semipermanente-efecto-laser-ojo-de-gato-kalanzi.webp"
     },
     {
         "category": "kalanzi",
-        "data": "Gama galaxy kalanzi A",
+        "data": "Gama Gel Semipermanente Efecto Galaxy Set A Kalanzi",
         "data2": "$184.00",
-        "altTexto": "",
-        "image": "imagenes/gama-galaxy-kalanzi-a.webp"
+        "altTexto": "Caja de la gama Gelish Efecto Galaxy de Kalanzi que muestra 6 tonos de gel semipermanente con acabado de glitter intenso y destellos en colores plata, oro rosa, dorado, negro, rosa y azul.",
+        "image": "imagenes/gama-gel-efecto-galaxy-kalanzi-set-a-glitter-brillante-6-piezas.webp"
     },
     {
         "category": "kalanzi",
-        "data": "Gama galaxy kalanzi B",
+        "data": "Gama Gel Semipermanente Efecto Galaxy Set B Kalanzi",
         "data2": "$184.00",
-        "altTexto": "",
-        "image": "imagenes/gama-galaxy-kalanzi-b.webp"
+        "altTexto": "Gama Efecto Galaxy B de Kalanzi que presenta 6 tonos de gel semipermanente con acabado de glitter brillante en colores morado, turquesa, verde, rojo, cobre y multicolor.",
+        "image": "imagenes/gama-gel-efecto-galaxy-kalanzi-set-b-glitter-brillante-6-piezas.webp"
     },
     {
         "category": "kalanzi",
@@ -2521,80 +2556,80 @@ const misProductos = [
     },
     {
         "category": "mussa",
-        "data": "Gama firework B",
+        "data": "Gama Gel Semipermanente Firework Set B Efecto Glitter",
         "data2": "$239.00",
-        "altTexto": "",
-        "image": "imagenes/gama-firework-b.webp"
+        "altTexto": "Caja de la colección Firework Set B de Mussa que muestra 6 tonos de gel semipermanente con glitter intenso en colores plata, azul cielo, rose gold, lila, dorado y cobre.",
+        "image": "imagenes/gama-gel-firework-set-b-mussa-glitter-brillante-destellos.webp"
     },
     {
         "category": "mussa",
-        "data": "Gama gel diamante D",
+        "data": "Gama Gel Semipermanente Diamante Set D Mussa",
         "data2": "$239.00",
-        "altTexto": "",
-        "image": "imagenes/gama-gel-diamante-d.webp"
+        "altTexto": "Gel Diamante D de Mussa que presenta 6 tonos de gel semipermanente con acabado de glitter brillante en colores rosa, amarillo, verde, azul petróleo, negro y vino.",
+        "image": "imagenes/gama-gel-diamante-set-d-mussa-glitter-brillante-6-piezas.webp"
     },
     {
         "category": "mussa",
-        "data": "Gama halloween",
+        "data": "Gama Gel Semipermanente Colección Halloween Mussa",
         "data2": "$135.00",
-        "altTexto": "",
-        "image": "imagenes/gama-halloween.webp"
+        "altTexto": "Gama de 6 tonos de gel semipermanente colección Halloween de Mussa presentados en muestrario, mostrando el acabado final mate en colores temáticos como naranja calabaza, negro, blanco, beige y morado intens",
+        "image": "imagenes/gama-gel-semipermanente-coleccion-halloween-mussa-tonos-mate-naranja-negro.webp"
     },
     {
         "category": "mussa",
-        "data": "Gama mermaid",
+        "data": "Gama Gel Semipermanente Mermaid Mussa",
         "data2": "$135.00",
-        "altTexto": "",
-        "image": "imagenes/gama-mermaid.webp"
+        "altTexto": "Gama Mermaid Mussa con 6 tonos de gel semipermanente, mostrando colores oscuros intensos con acabado de glitter fino estilo sirena en azul turquesa, azul marino, morado, dorado y negro.",
+        "image": "imagenes/gama-gel-mermaid-mussa-efecto-sirena-brillo-profundo.webp"
     },
     {
         "category": "mussa",
-        "data": "Gama Mussa A",
+        "data": "Gama Gel Semipermanente Colección A Mussa",
         "data2": "$135.00",
-        "altTexto": "",
-        "image": "imagenes/gama-mussa-a.webp"
+        "altTexto": "Gama Colección A Mussa con 6 tonos de gel semipermanente, presentando una paleta de colores nude, beige y tonos piel cálidos y suaves ideales para manicura natural o bases",
+        "image": "imagenes/gama-gel-mussa-coleccion-a-tonos-nude-beige-maquillaje.webp"
     },
     {
         "category": "mussa",
-        "data": "Gama Mussa athena",
+        "data": "Gama Gel Semipermanente Colección Athena Mussa",
         "data2": "$135.00",
-        "altTexto": "",
-        "image": "imagenes/gama-mussa-athena.webp"
+        "altTexto": "Gama Athena Mussa con 6 tonos de gel semipermanente, presentando una paleta de colores cálidos estilo otoño con tonos tierra, terracota, café y bronce metálico.",
+        "image": "imagenes/gama-gel-athena-mussa-tonos-tierra-terracota-bronce.webp"
     },
     {
         "category": "mussa",
-        "data": "Gama Mussa B",
+        "data": "Gama Gel Semipermanente Colección B Mussa",
         "data2": "$135.00",
-        "altTexto": "",
-        "image": "imagenes/gama-mussa-b.webp"
+        "altTexto": "Gama Colección B Mussa con 6 tonos de gel semipermanente, presentando una paleta de colores intensos en gama de rojos, vino, borgoña y tinto oscuro",
+        "image": "imagenes/gama-gel-mussa-coleccion-b-tonos-rojos-vino-tinto.webp"
     },
     {
         "category": "mussa",
-        "data": "Gama Mussa blush",
+        "data": "Gama Gel Semipermanente Colección Blush Mussa",
         "data2": "$135.00",
-        "altTexto": "",
-        "image": "imagenes/gama-mussa-blush.webp"
+        "altTexto": "Gama Blush Mussa con 6 tonos de gel semipermanente, presentando una paleta de colores sólidos oscuros y elegantes en gama de vino, tinto, borgoña y malva rojizo",
+        "image": "imagenes/gama-gel-mussa-coleccion-blush-tonos-vino-tinto-malva.webp"
     },
     {
         "category": "mussa",
-        "data": "Gama Mussa cristal B",
+        "data": "Gama Gel Semipermanente Colección Cristal Set B Mussa",
         "data2": "$220.00",
-        "altTexto": "",
-        "image": "imagenes/gama-mussa-cristal-b.webp"
+        "altTexto": "Gama Cristal B Mussa con 6 tonos de gel semipermanente, presentando colores pastel translúcidos con acabado cristalino y destellos de glitter en rosa, azul, amarillo, lila y verde",
+        "image": "imagenes/gama-gel-cristal-set-b-mussa-translucido-glitter-pastel.webp"
     },
     {
         "category": "mussa",
-        "data": "Gama Mussa diamante fondo negro",
+        "data": "Gama Gel Semipermanente Diamante Fondo Negro Set A Mussa",
         "data2": "$200.00",
-        "altTexto": "",
-        "image": "imagenes/gama-mussa-diamante-fondo-negro.webp"
+        "altTexto": "Gama Diamante Fondo Negro Set A Mussa con 6 tonos de gel semipermanente, presentando un efecto de destellos de glitter plateado y holográfico diseñados para resaltar intensamente sobre bases oscuras",
+        "image": "imagenes/gama-gel-diamante-fondo-negro-set-a-mussa-glitter-reflex.webp"
     },
     {
         "category": "mussa",
-        "data": "Gama Mussa diamante glow A",
+        "data": "Gama Gel Semipermanente Diamante Glow Set A Mussa",
         "data2": "$205.00",
-        "altTexto": "",
-        "image": "imagenes/gama-mussa-diamante-glow-a.webp"
+        "altTexto": "Gama Diamante Glow Set A Mussa con 6 tonos de gel semipermanente, presentando colores pastel suaves con destellos de glitter y efecto luminoso en tonos menta, rosa, azul, nude y lima",
+        "image": "imagenes/gama-gel-diamante-glow-set-a-mussa-pastel-brillo-luminoso.webp"
     },
     {
         "category": "mussa",
@@ -2829,66 +2864,73 @@ const misProductos = [
     },
     {
         "category": "miss-cherry",
-        "data": "Blooming (Miss Cherry)",
+        "data": "Gama Tinta Marble Ink Efecto Blooming (Miss Cherry)",
         "data2": "$35.00",
-        "altTexto": "Tinta para efecto mármol (Blooming Gel) marca Miss Cherry línea Clear Marble Ink tono 06, ideal para realizar diseños difuminados y tipo acuarela.",
-        "image": "imagenes/blooming-gel-clear-marble-ink-miss-cherry-tono-06.webp"
+        "altTexto": "Gama Clear Marble Ink Miss Cherry con 6 tintas efecto blooming o mármol, mostrando la presentación en caja blanca y botella plateada para crear diseños de dispersión y acuarela.",
+        "image": "imagenes/gama-tinta-marble-ink-blooming-gel-miss-cherry-efecto-marmol.webp"
     },
     {
         "category": "miss-cherry",
-        "data": "Gama aictic streamer",
+        "data": "Gama Gel Arctic Streamer Miss Cherry 12 Piezas Efecto Aurora",
         "data2": "$350.00",
-        "altTexto": "",
-        "image": "imagenes/gama-aictic-streamer.webp"
+        "altTexto": "Gama de 12 geles semipermanentes Arctic Streamer de Miss Cherry con efecto aurora y acabado perla en tonos pastel sobre muestrario.",
+        "image": "imagenes/gama-gel-arctic-streamer-miss-cherry-aurora-boreal.webp"
     },
     {
         "category": "miss-cherry",
-        "data": "Gama chocolate sal marina",
+        "data": "Gama Gel Semipermanente Efecto Huevo de Codorniz",
         "data2": "$242.00",
-        "altTexto": "",
-        "image": "imagenes/gama-chocolate-sal-marina.webp"
+        "altTexto": "Muestrario de 12 tips de uñas con acabado efecto huevo de codorniz en colores pastel y terrosos con moteado negro.",
+        "image": "imagenes/gama-gel-efecto-huevo-codorniz.webp"
     },
     {
         "category": "miss-cherry",
-        "data": "Gama cristal diamond A",
+        "data": "Gama Gel Semipermanente Efecto Sal Marina con Glitter",
+        "data2": "$242.00",
+        "altTexto": "Muestrario de 12 tips de uñas con gel efecto sal marina y destellos de glitter, comparando acabados brillante y mate en tonos verde oscuro, azul, morado y café chocolate.",
+        "image": "imagenes/gel-efecto-sal-marina-glitter-tonos-tierra-mate-brillo.webp"
+    },
+    {
+        "category": "miss-cherry",
+        "data": "Gama Gel Semipermanente Crystal Diamond Night Set A Efecto Flash 12 Tonos",
         "data2": "$403.00",
-        "altTexto": "",
-        "image": "imagenes/gama-cristal-diamond-a.webp"
+        "altTexto": "Gama de 12 tonos de gel semipermanente colección Crystal Diamond Night presentados en muestrario, mostrando un acabado de glitter reflectivo intenso en colores metálicos, rosas, verdes y azules.",
+        "image": "imagenes/gama-gel-crystal-diamond-night-set-a-glitter-reflectivo-flash.webp"
     },
     {
         "category": "miss-cherry",
-        "data": "Gama cristal diamond B",
+        "data": "Gama Gel Semipermanente Crystal Diamond Night Set B Efecto Flash 12 Tonos",
         "data2": "$403.00",
-        "altTexto": "",
-        "image": "imagenes/gama-cristal-diamond-b.webp"
+        "altTexto": "Gama de 12 tonos de gel semipermanente colección Crystal Diamond Night Set B presentados en muestrario, mostrando el acabado final de glitter reflectivo flash en colores intensos como rojo, negro, morado, verde y turquesa.",
+        "image": "imagenes/gama-gel-crystal-diamond-night-set-b-glitter-reflectivo-flash.webp"
     },
     {
         "category": "miss-cherry",
-        "data": "Gama E1",
+        "data": "Gama Gel Semipermanente Neón y Confeti Colección E1 12 Tonos",
         "data2": "$260.00",
-        "altTexto": "",
-        "image": "imagenes/gama-e1.webp"
+        "altTexto": "Gama de 12 tonos de gel semipermanente colección E1 mostrada en exhibidor, alternando colores neón sólidos vibrantes con geles de glitter y confeti en tonos verde, rosa, rojo, amarillo, dorado y azul.",
+        "image": "imagenes/gama-gel-neon-y-confeti-miss-cherry-coleccion-e1-glitter.webp"
     },
     {
         "category": "miss-cherry",
-        "data": "Gama F1 miss cherry",
+        "data": "Gama Gel Semipermanente Tonos Pastel y Florales Colección F1",
         "data2": "$260.00",
-        "altTexto": "",
-        "image": "imagenes/gama-f1-miss-cherry.webp"
+        "altTexto": "Gama de 12 tonos de gel semipermanente Colección F1, presentando una combinación de colores pastel suaves, nude y rosa vibrante junto con diseños de flores encapsuladas y toques dorados.",
+        "image": "imagenes/gama-gel-f1-pastel-floral-primavera-tonos-suaves-miss-cherry.webp"
     },
     {
         "category": "miss-cherry",
-        "data": "Gama luz de agua",
+        "data": "Gama Gel Semipermanente Efecto Aurora Colección Luz de Agua",
         "data2": "$420.00",
-        "altTexto": "",
-        "image": "imagenes/gama-luz-de-agua.webp"
+        "altTexto": "Gama Luz de Agua Miss Cherry con 12 tonos de gel semipermanente efecto aurora y perla, mostrando acabados iridiscentes y metálicos suaves en colores blanco, rosa, azul, verde, plata y lila",
+        "image": "imagenes/gama-gel-luz-de-agua-miss-cherry-efecto-aurora-perla-iridiscente.webp"
     },
     {
         "category": "miss-cherry",
-        "data": "Gama Ojo de gato Diamante",
+        "data": "Gama Gel Semipermanente Ojo de Gato Diamante Miss Cherry",
         "data2": "$399.00",
-        "altTexto": "",
-        "image": "imagenes/gama-ojo-de-gato-diamante.webp"
+        "altTexto": "Gama Ojo de Gato Diamante Miss Cherry con 12 tonos de gel semipermanente, presentando colores pastel brillantes con efecto magnético y destellos de glitter en muestrario circular",
+        "image": "imagenes/gama-gel-miss-cherry-ojo-de-gato-diamante.webp"
     },
     {
         "category": "miss-cherry",
@@ -3354,45 +3396,52 @@ const misProductos = [
     },
     {
         "category": "herramientas",
-        "data": "Dedo articulado de práctica con uñas",
+        "data": "Dedo de Práctica Articulado para Manicura - Kit con Base Estable y Tips de Repuesto para Acrílico",
         "data2": "$120.00",
-        "altTexto": "",
-        "image": "imagenes/dedo-articulado-de-pr-ctica-con-u-as.webp"
+        "altTexto": "Kit de entrenamiento para uñas que incluye dedo articulado con base soporte dedos de reemplazo y bolsa de tips de práctica en empaque blister para estudiantes de manicura.",
+        "image": "imagenes/dedo-practica-articulado-manicura-con-base-y-tips-repuesto.webp"
     },
     {
         "category": "herramientas",
-        "data": "Dedo de práctica con uña /sin uña",
+        "data": "Dedo de práctica sin uña",
         "data2": "$5.00",
-        "altTexto": "",
-        "image": "imagenes/dedo-de-pr-ctica-con-u-a-sin-u-a.webp"
+        "altTexto": "Dedo de práctica individual de plástico con base adhesiva disponible en modelo sin uña postiza para entrenamiento de manicura.",
+        "image": "imagenes/dedo-practica-individual-opcion-sin-una-postiza-base-adhesiva.webp"
+    },
+    {
+        "category": "herramientas",
+        "data": "Dedo de práctica con uña",
+        "data2": "$5.00",
+        "altTexto": "Dedo de práctica individual de plástico con base adhesiva disponible en modelo con uña postiza insertada para entrenamiento de manicura.",
+        "image": "imagenes/dedo-practica-individual-opcion-con-una-postiza-base-adhesiva.webp"
     },
     {
         "category": "herramientas",
         "data": "Empujador de cutícula /bisturí",
         "data2": "$10.00",
-        "altTexto": "",
-        "image": "imagenes/empujador-de-cut-cula-bistur.webp"
+        "altTexto": "Herramienta metálica para manicura con empujador de cutícula y punta tipo bisturí con mango texturizado antideslizante.",
+        "image": "imagenes/empujador-cuticula-acero-inoxidable-bisturi.webp"
     },
     {
         "category": "herramientas",
-        "data": "Esponja para difuminar gel con repuestos",
+        "data": "Pincel Esponja para Difuminar Gel con Cristales y Repuestos",
         "data2": "$35.00",
-        "altTexto": "",
-        "image": "imagenes/esponja-para-difuminar-gel-con-repuestos.webp"
+        "altTexto": "Pincel de esponja doble punta para Nail Art con mango transparente relleno de cristales y 4 repuestos de esponja redonda amarilla para efectos degradados.",
+        "image": "imagenes/pincel-esponja-difuminar-gel-cristales-repuestos.webp"
     },
     {
         "category": "herramientas",
-        "data": "Esterilizador de  puntas",
+        "data": "Vaso Esterilizador para Puntas de Drill con Canastilla",
         "data2": "$30.00",
-        "altTexto": "",
-        "image": "imagenes/esterilizador-de-puntas.webp"
+        "altTexto": "Contenedor redondo de plástico translúcido con tapa y canastilla interna de drenaje para la limpieza y desinfección de brocas y herramientas de manicura.",
+        "image": "imagenes/vaso-esterilizador-puntas-drill-canastilla.webp"
     },
     {
         "category": "herramientas",
-        "data": "Fundido de cera",
+        "data": "Fundidor de Cera Pro-Wax100 Blanco",
         "data2": "$205.00",
-        "altTexto": "",
-        "image": "imagenes/fundido-de-cera.webp"
+        "altTexto": "Olla calentadora para cera depilatoria modelo Pro-Wax100 color blanco con tapa translúcida morada y perilla de control de temperatura.",
+        "image": "imagenes/fundidor-cera-pro-wax-100-blanco.webp"
     },
     {
         "category": "herramientas",
@@ -3669,135 +3718,135 @@ const misProductos = [
     },
     {
         "category": "foil",
-        "data": "Foil animales tiernos",
+        "data": "Foil para Uñas Animales Tiernos",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-animales-tiernos.webp"
+        "altTexto": "Estuche organizador con 10 rollos de papel foil para transferencia en uñas con diseños coloridos de animales estilo caricatura tierna.",
+        "image": "imagenes/set-foil-transfer-nail-art-animales-caricatura.webp"
     },
     {
         "category": "foil",
-        "data": "Foil corazoncitos",
+        "data": "Foil para Uñas Corazones",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-corazoncitos.webp"
+        "altTexto": "Estuche organizador con 10 rollos de papel foil para transferencia con variedad de diseños de corazones rojos, coloridos y geométricos.",
+        "image": "imagenes/set-foil-transfer-unas-corazones-amor-san-valentin.webp"
     },
     {
         "category": "foil",
-        "data": "Foil corazones love san valentin",
+        "data": "Foil para Uñas San Valentín",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-corazones-love-san-valentin.webp"
+        "altTexto": "Estuche con 10 rollos de foil con diseños románticos de San Valentín, incluyendo corazones, rosas, ositos y frases de amor en colores rojo y rosa.",
+        "image": "imagenes/set-foil-unas-san-valentin-corazones-amor.webp"
     },
     {
         "category": "foil",
-        "data": "Foil degradado B",
+        "data": "Foil para Uñas Degradado Pastel",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-degradado-b.webp"
+        "altTexto": "Estuche con 10 rollos de papel foil para uñas con efectos de degradado suave en colores pastel y arcoíris (rosa, azul, amarillo).",
+        "image": "imagenes/set-foil-transfer-unas-degradado-pastel-arcoiris.webp"
     },
     {
         "category": "foil",
-        "data": "Foil espacio abstracto",
+        "data": "Foil para Uñas Galaxia",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-espacio-abstracto.webp"
+        "altTexto": "Estuche organizador con 10 rollos de papel foil con diseños del espacio exterior, incluyendo galaxias, nebulosas, estrellas y patrones abstractos en tonos azul, morado y naranja.",
+        "image": "imagenes/set-foil-transfer-unas-galaxia-espacio-abstracto.webp"
     },
     {
         "category": "foil",
-        "data": "Foil flamas",
+        "data": "Foil para Uñas Flamas",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-flamas.webp"
+        "altTexto": "Estuche con 10 rollos de papel foil para uñas con diseños de flamas y fuego en colores variados (rojo, azul, morado, amarillo) y degradados.",
+        "image": "imagenes/set-foil-transfer-unas-flamas-fuego-colores.webp"
     },
     {
         "category": "foil",
-        "data": "Foil flores difuminado",
+        "data": "Foil para Uñas Flores Difuminado",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-flores-difuminado.webp"
+        "altTexto": "Estuche con 10 rollos de papel foil con diseños de flores variadas sobre fondos difuminados tipo tie-dye y acuarela en colores vibrantes.",
+        "image": "imagenes/set-foil-transfer-unas-flores-difuminado-tie-dye.webp"
     },
     {
         "category": "foil",
-        "data": "Foil frutas",
+        "data": "Foil para Uñas Frutas",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-frutas.webp"
+        "altTexto": "Estuche con 10 rollos de papel foil para uñas con diseños de frutas variadas y coloridas como fresas, limones, sandías, piñas y uvas.",
+        "image": "imagenes/set-foil-transfer-unas-frutas-tropicales-verano.webp"
     },
     {
         "category": "foil",
-        "data": "Foil holográfico",
+        "data": "Foil para Uñas Holográfico Diseños",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-hologr-fico.webp"
+        "altTexto": "Estuche organizador con 10 rollos de papel foil plateado con efectos holográficos y patrones variados como estrellas, remolinos, puntos y formas",
+        "image": "imagenes/set-foil-transfer-unas-holografico-disenos-plata.webp"
     },
     {
         "category": "foil",
-        "data": "Foil holográfico liso",
+        "data": "Foil para Uñas Holográfico Liso",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-hologr-fico-liso.webp"
+        "altTexto": "Estuche organizador con 10 rollos de papel foil para uñas con acabados metálicos y holográficos lisos (sin estampado) en tonos plata y arcoíris.",
+        "image": "imagenes/set-foil-transfer-unas-holografico-liso-plata.webp"
     },
     {
         "category": "foil",
-        "data": "Foil mándala 1",
+        "data": "Foil para Uñas Mandalas",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-m-ndala-1.webp"
+        "altTexto": "Estuche organizador con 10 rollos de papel foil con diseños coloridos de mandalas, figuras geométricas y patrones paisley estilo bohemio.",
+        "image": "imagenes/set-foil-transfer-unas-mandalas-paisley-boho.webp"
     },
     {
         "category": "foil",
-        "data": "Foil Mándalas",
+        "data": "Foil para Uñas Mandalas Geométrico",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-m-ndalas.webp"
+        "altTexto": "Estuche organizador con 10 rollos de papel foil con diseños vibrantes de mandalas combinados con figuras geométricas y patrones tribales coloridos.",
+        "image": "imagenes/set-foil-transfer-unas-mandalas-geometrico-tribal.webp"
     },
     {
         "category": "foil",
-        "data": "Foil Mándalas y formas",
+        "data": "Foil para Uñas Mandalas y Formas",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-m-ndalas-y-formas.webp"
+        "altTexto": "Estuche organizador con 10 rollos de papel foil que incluye variedad de diseños de mandalas, figuras geométricas y patrones abstractos en tonos tierra y pastel.",
+        "image": "imagenes/set-foil-transfer-unas-mandalas-formas-geometricas-mix.webp"
     },
     {
         "category": "foil",
-        "data": "Foil moños",
+        "data": "Foil para Uñas Moños",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-mo-os.webp"
+        "altTexto": "Estuche organizador con 10 rollos de papel foil para uñas con diseños de moños, lazos y cintas en colores variados y estilos tiernos.",
+        "image": "imagenes/set-foil-transfer-unas-monos-lazos-coquette-cute.webp"
     },
     {
         "category": "foil",
-        "data": "Foil musical",
+        "data": "Foil para Uñas Musical",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-musical.webp"
+        "altTexto": "Estuche organizador con 10 rollos de papel foil para uñas con diseños musicales, incluyendo notas, claves de sol, guitarras y estampados estilo graffiti colorido.",
+        "image": "imagenes/set-foil-transfer-unas-musical-notas-graffiti.webp"
     },
     {
         "category": "foil",
-        "data": "Foil san valentin",
+        "data": "Foil para Uñas San Valentín Love",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-san-valentin.webp"
+        "altTexto": "Estuche organizador con 10 rollos de papel foil con diseños románticos que incluyen labios, besos, rosas, flamingos y frases de Love en tonos rojo y rosa.",
+        "image": "imagenes/set-foil-transfer-unas-san-valentin-love-labios-besos.webp"
     },
     {
         "category": "foil",
-        "data": "Foil serpientes k",
+        "data": "Foil para Uñas Serpientes",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-serpientes-k.webp"
+        "altTexto": "Estuche organizador con 10 rollos de papel foil con diseños estilo tatuaje de serpientes, cobras, dragones y rosas con calaveras en colores variados.",
+        "image": "imagenes/set-foil-transfer-unas-serpientes-cobras-dragones-tattoo.webp"
     },
     {
         "category": "foil",
-        "data": "Foil siluetas",
+        "data": "Foil para Uñas Siluetas",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-siluetas.webp"
+        "altTexto": "Estuche organizador con 10 rollos de papel foil con diseños de arte lineal (line art), incluyendo siluetas de rostros de mujer, flores y formas abstractas con toques de color.",
+        "image": "imagenes/set-foil-transfer-unas-siluetas-rostros-line-art.webp"
     },
     {
         "category": "foil",
-        "data": "Foil degradado A",
+        "data": "Foil para Uñas Degradado A",
         "data2": "$25.00",
-        "altTexto": "",
-        "image": "imagenes/foil-degradado-a.webp"
+        "altTexto": "Estuche con 10 rollos de papel foil para uñas con efectos de degradado y difuminado en colores neón brillantes como naranja, verde y azul.",
+        "image": "imagenes/set-foil-transfer-unas-degradado-colores-neon.webp"
     }
 ];

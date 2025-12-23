@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("✅ Datos cargados correctamente:", misProductos.length, "productos.");
 
     // Estado de filtros
-    let activeCategory = ''; // slug de la categoría seleccionada; '' = Todas
+    let activeCategory = '';
     let searchText = '';
 
     // 2. Configuración de paginación / orden
@@ -19,10 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedSort = '';
     let filteredAndSorted = misProductos.slice();
 
-    // 3. Generar controles de categorías a partir de los datos
+    // 3. Generar controles de categorías
     const categoriesContainer = document.getElementById('categories');
 
-    // Extrae slug de categoría desde una URL tipo '/c/<slug>/...'
     function extractCategorySlug(prod) {
         if (prod && prod.category && typeof prod.category === 'string' && prod.category.trim() !== '') {
             return String(prod.category).trim();
@@ -52,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const slug = extractCategorySlug(p);
             if (slug && slug !== 'sin-categoria') p.category = slug;
-        } catch (e) { /* ignore */ }
+        } catch (e) { }
         Object.keys(p).forEach(k => { if (/^category-link/i.test(k)) delete p[k]; });
         if (p.image2) delete p.image2;
     });
@@ -128,10 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 expanded = !expanded;
                 hiddenContainer.classList.toggle('d-none', !expanded);
                 toggleBtn.textContent = expanded ? 'Ocultar' : 'Más categorías';
-                if (expanded) {
-                    const first = hiddenContainer.querySelector('.category-btn');
-                    if (first) first.focus();
-                }
             });
             categoriesContainer.appendChild(toggleBtn);
         }
@@ -152,19 +147,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const copy = list.slice();
         if (!sortVal) return copy;
         if (sortVal === 'price-asc') {
-            copy.sort((a, b) => parsePrice(a.data2 || a.price || a['data2'] || '') - parsePrice(b.data2 || b.price || b['data2'] || ''));
+            copy.sort((a, b) => parsePrice(a.data2 || a.price || '') - parsePrice(b.data2 || b.price || ''));
         } else if (sortVal === 'price-desc') {
-            copy.sort((a, b) => parsePrice(b.data2 || b.price || b['data2'] || '') - parsePrice(a.data2 || a.price || a['data2'] || ''));
+            copy.sort((a, b) => parsePrice(b.data2 || b.price || '') - parsePrice(a.data2 || a.price || ''));
         } else if (sortVal === 'name-asc') {
             copy.sort((a, b) => {
-                const nameA = (a.data || a.data || Object.values(a).join(' ')).toString().toLowerCase();
-                const nameB = (b.data || b.data || Object.values(b).join(' ')).toString().toLowerCase();
+                const nameA = (a.data || a.nombre || '').toString().toLowerCase();
+                const nameB = (b.data || b.nombre || '').toString().toLowerCase();
                 return nameA.localeCompare(nameB);
             });
         } else if (sortVal === 'name-desc') {
             copy.sort((a, b) => {
-                const nameA = (a.data || a.data || Object.values(a).join(' ')).toString().toLowerCase();
-                const nameB = (b.data || b.data || Object.values(b).join(' ')).toString().toLowerCase();
+                const nameA = (a.data || a.nombre || '').toString().toLowerCase();
+                const nameB = (b.data || b.nombre || '').toString().toLowerCase();
                 return nameB.localeCompare(nameA);
             });
         }
@@ -201,12 +196,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const slice = filteredAndSorted.slice(0, currentLimit);
             renderizarProductos(slice);
             if (loadingEl) {
-                if (currentLimit < total) {
-                    loadingEl.hidden = false;
-                    loadingEl.textContent = 'Desplázate para cargar más...';
-                } else {
-                    loadingEl.hidden = true;
-                }
+                loadingEl.hidden = (currentLimit >= total);
+                loadingEl.textContent = 'Desplázate para cargar más...';
             }
             if (paginationContainer) paginationContainer.hidden = true;
         }
@@ -238,41 +229,41 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         ul.appendChild(makePageItem('Anterior', Math.max(1, page - 1), page <= 1));
-        const maxButtons = 7;
-        let start = Math.max(1, page - Math.floor(maxButtons / 2));
+        const maxButtons = 5;
+        let start = Math.max(1, page - 2);
         let end = Math.min(totalPages, start + maxButtons - 1);
         if (end - start < maxButtons - 1) start = Math.max(1, end - maxButtons + 1);
 
-        if (start > 1) {
-            ul.appendChild(makePageItem('1', 1, false, page === 1));
-            if (start > 2) {
-                const ell = document.createElement('li'); ell.className = 'page-item disabled'; ell.innerHTML = '<span class="page-link">…</span>'; ul.appendChild(ell);
-            }
-        }
-
         for (let p = start; p <= end; p++) {
             ul.appendChild(makePageItem(String(p), p, false, p === page));
-        }
-
-        if (end < totalPages) {
-            if (end < totalPages - 1) {
-                const ell = document.createElement('li'); ell.className = 'page-item disabled'; ell.innerHTML = '<span class="page-link">…</span>'; ul.appendChild(ell);
-            }
-            ul.appendChild(makePageItem(String(totalPages), totalPages, false, page === totalPages));
         }
 
         ul.appendChild(makePageItem('Siguiente', Math.min(totalPages, page + 1), page >= totalPages));
         paginationContainer.appendChild(ul);
     }
 
-    // ------------------ Renderizado de productos (ACTUALIZADO PARA WEBP) ------------------
+    // ------------------ FUNCION PARA AMPLIAR IMAGEN ------------------
+    function ampliarImagen(url, titulo) {
+        const modalImg = document.getElementById('modalImage');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalEl = document.getElementById('imageModal');
+
+        if (modalImg && modalTitle && modalEl) {
+            modalImg.src = url;
+            modalTitle.textContent = titulo;
+            const zoomModal = new bootstrap.Modal(modalEl);
+            zoomModal.show();
+        }
+    }
+
+    // ------------------ Renderizado de productos ------------------
     function renderizarProductos(lista) {
         const contenedor = document.getElementById('grid-productos');
         if (!contenedor) return;
         contenedor.innerHTML = '';
 
         if (lista.length === 0) {
-            contenedor.innerHTML = '<p style="grid-column: 1/-1; text-align:center;">No se encontraron productos 😢</p>';
+            contenedor.innerHTML = '<p class="text-center w-100 py-5">No se encontraron productos 😢</p>';
             return;
         }
 
@@ -281,48 +272,16 @@ document.addEventListener('DOMContentLoaded', () => {
         lista.forEach(prod => {
             const llaves = Object.keys(prod);
             const keyNombre = llaves.find(k => /(^data\b|nom|name|titul|title|producto|descripcion)/i.test(k)) || llaves[0];
-            const keyPrecio = llaves.find(k => /(^data2\b|precio|price|cost|valor)/i.test(k)) || llaves.find(k => typeof prod[k] === 'string' && /\$|\d/.test(prod[k])) || llaves[1];
+            const keyPrecio = llaves.find(k => /(^data2\b|precio|price|cost|valor)/i.test(k)) || llaves[1];
 
-            // Buscar Imagen:
             let keyImg = llaves.find(k => /(image|img|src|url|foto|link)/i.test(k) && typeof prod[k] === 'string' && /^https?:\/\//i.test(prod[k]));
             if (!keyImg) {
-                keyImg = llaves.find(k => typeof prod[k] === 'string' && /^https?:\/\//i.test(prod[k]) && /\.jpg|\.png|\.jpeg|\.gif|data:image/i.test(prod[k]));
+                keyImg = llaves.find(k => typeof prod[k] === 'string' && /^https?:\/\//i.test(prod[k]) && /\.(jpg|png|webp|jpeg)/i.test(prod[k]));
             }
 
             const nombre = prod[keyNombre] || 'Producto sin nombre';
             const precio = prod[keyPrecio] || '';
-
-            const placeholderSvg = encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='#eee'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#999' font-family='Segoe UI, Tahoma, sans-serif' font-size='24'>Sin imagen</text></svg>`);
-            const placeholderDataUrl = `data:image/svg+xml;utf8,${placeholderSvg}`;
-
-            // -------------------------------------------------------
-            // LÓGICA NUEVA SIMPLIFICADA: Confiar en datos.js (WebP)
-            // -------------------------------------------------------
-            const candidateUrls = [];
-
-            // Obtenemos la ruta que viene en el JSON
-            const imgField = (keyImg && prod[keyImg]) ? prod[keyImg] : (prod.image || '');
-
-            if (imgField) {
-                // Añadimos la ruta TAL CUAL viene (que ya debe ser .webp)
-                candidateUrls.push(imgField);
-
-                // Pequeño fallback de seguridad por si tu carpeta se llama 'images' pero el json dice 'imagenes'
-                if (imgField.includes('imagenes/')) {
-                    candidateUrls.push(imgField.replace('imagenes/', 'images/'));
-                } else if (imgField.includes('images/')) {
-                    candidateUrls.push(imgField.replace('images/', 'imagenes/'));
-                }
-            }
-
-            // Añadir URLs externas como respaldo
-            llaves.forEach(k => {
-                const v = prod[k];
-                if (typeof v === 'string' && /^https?:\/\//i.test(v) && !candidateUrls.includes(v)) {
-                    candidateUrls.push(v);
-                }
-            });
-            // -------------------------------------------------------
+            const imgUrl = prod[keyImg] || prod.image || '';
 
             const col = document.createElement('div');
             col.className = 'col-6 col-md-4 col-lg-3';
@@ -337,21 +296,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const imgEl = document.createElement('img');
             imgEl.className = 'card-img';
             imgEl.alt = nombre;
-            imgEl.src = candidateUrls[0] || placeholderDataUrl;
+            imgEl.src = imgUrl;
             imgEl.loading = 'lazy';
+            imgEl.style.cursor = 'zoom-in';
+
+            // EVENTO: Clic en imagen para zoom
+            imgEl.addEventListener('click', () => ampliarImagen(imgEl.src, nombre));
 
             imgEl.onload = () => { imgEl.classList.add('visible'); };
-
-            let attemptIndex = 0;
-            imgEl.onerror = () => {
-                attemptIndex += 1;
-                if (candidateUrls[attemptIndex]) {
-                    imgEl.src = candidateUrls[attemptIndex];
-                } else {
-                    imgEl.src = placeholderDataUrl;
-                    imgEl.classList.add('visible');
-                }
-            };
+            imgEl.onerror = () => { imgEl.src = 'https://via.placeholder.com/300x300?text=Sin+Imagen'; imgEl.classList.add('visible'); };
 
             imgContainer.appendChild(imgEl);
 
@@ -369,18 +322,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const likeBtn = document.createElement('button');
             likeBtn.className = 'btn-like';
             likeBtn.type = 'button';
-            const lr = (window.getLikes && typeof window.getLikes === 'function') ? window.getLikes(prod._id) : 0;
+            const lr = (window.getLikes) ? window.getLikes(prod._id) : 0;
             likeBtn.innerHTML = `❤ ${lr}`;
-            if (window.hasLiked && typeof window.hasLiked === 'function' && window.hasLiked(prod._id)) likeBtn.classList.add('liked');
-            likeBtn.addEventListener('click', () => { if (window.miToggleLike) window.miToggleLike(prod._id); });
+            if (window.hasLiked && window.hasLiked(prod._id)) likeBtn.classList.add('liked');
+            likeBtn.addEventListener('click', (e) => { e.stopPropagation(); if (window.miToggleLike) window.miToggleLike(prod._id); });
 
             const btnAdd = document.createElement('button');
             btnAdd.className = 'btn-add';
             btnAdd.type = 'button';
-            const currentCart = (window.miGetCart && typeof window.miGetCart === 'function') ? window.miGetCart() : {};
-            const inCart = currentCart && currentCart[String(prod._id)];
+            const inCart = carrito[String(prod._id)];
             btnAdd.textContent = inCart ? `En carrito (${inCart.qty})` : 'Agregar';
-            btnAdd.addEventListener('click', () => { if (window.miAddToCart) window.miAddToCart(prod); });
+            btnAdd.addEventListener('click', (e) => { e.stopPropagation(); addToCart(prod); });
 
             cuerpo.appendChild(h3);
             cuerpo.appendChild(divPrice);
@@ -389,7 +341,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             tarjeta.appendChild(imgContainer);
             tarjeta.appendChild(cuerpo);
-
             col.appendChild(tarjeta);
             fragmento.appendChild(col);
         });
@@ -397,8 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contenedor.appendChild(fragmento);
     }
 
-    renderCategoryButtons();
-
+    // --- LOGICA DEL CARRITO ---
     const CART_KEY = 'miCarritoNanty_v1';
     let carrito = {};
 
@@ -423,15 +373,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addToCart(product) {
         const id = String(product._id);
-        const nombre = product.data || product.data || product.name || JSON.stringify(product).slice(0, 30);
+        const keys = Object.keys(product);
+        const nombre = product.data || product.nombre || product.name || 'Producto';
         const precioRaw = product.data2 || product.price || '';
-        const imgKey = Object.keys(product).find(k => /image|img|src|url|foto|link/i.test(k) && typeof product[k] === 'string');
-        const img = imgKey ? product[imgKey] : '';
+        const imgKey = keys.find(k => /image|img|src/i.test(k));
+        const img = product[imgKey] || '';
 
         if (!carrito[id]) carrito[id] = { id, nombre, precioRaw, qty: 0, img };
         carrito[id].qty += 1;
         saveCart();
-        updateCartBadge();
         updateAddButtonForProduct(id);
     }
 
@@ -442,44 +392,35 @@ document.addEventListener('DOMContentLoaded', () => {
         if (carrito[id].qty === 0) delete carrito[id];
         saveCart();
         renderCartItems();
-        updateCartBadge();
         updateAddButtonForProduct(id);
     }
 
     function updateAddButtonForProduct(id) {
-        try {
-            const card = document.querySelector(`.card[data-id="${id}"]`);
-            if (!card) return;
+        const card = document.querySelector(`.card[data-id="${id}"]`);
+        if (card) {
             const btn = card.querySelector('.btn-add');
-            if (!btn) return;
-            const item = carrito[String(id)];
-            btn.textContent = item ? `En carrito (${item.qty})` : 'Agregar';
-        } catch (e) { }
+            if (btn) {
+                const item = carrito[String(id)];
+                btn.textContent = item ? `En carrito (${item.qty})` : 'Agregar';
+            }
+        }
     }
 
-    const cartButton = document.getElementById('cart-button');
     const cartModalEl = document.getElementById('cartModal');
     const cartItemsEl = document.getElementById('cart-items');
     const cartTotalEl = document.getElementById('cart-total');
     const clearCartBtn = document.getElementById('clear-cart');
     const confirmCartBtn = document.getElementById('confirm-cart');
 
-    let cartModal = null;
-    try {
-        if (cartModalEl && window.bootstrap && typeof window.bootstrap.Modal === 'function') {
-            cartModal = bootstrap.Modal.getOrCreateInstance(cartModalEl);
-            cartModalEl.addEventListener('show.bs.modal', () => {
-                renderCartItems();
-                updateCartBadge();
-            });
-        }
-    } catch (e) { }
+    if (cartModalEl) {
+        cartModalEl.addEventListener('show.bs.modal', renderCartItems);
+    }
 
     if (clearCartBtn) clearCartBtn.addEventListener('click', () => {
         carrito = {};
         saveCart();
         renderCartItems();
-        if (cartModal) cartModal.hide();
+        applyFilters(); // Para refrescar botones de "Agregar"
     });
 
     function formatPriceForDisplay(p) {
@@ -499,139 +440,48 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         entries.forEach(item => {
             const row = document.createElement('div');
-            row.className = 'cart-item d-flex gap-2 align-items-center mb-2';
-
-            const img = document.createElement('img');
-            img.src = item.img || 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><rect width='100%' height='100%' fill='#eee'/></svg>`);
-            img.style.width = '64px'; img.style.height = '64px'; img.style.objectFit = 'cover'; img.style.borderRadius = '8px';
-
-            const meta = document.createElement('div'); meta.className = 'meta flex-fill';
-            const title = document.createElement('div'); title.textContent = item.nombre; title.style.fontWeight = '600';
-            const price = document.createElement('div'); price.textContent = formatPriceForDisplay(item.precioRaw); price.style.color = 'var(--primary)';
-
-            const qtyWrap = document.createElement('div'); qtyWrap.className = 'qty d-flex gap-1 align-items-center';
-            const btnMinus = document.createElement('button'); btnMinus.className = 'btn btn-sm btn-outline-secondary'; btnMinus.textContent = '-';
-            const spanQty = document.createElement('span'); spanQty.textContent = item.qty; spanQty.className = 'px-2';
-            const btnPlus = document.createElement('button'); btnPlus.className = 'btn btn-sm btn-outline-secondary'; btnPlus.textContent = '+';
-
-            btnMinus.addEventListener('click', () => changeQty(item.id, (item.qty || 0) - 1));
-            btnPlus.addEventListener('click', () => changeQty(item.id, (item.qty || 0) + 1));
-
-            qtyWrap.appendChild(btnMinus); qtyWrap.appendChild(spanQty); qtyWrap.appendChild(btnPlus);
-            meta.appendChild(title); meta.appendChild(price);
-
-            row.appendChild(img); row.appendChild(meta); row.appendChild(qtyWrap);
+            row.className = 'cart-item d-flex gap-2 align-items-center mb-3 border-bottom pb-2';
+            row.innerHTML = `
+                <img src="${item.img}" style="width:50px; height:50px; object-fit:cover; border-radius:5px;">
+                <div class="flex-fill">
+                    <div class="small fw-bold">${item.nombre}</div>
+                    <div class="small text-primary">${formatPriceForDisplay(item.precioRaw)}</div>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-sm btn-outline-secondary" onclick="window.miChangeQty('${item.id}', ${item.qty - 1})">-</button>
+                    <span>${item.qty}</span>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="window.miChangeQty('${item.id}', ${item.qty + 1})">+</button>
+                </div>
+            `;
             cartItemsEl.appendChild(row);
-
-            total += parsePrice(item.precioRaw) * (item.qty || 0);
+            total += parsePrice(item.precioRaw) * item.qty;
         });
         if (cartTotalEl) cartTotalEl.textContent = `$${total.toFixed(2)}`;
     }
 
-    function getWaNumber() {
-        try {
-            const n = localStorage.getItem('waNumber');
-            if (n && n.trim()) return n.trim();
-        } catch (e) { }
-        return '5614782629';
-    }
+    window.miChangeQty = changeQty;
 
     if (confirmCartBtn) confirmCartBtn.addEventListener('click', () => {
         const entries = Object.values(carrito);
-        if (entries.length === 0) return alert('El carrito está vacío.');
+        if (entries.length === 0) return;
+        let lines = ['*Nuevo Pedido Nanty Nails:*'];
         let total = 0;
-        let lines = ['Hola, estoy interesada en estos productos:'];
         entries.forEach(i => {
-            const subtotal = parsePrice(i.precioRaw) * i.qty;
             lines.push(`- ${i.qty} x ${i.nombre} (${formatPriceForDisplay(i.precioRaw)})`);
-            total += subtotal;
+            total += parsePrice(i.precioRaw) * i.qty;
         });
-        lines.push(`Total aproximado: $${total.toFixed(2)}`);
-        const text = encodeURIComponent(lines.join('\n'));
-        const waNumber = getWaNumber();
-        const url = `https://wa.me/${waNumber}?text=${text}`;
-        window.open(url, '_blank');
+        lines.push(`*Total: $${total.toFixed(2)}*`);
+        const wa = localStorage.getItem('waNumber') || '5614782629';
+        window.open(`https://wa.me/${wa}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
     });
 
-    loadCart();
-
-    const LIKES_KEY = 'miLikesNanty_v1';
-    const LIKES_FLAGS = 'miLikedFlagsNanty_v1';
-    let likesMap = {};
-    let likedFlags = {};
-
-    function loadLikes() {
-        try { likesMap = JSON.parse(localStorage.getItem(LIKES_KEY)) || {}; } catch (e) { likesMap = {}; }
-        try { likedFlags = JSON.parse(localStorage.getItem(LIKES_FLAGS)) || {}; } catch (e) { likedFlags = {}; }
-    }
-    function saveLikes() {
-        localStorage.setItem(LIKES_KEY, JSON.stringify(likesMap));
-        localStorage.setItem(LIKES_FLAGS, JSON.stringify(likedFlags));
-    }
-    function getLikes(id) { return likesMap[String(id)] || 0; }
-    function hasLiked(id) { return !!likedFlags[String(id)]; }
-
-    function toggleLike(id) {
-        id = String(id);
-        if (hasLiked(id)) {
-            likesMap[id] = Math.max(0, (likesMap[id] || 1) - 1);
-            delete likedFlags[id];
-        } else {
-            likesMap[id] = (likesMap[id] || 0) + 1;
-            likedFlags[id] = true;
-        }
-        saveLikes();
-
-        const card = document.querySelector(`.card[data-id="${id}"]`);
-        if (card) {
-            const btn = card.querySelector('.btn-like');
-            if (btn) {
-                const newCount = likesMap[id];
-                btn.innerHTML = `❤ ${newCount}`;
-                if (likedFlags[id]) btn.classList.add('liked'); else btn.classList.remove('liked');
-            }
-        }
-    }
-    loadLikes();
-
-    const settingsButton = document.getElementById('settings-button');
-    const settingsModal = document.getElementById('settings-modal');
-    const closeSettings = document.getElementById('close-settings');
-    const saveWaBtn = document.getElementById('save-wa-number');
-    const waInput = document.getElementById('wa-number-input');
-
-    try {
-        const host = window.location.hostname;
-        if (settingsButton && host !== 'localhost' && host !== '127.0.0.1') {
-            settingsButton.style.display = 'none';
-        }
-    } catch (e) { }
-
-    function openSettings() {
-        if (settingsModal) { settingsModal.setAttribute('aria-hidden', 'false'); }
-        if (waInput) { waInput.value = localStorage.getItem('waNumber') || getWaNumber(); }
-    }
-    function closeSettingsFn() { if (settingsModal) { settingsModal.setAttribute('aria-hidden', 'true'); } }
-    if (settingsButton) settingsButton.addEventListener('click', openSettings);
-    if (closeSettings) closeSettings.addEventListener('click', closeSettingsFn);
-    if (saveWaBtn) saveWaBtn.addEventListener('click', () => {
-        const v = waInput.value.trim();
-        if (v) localStorage.setItem('waNumber', v);
-        closeSettingsFn();
-    });
-
-    window.miGetCart = () => carrito;
-    window.miAddToCart = (p) => addToCart(p);
-    window.miToggleLike = (id) => toggleLike(id);
-    window.getLikes = getLikes;
-    window.hasLiked = hasLiked;
-
+    // --- BUSCADOR Y ORDEN ---
     const inputBuscador = document.getElementById('buscador');
     if (inputBuscador) {
-        inputBuscador.addEventListener('input', debounce((e) => {
+        inputBuscador.addEventListener('input', (e) => {
             searchText = e.target.value.toLowerCase();
             applyFilters();
-        }, 300));
+        });
     }
     if (sortSelect) {
         sortSelect.addEventListener('change', (e) => {
@@ -640,24 +490,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function debounce(fn, wait = 150) {
-        let t;
-        return function (...args) {
-            clearTimeout(t);
-            t = setTimeout(() => fn.apply(this, args), wait);
-        };
+    // --- LIKES ---
+    const LIKES_KEY = 'miLikesNanty_v1';
+    let likesMap = {};
+    let likedFlags = {};
+
+    function loadLikes() {
+        try { likesMap = JSON.parse(localStorage.getItem(LIKES_KEY)) || {}; } catch (e) { }
+        try { likedFlags = JSON.parse(localStorage.getItem('likedFlags')) || {}; } catch (e) { }
     }
-
-    window.addEventListener('scroll', debounce(() => {
-        const nearBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 300);
-        if (!nearBottom) return;
-        const isAllCategory = activeCategory === '';
-        if (isAllCategory) return;
-        if (currentLimit < filteredAndSorted.length) {
-            currentLimit += itemsPerPage;
-            renderPaginated();
+    window.getLikes = (id) => likesMap[String(id)] || 0;
+    window.hasLiked = (id) => !!likedFlags[String(id)];
+    window.miToggleLike = (id) => {
+        id = String(id);
+        if (likedFlags[id]) {
+            likesMap[id] = Math.max(0, (likesMap[id] || 1) - 1);
+            delete likedFlags[id];
+        } else {
+            likesMap[id] = (likesMap[id] || 0) + 1;
+            likedFlags[id] = true;
         }
-    }, 100));
+        localStorage.setItem(LIKES_KEY, JSON.stringify(likesMap));
+        localStorage.setItem('likedFlags', JSON.stringify(likedFlags));
+        applyFilters();
+    };
 
+    // Inicialización
+    loadCart();
+    loadLikes();
     applyFilters();
 });

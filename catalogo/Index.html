@@ -69,16 +69,6 @@
               <a class="nav-link" href="index.html">Inicio</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#servicios">Servicios</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#cursos">Cursos</a>
-            </li>
-            <!-- El link de insumos ahora apunta arriba, al catálogo actual -->
-            <li class="nav-item">
-              <a class="nav-link active" href="#">Insumos (Catálogo)</a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link" href="#footer">Contacto</a>
             </li>
           </ul>
@@ -90,23 +80,27 @@
     <!-- Header del Catálogo (Título, buscador, categorías y carrito) -->
     <header class="py-4 bg-white border-bottom">
       <div class="container">
-        <div class="row align-items-center">
-          <div class="col-md-4">
-            <h1 class="h4 mb-0 text-primary">💅 Nanty Nails Shop</h1>
-            <p class="text-muted mb-0">Catálogo de Insumos Profesionales</p>
-          </div>
-          <div class="col-md-5">
-            <div class="d-flex gap-2">
+        <div class="row justify-content-center">
+          <div class="col-12 col-lg-8 text-center">
+            <!-- 1. Buscador (Centrado, grande y redondeado) -->
+            <div class="mb-3">
               <input
                 type="text"
                 id="buscador"
-                class="form-control"
-                placeholder="🔍 Buscar producto (ej: monómero, pincel)..."
+                class="form-control form-control-lg text-center rounded-pill mx-auto"
+                placeholder="🔍 ¿Qué estás buscando hoy?..."
               />
+            </div>
+
+            <!-- 2. Controles: Ordenar y Carrito (Centrados abajo del buscador) -->
+            <div
+              class="d-flex justify-content-center align-items-center gap-3 mb-4 flex-wrap"
+            >
               <select
                 id="sort"
-                class="form-select w-auto"
+                class="form-select w-auto rounded-pill border-0 bg-light"
                 aria-label="Ordenar productos"
+                style="cursor: pointer"
               >
                 <option value="">Orden: Predeterminado</option>
                 <option value="price-asc">Precio: menor → mayor</option>
@@ -114,20 +108,10 @@
                 <option value="name-asc">Nombre A → Z</option>
                 <option value="name-desc">Nombre Z → A</option>
               </select>
-            </div>
-            <!-- Contenedor dinámico de categorías (se genera desde main.js) -->
-            <div
-              id="categories"
-              class="categories d-flex flex-wrap gap-2 mt-3"
-              aria-label="Filtrar por categoría"
-            ></div>
-          </div>
-          <div class="col-md-3 text-end">
-            <!-- Cart button: abre modal de carrito -->
-            <div class="d-inline-block">
+
               <button
                 id="cart-button"
-                class="btn btn-primary"
+                class="btn btn-primary rounded-pill px-4"
                 aria-label="Ver carrito"
                 data-bs-toggle="modal"
                 data-bs-target="#cartModal"
@@ -138,6 +122,13 @@
                 >
               </button>
             </div>
+
+            <!-- 3. Categorías (Centradas y ordenadas) -->
+            <div
+              id="categories"
+              class="categories d-flex flex-wrap justify-content-center gap-2"
+              aria-label="Filtrar por categoría"
+            ></div>
           </div>
         </div>
       </div>
@@ -328,6 +319,32 @@
       <i class="bi bi-chat-dots-fill"></i>
       <span>Contáctanos</span>
     </a>
+
+    <!-- Modal de Ajustes (localStorage) -->
+
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark border-0">
+          <div class="modal-header border-0 pb-0">
+            <h6 class="modal-title text-white" id="modalTitle"></h6>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body p-2 text-center">
+            <img
+              src=""
+              id="modalImage"
+              class="img-fluid rounded"
+              style="max-height: 75vh; width: auto"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Scripts -->
     <script src="datos.js"></script>
