@@ -1,9 +1,9 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
     // --- 1. EFECTO EN EL NAVBAR AL HACER SCROLL ---
     const navbar = document.getElementById('main-navbar');
 
-    window.addEventListener('scroll', function() {
+    window.addEventListener('scroll', function () {
         if (window.scrollY > window.innerHeight - 50) { // Un pequeño ajuste para que se active un poco antes de salir del hero
             navbar.classList.add('scrolled');
         } else {
@@ -52,19 +52,19 @@ document.addEventListener("DOMContentLoaded", function() {
     elementsToAnimate.forEach(el => {
         observer.observe(el);
     });
-    
-    
+
+
     // --- 4. SCROLL SUAVE PARA LOS ENLACES DE NAVEGACIÓN ---
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
-            
+
             const targetId = this.getAttribute('href');
             const targetElement = document.querySelector(targetId);
-            
-            if(targetElement) {
+
+            if (targetElement) {
                 // Ajustar la altura del navbar para el scroll suave
-                const navbarHeight = document.querySelector('#main-navbar').offsetHeight; 
+                const navbarHeight = document.querySelector('#main-navbar').offsetHeight;
                 const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
 
                 window.scrollTo({
@@ -75,20 +75,17 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-});
-
-
     // --- 5. FUNCIONALIDAD PARA LEER MÁS EN TESTIMONIOS ---
     const readMoreBtns = document.querySelectorAll('.read-more-btn');
-    
+
     readMoreBtns.forEach(btn => {
-        btn.addEventListener('click', function(e) {
+        btn.addEventListener('click', function (e) {
             // Prevenir propagación del evento
             e.stopPropagation();
-            
+
             // Obtener SOLO el texto de ESTA tarjeta
             const testimonialText = this.previousElementSibling;
-            
+
             // Toggle para ESTA tarjeta únicamente
             if (testimonialText.classList.contains('expanded')) {
                 testimonialText.classList.remove('expanded');
@@ -100,3 +97,4 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
+});

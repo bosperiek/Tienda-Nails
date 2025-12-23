@@ -146,7 +146,7 @@ html {
 
 .hero-section {
   position: relative;
-  background: url('../imagenes/insumos-profesionales-unas-acabado-gel-nude-desktop.webp')
+  background: url('/imagenesPrincipal/insumos-profesionales-unas-acabado-gel-nude-desktop.webp')
     no-repeat center center/cover;
   min-height: 100vh;
   display: flex;
