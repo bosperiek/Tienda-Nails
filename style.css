@@ -3,7 +3,7 @@
    ------------------------------------------------- */
 @font-face {
   font-family: 'Love Script';
-  src: url('../imagenes/Love script.ttf') format('truetype');
+  src: url('imagenes/Love script.ttf') format('truetype');
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500&display=swap');
@@ -78,6 +78,26 @@ html {
 #main-navbar.scrolled .nav-link {
   color: var(--primary-color) !important; /* Color oscuro */
   text-shadow: none; /* Sin sombra */
+}
+
+/* Estilos para el logo - Control de tamaño */
+.logo-img {
+  height: 55px; /* Tamaño ideal para Escritorio y Tablets grandes */
+  width: auto; /* Mantiene la proporción */
+  vertical-align: middle;
+  transition: height 0.3s ease; /* Suaviza el cambio de tamaño */
+}
+
+/* AJUSTE PARA MÓVILES: Logo más pequeño */
+@media (max-width: 768px) {
+  .logo-img {
+    display: none; /* Ocultamos el logo en móvil para que no tape el texto */
+  }
+
+  /* Separar el menú hamburguesa del borde derecho */
+  #main-navbar .container {
+    padding-right: 25px;
+  }
 }
 
 /* Ícono de la hamburguesa (para móviles) */

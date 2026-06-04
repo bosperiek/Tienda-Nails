@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // 1. Verificamos si datos.js cargó correctamente
     if (typeof misProductos === 'undefined') {
         alert("⚠️ ERROR: No encuentro la variable 'misProductos'. Revisa que hayas guardado bien el archivo datos.js");
         return;
@@ -8,18 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log("✅ Datos cargados correctamente:", misProductos.length, "productos.");
 
-    // Estado de filtros
     let activeCategory = '';
     let searchText = '';
 
-    // 2. Configuración de paginación / orden
     const itemsPerPage = 24;
     let currentLimit = itemsPerPage;
     let currentPage = 1;
     let selectedSort = '';
     let filteredAndSorted = misProductos.slice();
 
-    // 3. Generar controles de categorías
     const categoriesContainer = document.getElementById('categories');
 
     function extractCategorySlug(prod) {
@@ -242,7 +238,6 @@ document.addEventListener('DOMContentLoaded', () => {
         paginationContainer.appendChild(ul);
     }
 
-    // ------------------ FUNCION PARA AMPLIAR IMAGEN ------------------
     function ampliarImagen(url, titulo) {
         const modalImg = document.getElementById('modalImage');
         const modalTitle = document.getElementById('modalTitle');
@@ -256,7 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ------------------ Renderizado de productos ------------------
     function renderizarProductos(lista) {
         const contenedor = document.getElementById('grid-productos');
         if (!contenedor) return;
@@ -300,9 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
             imgEl.loading = 'lazy';
             imgEl.style.cursor = 'zoom-in';
 
-            // EVENTO: Clic en imagen para zoom
             imgEl.addEventListener('click', () => ampliarImagen(imgEl.src, nombre));
-
             imgEl.onload = () => { imgEl.classList.add('visible'); };
             imgEl.onerror = () => { imgEl.src = 'https://via.placeholder.com/300x300?text=Sin+Imagen'; imgEl.classList.add('visible'); };
 
@@ -348,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contenedor.appendChild(fragmento);
     }
 
-    // --- LOGICA DEL CARRITO ---
+    // --- LÓGICA DEL CARRITO ---
     const CART_KEY = 'miCarritoNanty_v1';
     let carrito = {};
 
@@ -420,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
         carrito = {};
         saveCart();
         renderCartItems();
-        applyFilters(); // Para refrescar botones de "Agregar"
+        applyFilters();
     });
 
     function formatPriceForDisplay(p) {
@@ -433,29 +425,36 @@ document.addEventListener('DOMContentLoaded', () => {
         cartItemsEl.innerHTML = '';
         const entries = Object.values(carrito);
         let total = 0;
+
         if (entries.length === 0) {
-            cartItemsEl.innerHTML = '<p class="text-center">Tu carrito está vacío.</p>';
+            cartItemsEl.innerHTML = `
+                <div class="cart-empty">
+                    <span class="cart-empty-icon">🛍️</span>
+                    <p>¡Tu carrito está vacío!<br><small>Agrega tus productos favoritos</small></p>
+                </div>`;
             if (cartTotalEl) cartTotalEl.textContent = '$0.00';
             return;
         }
+
         entries.forEach(item => {
             const row = document.createElement('div');
             row.className = 'cart-item d-flex gap-2 align-items-center mb-3 border-bottom pb-2';
             row.innerHTML = `
-                <img src="${item.img}" style="width:50px; height:50px; object-fit:cover; border-radius:5px;">
+                <img src="${item.img}" style="width:65px; height:65px; object-fit:cover; border-radius:10px;" alt="${item.nombre}">
                 <div class="flex-fill">
-                    <div class="small fw-bold">${item.nombre}</div>
-                    <div class="small text-primary">${formatPriceForDisplay(item.precioRaw)}</div>
+                    <div class="cart-item-name">${item.nombre}</div>
+                    <div class="cart-item-price">${formatPriceForDisplay(item.precioRaw)}</div>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <button class="btn btn-sm btn-outline-secondary" onclick="window.miChangeQty('${item.id}', ${item.qty - 1})">-</button>
-                    <span>${item.qty}</span>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="window.miChangeQty('${item.id}', ${item.qty + 1})">+</button>
+                    <button class="btn-qty" onclick="window.miChangeQty('${item.id}', ${item.qty - 1})">−</button>
+                    <span class="qty-number">${item.qty}</span>
+                    <button class="btn-qty" onclick="window.miChangeQty('${item.id}', ${item.qty + 1})">+</button>
                 </div>
             `;
             cartItemsEl.appendChild(row);
             total += parsePrice(item.precioRaw) * item.qty;
         });
+
         if (cartTotalEl) cartTotalEl.textContent = `$${total.toFixed(2)}`;
     }
 
@@ -478,11 +477,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- BUSCADOR Y ORDEN ---
     const inputBuscador = document.getElementById('buscador');
     if (inputBuscador) {
+        // Funciona en escritorio y en móvil al escribir
         inputBuscador.addEventListener('input', (e) => {
             searchText = e.target.value.toLowerCase();
             applyFilters();
         });
+
+        // Captura el Enter en teclados móviles
+        inputBuscador.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                searchText = e.target.value.toLowerCase();
+                applyFilters();
+                inputBuscador.blur(); // Cierra el teclado en móvil
+            }
+        });
+
+        // Red de seguridad: cuando el teclado se cierra en móvil
+        inputBuscador.addEventListener('blur', (e) => {
+            searchText = e.target.value.toLowerCase();
+            applyFilters();
+        });
     }
+
     if (sortSelect) {
         sortSelect.addEventListener('change', (e) => {
             selectedSort = e.target.value;
