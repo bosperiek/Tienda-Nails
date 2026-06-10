@@ -91,7 +91,7 @@ const misProductos = [
         "image": "imagenes/stiker-navidad-9.webp"
     },
     {
-        "category": "fantasy",
+        "category": "Fantasy Nails",
         "data": "Aceite de cutícula Fantasy Nails",
         "data2": "$30.00",
         "altTexto": "Aceite hidratante para cutícula Fantasy Nails color rosa, tratamiento reparador para finalizar la manicura y cuidar la piel",

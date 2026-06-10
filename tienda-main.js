@@ -1,23 +1,30 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     if (typeof misProductos === 'undefined') {
-        alert("⚠️ ERROR: No encuentro la variable 'misProductos'. Revisa que hayas guardado bien el archivo datos.js");
+        alert("⚠️ ERROR: No encuentro 'misProductos'. Revisa que hayas guardado bien datos.js");
         return;
     }
 
-    console.log("✅ Datos cargados correctamente:", misProductos.length, "productos.");
+    console.log("✅ Datos cargados:", misProductos.length, "productos.");
 
     let activeCategory = '';
     let searchText = '';
-
     const itemsPerPage = 24;
     let currentLimit = itemsPerPage;
     let currentPage = 1;
     let selectedSort = '';
     let filteredAndSorted = misProductos.slice();
 
+    // Lista actual visible para la navegación del modal
+    let currentVisibleList = [];
+    let currentModalIndex = -1;
+    let currentModalProduct = null;
+
     const categoriesContainer = document.getElementById('categories');
 
+    // -------------------------------------------------------
+    // UTILIDADES DE CATEGORÍA
+    // -------------------------------------------------------
     function extractCategorySlug(prod) {
         if (prod && prod.category && typeof prod.category === 'string' && prod.category.trim() !== '') {
             return String(prod.category).trim();
@@ -47,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const slug = extractCategorySlug(p);
             if (slug && slug !== 'sin-categoria') p.category = slug;
-        } catch (e) { }
+        } catch (e) {}
         Object.keys(p).forEach(k => { if (/^category-link/i.test(k)) delete p[k]; });
         if (p.image2) delete p.image2;
     });
@@ -58,6 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
         categoriesMap[s] = (categoriesMap[s] || 0) + 1;
     });
 
+    // -------------------------------------------------------
+    // RENDER CATEGORÍAS
+    // -------------------------------------------------------
     function renderCategoryButtons() {
         if (!categoriesContainer) return;
         categoriesContainer.innerHTML = '';
@@ -132,6 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingEl = document.getElementById('loading');
     const paginationContainer = document.getElementById('pagination');
 
+    // -------------------------------------------------------
+    // ORDENADO Y FILTRADO
+    // -------------------------------------------------------
     function parsePrice(val) {
         if (!val) return 0;
         const s = String(val).replace(/[^0-9.,-]/g, '').replace(',', '.');
@@ -147,17 +160,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (sortVal === 'price-desc') {
             copy.sort((a, b) => parsePrice(b.data2 || b.price || '') - parsePrice(a.data2 || a.price || ''));
         } else if (sortVal === 'name-asc') {
-            copy.sort((a, b) => {
-                const nameA = (a.data || a.nombre || '').toString().toLowerCase();
-                const nameB = (b.data || b.nombre || '').toString().toLowerCase();
-                return nameA.localeCompare(nameB);
-            });
+            copy.sort((a, b) => (a.data || a.nombre || '').toString().toLowerCase().localeCompare((b.data || b.nombre || '').toString().toLowerCase()));
         } else if (sortVal === 'name-desc') {
-            copy.sort((a, b) => {
-                const nameA = (a.data || a.nombre || '').toString().toLowerCase();
-                const nameB = (b.data || b.nombre || '').toString().toLowerCase();
-                return nameB.localeCompare(nameA);
-            });
+            copy.sort((a, b) => (b.data || b.nombre || '').toString().toLowerCase().localeCompare((a.data || a.nombre || '').toString().toLowerCase()));
         }
         return copy;
     }
@@ -167,8 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const textoOK = searchText === '' || JSON.stringify(producto).toLowerCase().includes(searchText);
             if (!textoOK) return false;
             if (!activeCategory) return true;
-            const slug = extractCategorySlug(producto);
-            return slug === activeCategory;
+            return extractCategorySlug(producto) === activeCategory;
         });
 
         filteredAndSorted = sortList(filtrados, selectedSort);
@@ -185,11 +189,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const totalPages = Math.max(1, Math.ceil(total / itemsPerPage));
             const start = (currentPage - 1) * itemsPerPage;
             const slice = filteredAndSorted.slice(start, start + itemsPerPage);
+            currentVisibleList = slice;
             renderizarProductos(slice);
             renderPaginationControls(totalPages, currentPage);
             if (loadingEl) loadingEl.hidden = true;
         } else {
             const slice = filteredAndSorted.slice(0, currentLimit);
+            currentVisibleList = slice;
             renderizarProductos(slice);
             if (loadingEl) {
                 loadingEl.hidden = (currentLimit >= total);
@@ -199,6 +205,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // -------------------------------------------------------
+    // PAGINACIÓN
+    // -------------------------------------------------------
     function renderPaginationControls(totalPages, page) {
         if (!paginationContainer) return;
         paginationContainer.hidden = false;
@@ -224,7 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return li;
         }
 
-        ul.appendChild(makePageItem('Anterior', Math.max(1, page - 1), page <= 1));
+        ul.appendChild(makePageItem('← Anterior', Math.max(1, page - 1), page <= 1));
         const maxButtons = 5;
         let start = Math.max(1, page - 2);
         let end = Math.min(totalPages, start + maxButtons - 1);
@@ -234,48 +243,154 @@ document.addEventListener('DOMContentLoaded', () => {
             ul.appendChild(makePageItem(String(p), p, false, p === page));
         }
 
-        ul.appendChild(makePageItem('Siguiente', Math.min(totalPages, page + 1), page >= totalPages));
+        ul.appendChild(makePageItem('Siguiente →', Math.min(totalPages, page + 1), page >= totalPages));
         paginationContainer.appendChild(ul);
     }
 
-    function ampliarImagen(url, titulo) {
-        const modalImg = document.getElementById('modalImage');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalEl = document.getElementById('imageModal');
+    // -------------------------------------------------------
+    // MODAL DE IMAGEN — REDISEÑADO CON NAVEGACIÓN
+    // -------------------------------------------------------
+    const imageModalEl  = document.getElementById('imageModal');
+    const modalImg      = document.getElementById('modalImage');
+    const modalTitle    = document.getElementById('modalTitle');
+    const modalPrice    = document.getElementById('modalPrice');
+    const modalLoader   = document.getElementById('modal-loader');
+    const modalAddBtn   = document.getElementById('modal-add-to-cart');
+    const modalPrevBtn  = document.getElementById('modal-prev');
+    const modalNextBtn  = document.getElementById('modal-next');
 
-        if (modalImg && modalTitle && modalEl) {
-            modalImg.src = url;
-            modalTitle.textContent = titulo;
-            const zoomModal = new bootstrap.Modal(modalEl);
-            zoomModal.show();
-        }
+    // Inicializar el modal de Bootstrap de forma diferida para asegurar
+    // que Bootstrap ya esté cargado cuando se use por primera vez.
+    function getBsImageModal() {
+        if (!imageModalEl) return null;
+        return bootstrap.Modal.getOrCreateInstance(imageModalEl);
     }
 
+    function getProductData(prod) {
+        const llaves = Object.keys(prod);
+        const keyNombre = llaves.find(k => /(^data\b|nom|name|titul|title|producto|descripcion)/i.test(k)) || llaves[0];
+        const keyPrecio = llaves.find(k => /(^data2\b|precio|price|cost|valor)/i.test(k)) || llaves[1];
+        let keyImg = llaves.find(k => /(image|img|src|url|foto|link)/i.test(k) && typeof prod[k] === 'string' && /^https?:\/\//i.test(prod[k]));
+        if (!keyImg) keyImg = llaves.find(k => typeof prod[k] === 'string' && /^https?:\/\//i.test(prod[k]) && /\.(jpg|png|webp|jpeg)/i.test(prod[k]));
+        return {
+            nombre: prod[keyNombre] || 'Producto',
+            precio: prod[keyPrecio] || '',
+            imgUrl: prod[keyImg] || prod.image || ''
+        };
+    }
+
+    function loadModalImage(prod, index) {
+        if (!modalImg || !modalTitle) return;
+
+        currentModalIndex = index;
+
+        const { nombre, precio, imgUrl } = getProductData(prod);
+
+        // Mostrar loader + animar salida de imagen
+        if (modalLoader) modalLoader.classList.add('visible');
+        modalImg.classList.add('changing');
+
+        // Pequeño delay para la transición
+        setTimeout(() => {
+            modalTitle.textContent = nombre;
+            if (modalPrice) {
+                modalPrice.textContent = precio ? formatPriceForDisplay(precio) : '';
+            }
+
+            modalImg.src = imgUrl;
+            modalImg.alt = nombre;
+
+            modalImg.onload = () => {
+                if (modalLoader) modalLoader.classList.remove('visible');
+                modalImg.classList.remove('changing');
+            };
+            modalImg.onerror = () => {
+                modalImg.src = 'https://placehold.co/400x400/f8f0ed/e67e9f?text=Sin+Imagen';
+                if (modalLoader) modalLoader.classList.remove('visible');
+                modalImg.classList.remove('changing');
+            };
+        }, 120);
+
+        // Botón añadir al carrito desde el modal
+        // Guardamos el producto activo en una variable que el listener siempre lee al momento del click
+        currentModalProduct = prod;
+        if (modalAddBtn) {
+            const inCart = carrito[String(prod._id)];
+            modalAddBtn.innerHTML = inCart
+                ? `<i class="bi bi-check-lg me-1"></i> En carrito (${inCart.qty})`
+                : `<i class="bi bi-bag-plus me-1"></i> Añadir al carrito`;
+        }
+
+        // Actualizar botones de navegación
+        updateNavButtons();
+    }
+
+    function updateNavButtons() {
+        if (modalPrevBtn) modalPrevBtn.disabled = currentModalIndex <= 0;
+        if (modalNextBtn) modalNextBtn.disabled = currentModalIndex >= currentVisibleList.length - 1;
+    }
+
+    function ampliarImagen(prod, index) {
+        if (!imageModalEl) return;
+        loadModalImage(prod, index);
+        getBsImageModal().show();
+    }
+
+    // Listener único para el botón de añadir en el modal
+    // Usa siempre currentModalProduct que se actualiza en loadModalImage
+    if (modalAddBtn) {
+        modalAddBtn.addEventListener('click', () => {
+            if (!currentModalProduct) return;
+            addToCart(currentModalProduct);
+            const item = carrito[String(currentModalProduct._id)];
+            modalAddBtn.innerHTML = `<i class="bi bi-check-lg me-1"></i> En carrito (${item ? item.qty : 1})`;
+        });
+    }
+
+    // Navegación con flechas
+    if (modalPrevBtn) {
+        modalPrevBtn.addEventListener('click', () => {
+            if (currentModalIndex > 0) {
+                loadModalImage(currentVisibleList[currentModalIndex - 1], currentModalIndex - 1);
+            }
+        });
+    }
+    if (modalNextBtn) {
+        modalNextBtn.addEventListener('click', () => {
+            if (currentModalIndex < currentVisibleList.length - 1) {
+                loadModalImage(currentVisibleList[currentModalIndex + 1], currentModalIndex + 1);
+            }
+        });
+    }
+
+    // Navegación con teclado (←→) cuando el modal está abierto
+    if (imageModalEl) {
+        imageModalEl.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentModalIndex > 0) {
+                loadModalImage(currentVisibleList[currentModalIndex - 1], currentModalIndex - 1);
+            } else if (e.key === 'ArrowRight' && currentModalIndex < currentVisibleList.length - 1) {
+                loadModalImage(currentVisibleList[currentModalIndex + 1], currentModalIndex + 1);
+            }
+        });
+    }
+
+    // -------------------------------------------------------
+    // RENDER DE PRODUCTOS
+    // -------------------------------------------------------
     function renderizarProductos(lista) {
         const contenedor = document.getElementById('grid-productos');
         if (!contenedor) return;
         contenedor.innerHTML = '';
 
         if (lista.length === 0) {
-            contenedor.innerHTML = '<p class="text-center w-100 py-5">No se encontraron productos 😢</p>';
+            contenedor.innerHTML = '<p class="text-center w-100 py-5 text-muted">No se encontraron productos 😢<br><small>Intenta con otro término o categoría</small></p>';
             return;
         }
 
         const fragmento = document.createDocumentFragment();
 
-        lista.forEach(prod => {
-            const llaves = Object.keys(prod);
-            const keyNombre = llaves.find(k => /(^data\b|nom|name|titul|title|producto|descripcion)/i.test(k)) || llaves[0];
-            const keyPrecio = llaves.find(k => /(^data2\b|precio|price|cost|valor)/i.test(k)) || llaves[1];
-
-            let keyImg = llaves.find(k => /(image|img|src|url|foto|link)/i.test(k) && typeof prod[k] === 'string' && /^https?:\/\//i.test(prod[k]));
-            if (!keyImg) {
-                keyImg = llaves.find(k => typeof prod[k] === 'string' && /^https?:\/\//i.test(prod[k]) && /\.(jpg|png|webp|jpeg)/i.test(prod[k]));
-            }
-
-            const nombre = prod[keyNombre] || 'Producto sin nombre';
-            const precio = prod[keyPrecio] || '';
-            const imgUrl = prod[keyImg] || prod.image || '';
+        lista.forEach((prod, listIndex) => {
+            const { nombre, precio, imgUrl } = getProductData(prod);
 
             const col = document.createElement('div');
             col.className = 'col-6 col-md-4 col-lg-3';
@@ -286,17 +401,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const imgContainer = document.createElement('div');
             imgContainer.className = 'card-img-container';
+            imgContainer.title = 'Clic para ampliar';
 
             const imgEl = document.createElement('img');
             imgEl.className = 'card-img';
             imgEl.alt = nombre;
             imgEl.src = imgUrl;
             imgEl.loading = 'lazy';
-            imgEl.style.cursor = 'zoom-in';
 
-            imgEl.addEventListener('click', () => ampliarImagen(imgEl.src, nombre));
+            imgEl.addEventListener('click', () => ampliarImagen(prod, listIndex));
+            imgContainer.addEventListener('click', () => ampliarImagen(prod, listIndex));
+
             imgEl.onload = () => { imgEl.classList.add('visible'); };
-            imgEl.onerror = () => { imgEl.src = 'https://via.placeholder.com/300x300?text=Sin+Imagen'; imgEl.classList.add('visible'); };
+            imgEl.onerror = () => {
+                imgEl.src = 'https://placehold.co/300x300/f8f0ed/e67e9f?text=Sin+Imagen';
+                imgEl.classList.add('visible');
+            };
 
             imgContainer.appendChild(imgEl);
 
@@ -340,7 +460,9 @@ document.addEventListener('DOMContentLoaded', () => {
         contenedor.appendChild(fragmento);
     }
 
-    // --- LÓGICA DEL CARRITO ---
+    // -------------------------------------------------------
+    // CARRITO
+    // -------------------------------------------------------
     const CART_KEY = 'miCarritoNanty_v1';
     let carrito = {};
 
@@ -365,10 +487,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addToCart(product) {
         const id = String(product._id);
-        const keys = Object.keys(product);
+        const llaves = Object.keys(product);
         const nombre = product.data || product.nombre || product.name || 'Producto';
         const precioRaw = product.data2 || product.price || '';
-        const imgKey = keys.find(k => /image|img|src/i.test(k));
+        const imgKey = llaves.find(k => /image|img|src/i.test(k));
         const img = product[imgKey] || '';
 
         if (!carrito[id]) carrito[id] = { id, nombre, precioRaw, qty: 0, img };
@@ -398,16 +520,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const cartModalEl = document.getElementById('cartModal');
-    const cartItemsEl = document.getElementById('cart-items');
-    const cartTotalEl = document.getElementById('cart-total');
-    const clearCartBtn = document.getElementById('clear-cart');
+    const cartModalEl    = document.getElementById('cartModal');
+    const cartItemsEl    = document.getElementById('cart-items');
+    const cartTotalEl    = document.getElementById('cart-total');
+    const clearCartBtn   = document.getElementById('clear-cart');
     const confirmCartBtn = document.getElementById('confirm-cart');
 
-    if (cartModalEl) {
-        cartModalEl.addEventListener('show.bs.modal', renderCartItems);
-    }
-
+    if (cartModalEl) cartModalEl.addEventListener('show.bs.modal', renderCartItems);
     if (clearCartBtn) clearCartBtn.addEventListener('click', () => {
         carrito = {};
         saveCart();
@@ -440,7 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const row = document.createElement('div');
             row.className = 'cart-item d-flex gap-2 align-items-center mb-3 border-bottom pb-2';
             row.innerHTML = `
-                <img src="${item.img}" style="width:65px; height:65px; object-fit:cover; border-radius:10px;" alt="${item.nombre}">
+                <img src="${item.img}" alt="${item.nombre}">
                 <div class="flex-fill">
                     <div class="cart-item-name">${item.nombre}</div>
                     <div class="cart-item-price">${formatPriceForDisplay(item.precioRaw)}</div>
@@ -449,8 +568,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button class="btn-qty" onclick="window.miChangeQty('${item.id}', ${item.qty - 1})">−</button>
                     <span class="qty-number">${item.qty}</span>
                     <button class="btn-qty" onclick="window.miChangeQty('${item.id}', ${item.qty + 1})">+</button>
-                </div>
-            `;
+                </div>`;
             cartItemsEl.appendChild(row);
             total += parsePrice(item.precioRaw) * item.qty;
         });
@@ -463,36 +581,33 @@ document.addEventListener('DOMContentLoaded', () => {
     if (confirmCartBtn) confirmCartBtn.addEventListener('click', () => {
         const entries = Object.values(carrito);
         if (entries.length === 0) return;
-        let lines = ['*Nuevo Pedido Nanty Nails:*'];
+        let lines = ['*Nuevo Pedido Nanty Nails 💅*'];
         let total = 0;
         entries.forEach(i => {
-            lines.push(`- ${i.qty} x ${i.nombre} (${formatPriceForDisplay(i.precioRaw)})`);
+            lines.push(`• ${i.qty} x ${i.nombre} (${formatPriceForDisplay(i.precioRaw)})`);
             total += parsePrice(i.precioRaw) * i.qty;
         });
-        lines.push(`*Total: $${total.toFixed(2)}*`);
+        lines.push(`\n*Total estimado: $${total.toFixed(2)}*`);
         const wa = localStorage.getItem('waNumber') || '5614782629';
         window.open(`https://wa.me/${wa}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
     });
 
-    // --- BUSCADOR Y ORDEN ---
+    // -------------------------------------------------------
+    // BUSCADOR Y ORDENADO
+    // -------------------------------------------------------
     const inputBuscador = document.getElementById('buscador');
     if (inputBuscador) {
-        // Funciona en escritorio y en móvil al escribir
         inputBuscador.addEventListener('input', (e) => {
             searchText = e.target.value.toLowerCase();
             applyFilters();
         });
-
-        // Captura el Enter en teclados móviles
         inputBuscador.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 searchText = e.target.value.toLowerCase();
                 applyFilters();
-                inputBuscador.blur(); // Cierra el teclado en móvil
+                inputBuscador.blur();
             }
         });
-
-        // Red de seguridad: cuando el teclado se cierra en móvil
         inputBuscador.addEventListener('blur', (e) => {
             searchText = e.target.value.toLowerCase();
             applyFilters();
@@ -506,17 +621,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- LIKES ---
+    // -------------------------------------------------------
+    // LIKES
+    // -------------------------------------------------------
     const LIKES_KEY = 'miLikesNanty_v1';
     let likesMap = {};
     let likedFlags = {};
 
     function loadLikes() {
-        try { likesMap = JSON.parse(localStorage.getItem(LIKES_KEY)) || {}; } catch (e) { }
-        try { likedFlags = JSON.parse(localStorage.getItem('likedFlags')) || {}; } catch (e) { }
+        try { likesMap = JSON.parse(localStorage.getItem(LIKES_KEY)) || {}; } catch (e) {}
+        try { likedFlags = JSON.parse(localStorage.getItem('likedFlags')) || {}; } catch (e) {}
     }
-    window.getLikes = (id) => likesMap[String(id)] || 0;
-    window.hasLiked = (id) => !!likedFlags[String(id)];
+
+    window.getLikes   = (id) => likesMap[String(id)] || 0;
+    window.hasLiked   = (id) => !!likedFlags[String(id)];
     window.miToggleLike = (id) => {
         id = String(id);
         if (likedFlags[id]) {
@@ -531,7 +649,9 @@ document.addEventListener('DOMContentLoaded', () => {
         applyFilters();
     };
 
-    // Inicialización
+    // -------------------------------------------------------
+    // INICIALIZACIÓN
+    // -------------------------------------------------------
     loadCart();
     loadLikes();
     applyFilters();

@@ -1,11 +1,6 @@
 /* -------------------------------------------------
    ESTILOS BASE Y VARIABLES
    ------------------------------------------------- */
-@font-face {
-  font-family: 'Love Script';
-  src: url('imagenes/Love script.ttf') format('truetype');
-}
-
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500&display=swap');
 
 /* Reset and base styles */
@@ -19,30 +14,29 @@
 
 /* Define la nueva paleta de colores y la tipografía */
 :root {
-  --background-color: #f8f0ed; /* Un blanco roto más cálido */
-  --primary-color: #3b2f2f; /* Un marrón oscuro profundo */
-  --secondary-color: #6a5d5d; /* Un gris-marrón medio */
-  --accent-color: #e67e9f; /* Un rosa salmón más vibrante */
-  --hover-color: #d85c82; /* Un rosa más intenso para hover */
+  --background-color: #f8f0ed;
+  --primary-color: #3b2f2f;
+  --secondary-color: #6a5d5d;
+  --accent-color: #e67e9f;
+  --hover-color: #d85c82;
   --card-background-color: #ffffff;
-  --navbar-footer-color: #2c2121; /* Un marrón muy oscuro para navbar y footer */
+  --navbar-footer-color: #2c2121;
   --font-family-headings: 'Playfair Display', serif;
   --font-family-body: 'Montserrat', sans-serif;
-  --glow-color: #e67e9f; /* Color para el efecto de glow del botón flotante */
-  --button-float-bg: #e67e9f; /* Color de fondo del botón flotante */
+  --glow-color: #e67e9f;
+  --button-float-bg: #e67e9f;
   --button-float-text: #ffffff;
 }
 
-/* Regla para el body sin padding-top */
 body {
   font-family: var(--font-family-body);
   background-color: var(--background-color);
   color: var(--primary-color);
-  overflow-x: hidden; /* Previene el desbordamiento horizontal por las animaciones */
+  overflow-x: hidden;
 }
 
 html {
-  scroll-behavior: smooth; /* Scroll suave para los enlaces */
+  scroll-behavior: smooth;
 }
 
 /* -------------------------------------------------
@@ -53,11 +47,11 @@ html {
   background-color: transparent !important;
   transition: background-color 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
   box-shadow: none;
-  position: fixed; /* Asegura que el navbar se quede arriba */
+  position: fixed;
   width: 100%;
   top: 0;
   left: 0;
-  z-index: 1030; /* Para que esté por encima del contenido */
+  z-index: 1030;
 }
 
 #main-navbar.scrolled {
@@ -65,42 +59,36 @@ html {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Logo y enlaces en estado inicial (hero section) */
 #main-navbar .navbar-brand,
 #main-navbar .nav-link {
-  color: #fff !important; /* Color blanco */
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); /* Sombra para legibilidad */
+  color: #fff !important;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
   transition: color 0.3s ease, text-shadow 0.3s ease;
 }
 
-/* Logo y enlaces al hacer scroll */
 #main-navbar.scrolled .navbar-brand,
 #main-navbar.scrolled .nav-link {
-  color: var(--primary-color) !important; /* Color oscuro */
-  text-shadow: none; /* Sin sombra */
+  color: var(--primary-color) !important;
+  text-shadow: none;
 }
 
-/* Estilos para el logo - Control de tamaño */
 .logo-img {
-  height: 55px; /* Tamaño ideal para Escritorio y Tablets grandes */
-  width: auto; /* Mantiene la proporción */
+  height: 55px;
+  width: auto;
   vertical-align: middle;
-  transition: height 0.3s ease; /* Suaviza el cambio de tamaño */
+  transition: height 0.3s ease;
 }
 
-/* AJUSTE PARA MÓVILES: Logo más pequeño */
 @media (max-width: 768px) {
   .logo-img {
-    display: none; /* Ocultamos el logo en móvil para que no tape el texto */
+    display: none;
   }
 
-  /* Separar el menú hamburguesa del borde derecho */
   #main-navbar .container {
     padding-right: 25px;
   }
 }
 
-/* Ícono de la hamburguesa (para móviles) */
 #main-navbar .navbar-toggler-icon {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
@@ -110,47 +98,38 @@ html {
 }
 
 /* -------------------------------------------------
-   MENÚ EN DISPOSITIVOS MÓVILES (Despliegue hacia abajo)
+   MENÚ EN DISPOSITIVOS MÓVILES
    ------------------------------------------------- */
 @media (max-width: 991.98px) {
   #main-navbar .navbar-collapse {
     position: absolute;
-    top: 100%; /* Se posiciona justo debajo del navbar */
+    top: 100%;
     left: 0;
     width: 100%;
-    background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+    background-color: rgba(0, 0, 0, 0.7);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    padding-bottom: 10px; /* Pequeño padding para los enlaces */
+    padding-bottom: 10px;
     padding-top: 10px;
   }
 
   #main-navbar.scrolled .navbar-collapse {
-    background-color: rgba(
-      255,
-      255,
-      255,
-      0.95
-    ); /* Fondo sólido al hacer scroll */
+    background-color: rgba(255, 255, 255, 0.95);
   }
 
   #main-navbar .navbar-nav {
-    flex-direction: column; /* Apila los enlaces verticalmente */
-    align-items: center; /* Centra los enlaces */
+    flex-direction: column;
+    align-items: center;
   }
 
   #main-navbar .nav-item {
-    margin: 5px 0; /* Espacio vertical entre enlaces */
+    margin: 5px 0;
   }
 
   #main-navbar .nav-link {
     padding: 8px 12px !important;
     font-size: 1rem;
     white-space: nowrap;
-  }
-
-  /* Enlaces en móvil siempre blancos sobre fondo oscuro */
-  #main-navbar .nav-link {
     color: #fff !important;
     text-shadow: none;
   }
@@ -161,13 +140,12 @@ html {
 }
 
 /* -------------------------------------------------
-   ESTILOS DE SECCIONES
+   HERO SECTION
    ------------------------------------------------- */
 
 .hero-section {
   position: relative;
-  background: url('/imagenesPrincipal/insumos-profesionales-unas-acabado-gel-nude-desktop.webp')
-    no-repeat center center/cover;
+  background: url('imagenesPrincipal/insumos-profesionales-unas-acabado-gel-nude-desktop.webp') no-repeat center center / cover;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -181,7 +159,7 @@ html {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Overlay oscuro */
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1;
 }
 
@@ -191,13 +169,13 @@ html {
 }
 
 .hero-section h1 {
-  font-family: 'Love Script', var(--font-family-headings);
-  color: var(--accent-color); /* El color salmon/peach para el título */
+  font-family: var(--font-family-headings);
+  color: var(--accent-color);
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
 }
 
 .hero-section p {
-  color: #ffffff; /* El subtítulo sigue siendo blanco */
+  color: #ffffff;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
 }
 
@@ -209,8 +187,7 @@ html {
   padding: 12px 30px;
   font-weight: 600;
   font-size: 1.1rem;
-  transition: background-color 0.3s ease, transform 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .btn-hero:hover {
@@ -221,12 +198,14 @@ html {
   color: #ffffff;
 }
 
-/* Clase para las demás secciones, para que respeten el espacio del navbar */
+/* -------------------------------------------------
+   SECCIONES GENERALES
+   ------------------------------------------------- */
+
 .content-section {
   padding-top: 80px;
 }
 
-/* Títulos de secciones */
 .section-title {
   font-family: var(--font-family-headings);
   color: var(--primary-color);
@@ -245,10 +224,9 @@ html {
 }
 
 /* -------------------------------------------------
-   ESTILOS DE COMPONENTES (TARJETAS, BOTONES, ETC.)
+   TARJETAS
    ------------------------------------------------- */
 
-/* Estilo de las tarjetas (general) */
 .card {
   background-color: var(--card-background-color);
   border: 1px solid #eee;
@@ -260,8 +238,7 @@ html {
 }
 
 section .card {
-  transition: transform 0.5s ease, box-shadow 0.5s ease, opacity 0.8s ease,
-    transform 0.8s ease;
+  transition: transform 0.5s ease, box-shadow 0.5s ease, opacity 0.8s ease, transform 0.8s ease;
 }
 
 .card.visible {
@@ -283,7 +260,6 @@ section .card {
   color: var(--secondary-color);
 }
 
-/* Estilos para las tarjetas de servicio (Encuentra tu Camino, Cursos, Insumos) */
 .service-card-img-container {
   height: 200px;
   overflow: hidden;
@@ -303,15 +279,17 @@ section .card {
   transform: scale(1.05);
 }
 
-/* Botones */
+/* -------------------------------------------------
+   BOTONES
+   ------------------------------------------------- */
+
 .btn-primary {
   background-color: var(--accent-color);
   border-color: var(--accent-color);
   border-radius: 50px;
   padding: 10px 25px;
   font-weight: 500;
-  transition: background-color 0.3s ease, transform 0.3s ease,
-    box-shadow 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .btn-primary:hover {
@@ -325,21 +303,32 @@ section .card {
   color: #f1c40f;
 }
 
-/* Footer */
+/* -------------------------------------------------
+   FOOTER
+   ------------------------------------------------- */
+
 #footer {
-  background-color: var(--navbar-footer-color); /* Fondo oscuro del footer */
-  color: var(--background-color); /* Texto claro para contraste */
+  background-color: var(--navbar-footer-color);
+  color: var(--background-color);
 }
 
 #footer a {
-  color: var(--accent-color); /* Enlaces en el footer con el color de acento */
+  color: var(--accent-color);
+  transition: color 0.3s ease;
+}
+
+#footer a:hover {
+  color: var(--hover-color);
 }
 
 #footer .text-accent-color {
   color: var(--accent-color) !important;
 }
 
-/* Botón Flotante Personalizado */
+/* -------------------------------------------------
+   BOTÓN FLOTANTE
+   ------------------------------------------------- */
+
 .floating-button {
   position: fixed;
   bottom: 40px;
@@ -393,7 +382,10 @@ section .card {
   transition: opacity 0.4s ease-in 0.1s, max-width 0.4s ease-in 0.1s;
 }
 
-/* Estilos para el Modal */
+/* -------------------------------------------------
+   MODALES
+   ------------------------------------------------- */
+
 .modal-content {
   background-color: var(--background-color);
   border: none;
@@ -451,17 +443,21 @@ section .card {
   border-bottom-right-radius: 15px;
 }
 
+/* Precio en modales — color de marca en vez de azul Bootstrap */
+.modal-body .text-primary {
+  color: var(--accent-color) !important;
+}
+
 /* -------------------------------------------------
    MEDIA QUERIES
    ------------------------------------------------- */
 
-/* Media queries para el botón flotante en móviles */
 @media (max-width: 768px) {
   .hero-section {
-    background-image: url('../imagenes/insumos-profesionales-unas-acabado-gel-nude-movil.webp');
+    background-image: url('imagenesPrincipal/insumos-profesionales-unas-acabado-gel-nude-movil.webp');
     min-height: 65vh;
     background-position: center;
-    background-size: cover; /* <-- CAMBIA ESTE NOMBRE */
+    background-size: cover;
   }
 
   .floating-button {
@@ -496,9 +492,7 @@ section .card {
   }
 }
 
-/* AJUSTES PARA TABLETS (ENTRE 768PX Y 992PX) */
 @media (min-width: 768px) and (max-width: 991.98px) {
-  /* Hacer que el precio y el botón se centren y apilen verticalmente */
   .course-card .d-flex,
   .product-card .d-flex {
     flex-direction: column;
@@ -506,28 +500,24 @@ section .card {
     text-align: center;
   }
 
-  /* Agregar un pequeño espacio entre el precio y el botón */
   .course-card .price-tag,
   .product-card .price-tag {
     margin-bottom: 10px;
-    margin-right: 0; /* Quitamos el margen derecho que tenían */
+    margin-right: 0;
   }
 }
 
-/* AJUSTES PARA MÓVILES (PEQUEÑO ESPACIO A LOS LADOS) */
 @media (max-width: 575.98px) {
-  /* Selecciona el contenedor principal y aumenta su padding horizontal */
   .container {
-    padding-left: 2rem; /* 32px de espacio a la izquierda */
-    padding-right: 2rem; /* 32px de espacio a la derecha */
+    padding-left: 2rem;
+    padding-right: 2rem;
   }
 }
 
 /* -------------------------------------------------
-   ESTILOS ESPECÍFICOS PARA TESTIMONIOS (CORREGIDO)
+   TESTIMONIOS
    ------------------------------------------------- */
 
-/* Estilos para las tarjetas de testimonios */
 .testimonial-card {
   background: var(--card-background-color);
   padding: 30px;
@@ -536,7 +526,6 @@ section .card {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.8s ease, transform 0.8s ease;
-  /* Altura flexible para adaptarse al contenido y a Bootstrap */
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -547,7 +536,6 @@ section .card {
   transform: translateY(0);
 }
 
-/* Estilos para el nombre y negocio en las tarjetas de testimonio */
 .testimonial-card h6 {
   font-size: 1rem;
   margin-bottom: 0.2rem;
@@ -560,29 +548,25 @@ section .card {
   margin-top: 0.2rem;
 }
 
-/* Contenedor del contenido del testimonio */
 .testimonial-content {
   position: relative;
-  flex-grow: 1; /* Ocupa el espacio disponible */
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px; /* Espacio antes de la sección del autor */
+  margin-bottom: 20px;
 }
 
 .testimonial-text {
   overflow: hidden;
   transition: max-height 0.5s ease;
-  /* Altura base para el texto truncado */
   max-height: 120px;
   position: relative;
 }
 
 .testimonial-text.expanded {
-  /* Altura suficiente para mostrar todo el contenido */
   max-height: none;
 }
 
-/* Botón de leer más */
 .read-more-btn {
   background: none;
   border: none;
@@ -601,7 +585,6 @@ section .card {
   text-decoration: underline;
 }
 
-/* Efecto de desvanecimiento para el texto truncado */
 .testimonial-text:not(.expanded)::after {
   content: '';
   position: absolute;
@@ -610,4 +593,102 @@ section .card {
   width: 100%;
   height: 30px;
   background: linear-gradient(transparent, var(--card-background-color));
+}
+
+/* -------------------------------------------------
+   SECCIÓN POR QUÉ ELEGIRNOS
+   ------------------------------------------------- */
+
+.por-que-section {
+  background-color: #ffffff;
+}
+
+.por-que-item {
+  padding: 1.5rem 1rem;
+}
+
+.por-que-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: rgba(230, 126, 159, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.por-que-icon i {
+  font-size: 1.8rem;
+  color: var(--accent-color);
+}
+
+.por-que-item:hover .por-que-icon {
+  background-color: var(--accent-color);
+  transform: translateY(-4px);
+}
+
+.por-que-item:hover .por-que-icon i {
+  color: #ffffff;
+}
+
+.por-que-item h5 {
+  font-family: var(--font-family-headings);
+  color: var(--primary-color);
+  font-size: 1rem;
+  margin-bottom: 0.4rem;
+}
+
+.por-que-item p {
+  color: var(--secondary-color);
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+/* -------------------------------------------------
+   SERVICIOS PERSONALIZADOS — ÍCONOS Y PRECIOS
+   ------------------------------------------------- */
+
+.servicio-icon {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background-color: rgba(230, 126, 159, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  transition: background-color 0.3s ease;
+}
+
+.servicio-icon i {
+  font-size: 1.6rem;
+  color: var(--accent-color);
+}
+
+.card:hover .servicio-icon {
+  background-color: var(--accent-color);
+}
+
+.card:hover .servicio-icon i {
+  color: #ffffff;
+}
+
+.price-tag {
+  font-family: var(--font-family-headings);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--accent-color);
+}
+
+/* Precio en modales — color de marca */
+.precio-modal {
+  color: var(--accent-color);
+}
+
+/* Botón agendar cita — centrado al final de servicios */
+#emprender .btn-hero {
+  padding: 14px 40px;
+  font-size: 1rem;
 }

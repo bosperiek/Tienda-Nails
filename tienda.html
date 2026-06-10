@@ -3,102 +3,86 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Catálogo Nanty Nails</title>
+    <title>Catálogo Nanty Nails · Insumos Profesionales</title>
 
-    <!-- Bootstrap CSS (CDN) -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- Bootstrap Icons -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
+
     <!-- Font Awesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-    <!-- Fuentes elegantes para UI -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;600&display=swap"
-      rel="stylesheet"
-    />
+    <!-- Google Fonts — mismas que index.html -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
-    <!-- Tu archivo de estilos renombrado -->
     <link rel="stylesheet" href="tienda-style.css" />
-
-    <style></style>
   </head>
 
-  <body style="padding-top: 76px">
-    <!-- NAV -->
-    <nav
-      id="main-navbar"
-      class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top"
-    >
+  <body>
+
+    <!-- ===================== NAVBAR (idéntico al index) ===================== -->
+    <nav id="main-navbar" class="navbar navbar-expand-lg navbar-dark fixed-top">
       <div class="container">
         <a class="navbar-brand" href="index.html">
           <img
-            src="imagenes/logo4.svg"
+            src="imagenesPrincipal/logo4.svg"
             alt="Nanty Nails"
             class="logo-img"
             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline'"
           />
-          <span style="display: none">Nanty Nails</span>
+          <span style="display:none">Nanty Nails</span>
         </a>
         <button
           class="navbar-toggler"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Abrir menú"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="index.html">Inicio</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#footer">Contacto</a>
-            </li>
+            <li class="nav-item"><a class="nav-link" href="index.html">Inicio</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#servicios">Servicios</a></li>
+            <li class="nav-item"><a class="nav-link" href="index.html#cursos">Cursos</a></li>
+            <li class="nav-item"><a class="nav-link active" href="tienda.html">Catálogo</a></li>
+            <li class="nav-item"><a class="nav-link" href="#footer">Contacto</a></li>
           </ul>
         </div>
       </div>
     </nav>
 
-    <!-- Header del Catálogo -->
-    <header class="py-4 bg-white border-bottom">
+    <!-- ===================== HEADER DEL CATÁLOGO ===================== -->
+    <header>
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-12 col-lg-8 text-center">
-            <!-- Buscador — atributos corregidos para móvil -->
-            <div class="mb-3">
+            <h1 class="catalog-title">Catálogo de Insumos</h1>
+            <p class="catalog-subtitle">Profesionales, de calidad y con envío a todo México 🇲🇽</p>
+
+            <!-- Buscador -->
+            <div class="search-container">
               <input
                 type="text"
                 id="buscador"
-                class="form-control form-control-lg text-center rounded-pill mx-auto"
-                placeholder="🔍 ¿Qué estás buscando hoy?..."
+                placeholder="🔍 ¿Qué estás buscando?"
                 inputmode="search"
                 enterkeyhint="search"
+                autocomplete="off"
               />
             </div>
 
-            <!-- Controles -->
-            <div
-              class="d-flex justify-content-center align-items-center gap-3 mb-4 flex-wrap"
-            >
-              <select
-                id="sort"
-                class="form-select w-auto rounded-pill border-0 bg-light"
-                aria-label="Ordenar productos"
-                style="cursor: pointer"
-              >
-                <option value="">Orden: Predeterminado</option>
+            <!-- Controles: ordenar + carrito -->
+            <div class="d-flex justify-content-center align-items-center gap-3 mt-3 mb-3 flex-wrap">
+              <select id="sort" aria-label="Ordenar productos">
+                <option value="">✦ Predeterminado</option>
                 <option value="price-asc">Precio: menor → mayor</option>
                 <option value="price-desc">Precio: mayor → menor</option>
                 <option value="name-asc">Nombre A → Z</option>
@@ -107,95 +91,55 @@
 
               <button
                 id="cart-button"
-                class="btn btn-primary rounded-pill px-4"
+                class="btn"
                 aria-label="Ver carrito"
                 data-bs-toggle="modal"
                 data-bs-target="#cartModal"
               >
-                🧺 Carrito
-                <span id="cart-count" class="badge bg-white text-primary ms-2"
-                  >0</span
-                >
+                🧺 Mi Carrito
+                <span id="cart-count" class="cart-badge">0</span>
               </button>
             </div>
 
-            <!-- Categorías -->
-            <div
-              id="categories"
-              class="categories d-flex flex-wrap justify-content-center gap-2"
-              aria-label="Filtrar por categoría"
-            ></div>
+            <!-- Chips de categorías -->
+            <div id="categories" class="categories" aria-label="Filtrar por categoría"></div>
           </div>
         </div>
       </div>
     </header>
 
-    <!-- Main -->
-    <main class="py-4" style="min-height: 60vh">
-      <div class="container">
-        <div id="grid-productos" class="row g-3"></div>
-        <nav
-          id="pagination"
-          aria-label="Paginación de productos"
-          class="d-flex justify-content-center mt-3"
-          hidden
-        ></nav>
-        <div id="loading" class="loading mt-3 text-center" hidden>
-          Cargando...
-        </div>
-      </div>
+    <!-- ===================== GRID DE PRODUCTOS ===================== -->
+    <main>
+      <div id="grid-productos" class="row g-3"></div>
+      <nav id="pagination" aria-label="Paginación" class="d-flex justify-content-center mt-4" hidden></nav>
+      <div id="loading" class="text-center py-3 text-muted" hidden>Cargando más productos…</div>
     </main>
 
-    <!-- Modal del carrito — REDISEÑADO -->
-    <div
-      class="modal fade"
-      id="cartModal"
-      tabindex="-1"
-      aria-labelledby="cartModalLabel"
-      aria-hidden="true"
-    >
-      <div
-        class="modal-dialog modal-dialog-scrollable modal-md modal-dialog-centered"
-      >
+    <!-- ===================== MODAL CARRITO ===================== -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable modal-md modal-dialog-centered">
         <div class="modal-content">
-          <!-- Header -->
           <div class="modal-header">
             <div class="d-flex align-items-center gap-2">
-              <span style="font-size: 1.3rem;">🧺</span>
+              <span style="font-size:1.3rem">🧺</span>
               <h5 class="modal-title mb-0" id="cartModalLabel">Tu carrito</h5>
             </div>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Cerrar"
-            ></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
           </div>
-
-          <!-- Body -->
           <div class="modal-body">
-            <div id="cart-items" class="cart-items"></div>
+            <div id="cart-items"></div>
           </div>
-
-          <!-- Footer rediseñado -->
           <div class="modal-footer d-flex flex-column align-items-stretch">
-            <!-- Bloque del total con fondo rosa suave -->
             <div class="cart-total-block w-100 rounded-3 p-3 mb-3">
               <div class="d-flex justify-content-between align-items-center">
-                <span class="text-muted small fw-500">Subtotal estimado</span>
+                <span class="text-muted small">Subtotal estimado</span>
                 <span id="cart-total" class="cart-total-amount">$0.00</span>
               </div>
             </div>
-            <!-- Botones -->
             <div class="d-flex gap-2 w-100">
-              <button
-                id="clear-cart"
-                class="btn btn-outline-secondary btn-sm px-3"
-              >
-                Vaciar
-              </button>
+              <button id="clear-cart" class="btn btn-outline-secondary btn-sm px-3">Vaciar</button>
               <button id="confirm-cart" class="btn btn-primary flex-fill">
-                <i class="fab fa-whatsapp me-2"></i> Confirmar compra
+                <i class="fab fa-whatsapp me-2"></i> Confirmar pedido
               </button>
             </div>
           </div>
@@ -203,158 +147,113 @@
       </div>
     </div>
 
-    <!-- Modal de ajustes -->
-    <div
-      id="settings-modal"
-      class="modal"
-      aria-hidden="true"
-      style="display: none"
-    >
+    <!-- ===================== MODAL IMAGEN (rediseñado) ===================== -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-image-dialog">
+        <div class="modal-content modal-image-content">
+
+          <!-- Header con título del producto -->
+          <div class="modal-image-header">
+            <div class="modal-image-header-left">
+              <span class="modal-image-tag">Vista previa</span>
+              <h6 class="modal-image-title" id="modalTitle">Producto</h6>
+            </div>
+            <div class="modal-image-header-right">
+              <!-- Navegación entre productos -->
+              <button class="modal-nav-btn" id="modal-prev" aria-label="Producto anterior" title="Anterior">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <button class="modal-nav-btn" id="modal-next" aria-label="Producto siguiente" title="Siguiente">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+              <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Cerrar">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Imagen principal -->
+          <div class="modal-image-body">
+            <div class="modal-image-wrapper">
+              <img src="" id="modalImage" class="modal-product-img" alt="Vista ampliada del producto" />
+              <div class="modal-image-loader" id="modal-loader">
+                <div class="loader-spinner"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer con precio y botón añadir -->
+          <div class="modal-image-footer">
+            <div class="modal-product-price" id="modalPrice"></div>
+            <button class="modal-add-btn" id="modal-add-to-cart">
+              <i class="bi bi-bag-plus me-1"></i> Añadir al carrito
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== MODAL AJUSTES (oculto, interno) ===================== -->
+    <div id="settings-modal" aria-hidden="true" style="display:none">
       <div class="modal-content">
-        <button id="close-settings" class="modal-close" aria-label="Cerrar">
-          ✕
-        </button>
-        <h3>Ajustes (solo visible localmente)</h3>
+        <button id="close-settings" aria-label="Cerrar">✕</button>
+        <h3>Ajustes</h3>
         <label for="wa-number-input">Número WhatsApp (sin +):</label>
         <input id="wa-number-input" type="text" placeholder="5614782629" />
-        <div
-          style="
-            margin-top: 12px;
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-          "
-        >
+        <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
           <button id="save-wa-number" class="btn primary">Guardar</button>
         </div>
       </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer id="footer" class="content-section py-5 bg-dark text-white">
+    <!-- ===================== FOOTER ===================== -->
+    <footer id="footer" class="py-5">
       <div class="container">
         <div class="row">
           <div class="col-md-4 mb-4">
-            <h5 class="text-white">NantyNails</h5>
-            <p class="small">
-              Tu aliado para transformar tu pasión por la belleza en una
-              profesión rentable. Ofrecemos cursos de vanguardia y los mejores
-              insumos del mercado.
-            </p>
-            <div class="d-flex mt-4">
-              <a href="#" class="me-3 fs-4 text-white"
-                ><i class="bi bi-facebook"></i
-              ></a>
-              <a href="#" class="me-3 fs-4 text-white"
-                ><i class="bi bi-instagram"></i
-              ></a>
-              <a href="#" class="me-3 fs-4 text-white"
-                ><i class="fab fa-tiktok"></i
-              ></a>
+            <h5>NantyNails</h5>
+            <p class="small">Tu aliado para transformar tu pasión por la belleza en una profesión rentable. Insumos de calidad y cursos de vanguardia.</p>
+            <div class="d-flex mt-3 gap-3">
+              <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+              <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+              <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
             </div>
           </div>
           <div class="col-md-4 mb-4">
-            <h5 class="text-white">Enlaces Rápidos</h5>
+            <h5>Enlaces Rápidos</h5>
             <ul class="list-unstyled">
-              <li>
-                <a href="index.html" class="text-white text-decoration-none"
-                  >Inicio</a
-                >
-              </li>
-              <li>
-                <a
-                  href="index.html#servicios"
-                  class="text-white text-decoration-none"
-                  >Servicios</a
-                >
-              </li>
-              <li>
-                <a
-                  href="index.html#cursos"
-                  class="text-white text-decoration-none"
-                  >Cursos</a
-                >
-              </li>
-              <li>
-                <a href="#" class="text-white text-decoration-none">Insumos</a>
-              </li>
+              <li><a href="index.html">Inicio</a></li>
+              <li><a href="index.html#servicios">Servicios</a></li>
+              <li><a href="index.html#cursos">Cursos</a></li>
+              <li><a href="tienda.html">Catálogo</a></li>
             </ul>
           </div>
           <div class="col-md-4 mb-4">
-            <h5 class="text-white">Contacto y Horarios</h5>
+            <h5>Contacto y Horarios</h5>
             <ul class="list-unstyled small">
-              <li class="mb-2">
-                <i class="bi bi-geo-alt-fill text-accent-color me-2"></i>Av.
-                México Manzana 10 Lote 22, Tulpetlac, 55400 Ecatepec de Morelos,
-                Méx.
-              </li>
-              <li class="mb-2">
-                <i class="bi bi-telephone-fill text-accent-color me-2"></i> +1
-                (123) 456-7890
-              </li>
-              <li class="mb-2">
-                <i class="bi bi-envelope-fill text-accent-color me-2"></i>
-                info@nantynails.com
-              </li>
-              <li class="mt-3 mb-2">
-                <i class="bi bi-clock-fill text-accent-color me-2"></i> Lunes a
-                Viernes: 9:00 AM - 6:00 PM
-              </li>
-              <li class="mb-2">
-                <i class="bi bi-clock-fill text-accent-color me-2"></i> Sábados:
-                10:00 AM - 4:00 PM
-              </li>
+              <li class="mb-2"><i class="bi bi-geo-alt-fill me-2"></i>Av. México Manzana 10 Lote 22, Tulpetlac, Ecatepec, Méx.</li>
+              <li class="mb-2"><i class="bi bi-telephone-fill me-2"></i>+52 56 1478 2629</li>
+              <li class="mb-2"><i class="bi bi-envelope-fill me-2"></i>info@nantynails.com</li>
+              <li class="mt-3 mb-1"><i class="bi bi-clock-fill me-2"></i>Lun–Vie: 9:00 – 18:00</li>
+              <li><i class="bi bi-clock-fill me-2"></i>Sáb: 10:00 – 16:00</li>
             </ul>
           </div>
         </div>
-        <hr class="bg-light my-4" />
-        <div class="text-center">
-          <p class="mb-0">
-            &copy; 2025 NantyNails. Todos los derechos reservados.
-          </p>
-        </div>
+        <hr />
+        <p class="text-center mb-0 small">&copy; 2025 NantyNails. Todos los derechos reservados.</p>
       </div>
     </footer>
 
-    <!-- Botón Flotante de WhatsApp -->
-    <a
-      href="https://wa.me/525614782629?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n."
-      class="floating-button"
-      target="_blank"
-    >
-      <i class="bi bi-chat-dots-fill"></i>
+    <!-- Botón flotante WhatsApp -->
+    <a href="https://wa.me/525614782629?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n." class="floating-button" target="_blank" aria-label="Contactar por WhatsApp">
+      <i class="bi bi-whatsapp"></i>
       <span>Contáctanos</span>
     </a>
-
-    <!-- Modal Imagen -->
-    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content bg-dark border-0">
-          <div class="modal-header border-0 pb-0">
-            <h6 class="modal-title text-white" id="modalTitle"></h6>
-            <button
-              type="button"
-              class="btn-close btn-close-white"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body p-2 text-center">
-            <img
-              src=""
-              id="modalImage"
-              class="img-fluid rounded"
-              style="max-height: 65vh; width: auto"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- Scripts -->
     <script src="datos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Script renombrado -->
     <script src="tienda-main.js"></script>
   </body>
 </html>
