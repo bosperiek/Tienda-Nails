@@ -490,9 +490,74 @@ section .card {
     opacity: 1;
     max-width: 100px;
   }
+
+  /* Tipografía y espaciados ligeramente más grandes en móvil
+     para mejorar la legibilidad del contenido */
+  .section-title {
+    font-size: 2.1rem;
+    margin-bottom: 35px;
+  }
+
+  .content-section {
+    padding-top: 60px;
+  }
+
+  .por-que-item h5 {
+    font-size: 1.05rem;
+  }
+
+  .por-que-item p {
+    font-size: 0.95rem;
+  }
+
+  .card-title {
+    font-size: 1.35rem;
+  }
+
+  .card-text {
+    font-size: 1rem;
+  }
+
+  .price-tag {
+    font-size: 1.4rem;
+  }
+
+  .servicio-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  /* Testimonios: tarjetas más cómodas en pantallas pequeñas */
+  .testimonial-slide {
+    padding: 0 8px;
+  }
+
+  .testimonial-card {
+    padding: 22px 20px;
+  }
+
+  .testimonial-text {
+    font-size: 0.98rem;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .container {
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 991.98px) {
+  .testimonial-card {
+    padding: 26px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+
   .course-card .d-flex,
   .product-card .d-flex {
     flex-direction: column;
@@ -515,25 +580,90 @@ section .card {
 }
 
 /* -------------------------------------------------
-   TESTIMONIOS
+   TESTIMONIOS — CARRUSEL
    ------------------------------------------------- */
+
+/* Contenedor general: oculta overflow horizontal */
+.testimonial-carousel {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 10px 0 25px;
+}
+
+.testimonial-viewport {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Track: fila horizontal que se mueve.
+   El movimiento (translateX) y el ancho de cada slide se controlan
+   completamente por JS, lo que permite pausar/reanudar/avanzar
+   y retroceder de forma manual. */
+.testimonial-track {
+  display: flex;
+  will-change: transform;
+}
+
+/* Cada slide tiene un ancho fijo en px, asignado por JS según el viewport */
+.testimonial-slide {
+  flex: 0 0 auto;
+  width: var(--slide-width, 320px);
+  box-sizing: border-box;
+  padding: 0 12px;
+}
+
+/* -------------------------------------------------
+   CONTROLES DEL CARRUSEL (anterior / siguiente)
+   ------------------------------------------------- */
+
+.carousel-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 22px;
+}
+
+.carousel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(230, 126, 159, 0.25);
+  background-color: transparent;
+  color: var(--accent-color);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.carousel-btn:hover {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #ffffff;
+}
 
 .testimonial-card {
   background: var(--card-background-color);
   padding: 30px;
   border-radius: 15px;
+  border-top: 4px solid var(--testimonial-color, var(--accent-color));
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
   height: 100%;
   display: flex;
   flex-direction: column;
+  /* Override de animaciones de scroll-reveal: siempre visibles dentro del carrusel */
+  opacity: 1 !important;
+  transform: none !important;
+  transition: box-shadow 0.3s ease;
 }
 
-.testimonial-card.visible {
-  opacity: 1;
-  transform: translateY(0);
+.testimonial-card:hover {
+  box-shadow: 0 10px 28px rgba(230, 126, 159, 0.18);
 }
 
 .testimonial-card h6 {
@@ -557,15 +687,23 @@ section .card {
 }
 
 .testimonial-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
   overflow: hidden;
-  transition: max-height 0.5s ease;
-  max-height: 120px;
-  position: relative;
 }
 
 .testimonial-text.expanded {
-  max-height: none;
+  display: block;
+  -webkit-line-clamp: unset;
+  line-clamp: unset;
+  overflow: visible;
 }
+
+/* La pausa por "leer más" y por interacción (hover/touch) se controla
+   directamente en JS modificando el estado del carrusel, por lo que
+   ya no depende de animation-play-state. */
 
 .read-more-btn {
   background: none;
@@ -585,15 +723,44 @@ section .card {
   text-decoration: underline;
 }
 
-.testimonial-text:not(.expanded)::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 30px;
-  background: linear-gradient(transparent, var(--card-background-color));
+/* -------------------------------------------------
+   PUNTOS INDICADORES (DOTS) DEL CARRUSEL
+   ------------------------------------------------- */
+
+.carousel-dots {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 0 20px;
 }
+
+.carousel-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  background-color: rgba(230, 126, 159, 0.25);
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.carousel-dot:hover {
+  background-color: var(--hover-color);
+}
+
+.carousel-dot.active {
+  background-color: var(--accent-color);
+  transform: scale(1.25);
+}
+
+/* Los anchos de cada slide (móvil = coverflow, tablet = 2 visibles,
+   desktop = 3 visibles) se calculan dinámicamente por JS y se aplican
+   mediante la variable --slide-width en .testimonial-track */
+
 
 /* -------------------------------------------------
    SECCIÓN POR QUÉ ELEGIRNOS
