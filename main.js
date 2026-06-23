@@ -282,17 +282,42 @@ document.addEventListener("DOMContentLoaded", function () {
             lastTime = null;
         });
 
-        carousel.addEventListener('touchstart', () => { isInteracting = true; }, { passive: true });
-        carousel.addEventListener('touchend', () => {
+        // --- NUEVA LÓGICA DE ARRASTRE (SWIPE) PARA MÓVIL ---
+        let touchStartX = 0;
+        let touchStartOffset = 0;
+
+        carousel.addEventListener('touchstart', (e) => {
+            isInteracting = true;
+            isManualPause = true; // Pausa el auto-giro al tocar
+            touchStartX = e.touches[0].clientX;
+            touchStartOffset = offset; // Guarda la posición actual del carrusel
+        }, { passive: true });
+
+        carousel.addEventListener('touchmove', (e) => {
+            const currentX = e.touches[0].clientX;
+            const diff = touchStartX - currentX;
+            offset = touchStartOffset + diff; // Mueve el carrusel con el dedo
+            applyOffset();
+            updateActiveDot();
+        }, { passive: true });
+
+        function handleTouchEnd() {
             isInteracting = false;
             isManualPause = false;
             lastTime = null;
-        });
-        carousel.addEventListener('touchcancel', () => {
-            isInteracting = false;
-            isManualPause = false;
-            lastTime = null;
-        });
+
+            // Calcular a qué tarjeta saltar después de soltar el dedo
+            const total = slideCount * slideWidth;
+            let display = ((offset % total) + total) % total;
+            let nearestIndex = Math.round(display / slideWidth) % slideCount;
+
+            // Animar suavemente hacia la tarjeta más cercana
+            goToSlide(nearestIndex);
+        }
+
+        carousel.addEventListener('touchend', handleTouchEnd);
+        carousel.addEventListener('touchcancel', handleTouchEnd);
+
 
         // --- "Leer más": pausa total mientras se lee un testimonio ---
         carousel.addEventListener('click', function (e) {
