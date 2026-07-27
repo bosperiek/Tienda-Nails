@@ -650,6 +650,38 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // -------------------------------------------------------
+    // SINCRONIZACIÓN CON GOOGLE SHEETS
+    // -------------------------------------------------------
+    // datos.js dispara este evento cada vez que trae datos nuevos
+    // (ya sea del Sheet o del respaldo local si el Sheet falla).
+    // Aquí "refrescamos" la tienda con los datos más recientes,
+    // sin necesidad de recargar la página.
+    document.addEventListener('productosActualizados', (e) => {
+        misProductos = e.detail;
+
+        // Reasignar ids y normalizar categorías con los datos nuevos
+        misProductos.forEach((p, i) => { if (typeof p._id === 'undefined') p._id = i; });
+        misProductos.forEach(p => {
+            try {
+                const slug = extractCategorySlug(p);
+                if (slug && slug !== 'sin-categoria') p.category = slug;
+            } catch (e) {}
+            Object.keys(p).forEach(k => { if (/^category-link/i.test(k)) delete p[k]; });
+            if (p.image2) delete p.image2;
+        });
+
+        // Reconstruir el mapa de categorías desde cero
+        Object.keys(categoriesMap).forEach(k => delete categoriesMap[k]);
+        misProductos.forEach(p => {
+            const s = extractCategorySlug(p);
+            categoriesMap[s] = (categoriesMap[s] || 0) + 1;
+        });
+
+        // Volver a filtrar/ordenar y repintar la tienda con los datos actualizados
+        applyFilters();
+    });
+
+    // -------------------------------------------------------
     // INICIALIZACIÓN
     // -------------------------------------------------------
     loadCart();
