@@ -527,32 +527,12 @@ section .card {
     height: 60px;
   }
 
-  /* Testimonios: tarjetas más cómodas en pantallas pequeñas */
-  .testimonial-slide {
-    padding: 0 8px;
-  }
-
-  .testimonial-card {
-    padding: 22px 20px;
-  }
-
-  .testimonial-text {
-    font-size: 0.98rem;
-    -webkit-line-clamp: 4;
-    line-clamp: 4;
-  }
 }
 
 @media (min-width: 576px) and (max-width: 767.98px) {
   .container {
     padding-left: 1.75rem;
     padding-right: 1.75rem;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 991.98px) {
-  .testimonial-card {
-    padding: 26px;
   }
 }
 
@@ -574,8 +554,8 @@ section .card {
 
 @media (max-width: 575.98px) {
   .container {
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 1.1rem;
+    padding-right: 1.1rem;
   }
 }
 
@@ -583,87 +563,161 @@ section .card {
    TESTIMONIOS — CARRUSEL
    ------------------------------------------------- */
 
-/* Contenedor general: oculta overflow horizontal */
+#testimonios {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(230, 126, 159, 0.13), transparent 28%),
+    radial-gradient(circle at 88% 82%, rgba(216, 164, 127, 0.12), transparent 25%),
+    #f9f6f2;
+}
+
+.section-kicker {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--accent-color);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.testimonial-intro {
+  max-width: 660px;
+  margin: 0 auto 2.25rem;
+  color: var(--secondary-color);
+  font-size: 1rem;
+  line-height: 1.7;
+  text-align: center;
+}
+
 .testimonial-carousel {
   width: 100%;
-  max-width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
   overflow: hidden;
-  padding: 10px 0 25px;
+  padding: 8px clamp(18px, 3vw, 36px) 10px;
 }
 
 .testimonial-viewport {
   width: 100%;
   max-width: 100%;
   overflow: hidden;
+  border-radius: 20px;
+  outline: none;
+  touch-action: pan-y;
 }
 
-/* Track: fila horizontal que se mueve.
-   El movimiento (translateX) y el ancho de cada slide se controlan
-   completamente por JS, lo que permite pausar/reanudar/avanzar
-   y retroceder de forma manual. */
+.testimonial-viewport:focus-visible {
+  box-shadow: 0 0 0 3px rgba(230, 126, 159, 0.28);
+}
+
 .testimonial-track {
   display: flex;
+  align-items: stretch;
+  gap: clamp(16px, 2vw, 24px);
   will-change: transform;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Cada slide tiene un ancho fijo en px, asignado por JS según el viewport */
+.testimonial-track.no-transition,
+.testimonial-track.dragging {
+  transition: none;
+}
+
 .testimonial-slide {
   flex: 0 0 auto;
   width: var(--slide-width, 320px);
   box-sizing: border-box;
-  padding: 0 12px;
+  display: flex;
 }
-
-/* -------------------------------------------------
-   CONTROLES DEL CARRUSEL (anterior / siguiente)
-   ------------------------------------------------- */
 
 .carousel-controls {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 22px;
-  margin-top: 22px;
+  gap: 14px;
+  margin-top: 24px;
 }
 
 .carousel-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   border: 1px solid rgba(230, 126, 159, 0.25);
-  background-color: transparent;
+  background-color: rgba(255, 255, 255, 0.85);
   color: var(--accent-color);
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  box-shadow: 0 5px 16px rgba(59, 47, 47, 0.08);
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
 }
 
 .carousel-btn:hover {
   background-color: var(--accent-color);
   border-color: var(--accent-color);
   color: #ffffff;
+  transform: translateY(-2px);
+}
+
+.carousel-btn:focus-visible,
+.read-more-btn:focus-visible,
+.carousel-dot:focus-visible {
+  outline: 3px solid rgba(230, 126, 159, 0.35);
+  outline-offset: 3px;
+}
+
+.pause-btn {
+  background-color: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #fff;
 }
 
 .testimonial-card {
+  position: relative;
+  width: 100%;
+  min-height: 330px;
+  padding: 30px 28px 26px;
   background: var(--card-background-color);
-  padding: 30px;
-  border-radius: 15px;
+  border: 1px solid rgba(230, 126, 159, 0.14);
   border-top: 4px solid var(--testimonial-color, var(--accent-color));
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(59, 47, 47, 0.08);
+  overflow: hidden;
   height: 100%;
   display: flex;
   flex-direction: column;
-  /* Override de animaciones de scroll-reveal: siempre visibles dentro del carrusel */
   opacity: 1 !important;
   transform: none !important;
-  transition: box-shadow 0.3s ease;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.testimonial-card::after {
+  content: '“';
+  position: absolute;
+  top: 4px;
+  right: 18px;
+  color: var(--testimonial-color, var(--accent-color));
+  font-family: Georgia, serif;
+  font-size: 5rem;
+  line-height: 1;
+  opacity: 0.09;
+  pointer-events: none;
 }
 
 .testimonial-card:hover {
-  box-shadow: 0 10px 28px rgba(230, 126, 159, 0.18);
+  box-shadow: 0 12px 32px rgba(230, 126, 159, 0.18);
+  border-color: rgba(230, 126, 159, 0.28);
+}
+
+.testimonial-card .stars {
+  display: flex;
+  gap: 3px;
+  font-size: 0.9rem;
 }
 
 .testimonial-card h6 {
@@ -676,6 +730,13 @@ section .card {
   color: var(--secondary-color);
   font-size: 0.85rem;
   margin-top: 0.2rem;
+}
+
+.testimonial-card img {
+  width: 48px;
+  height: 48px;
+  border: 2px solid rgba(230, 126, 159, 0.18);
+  object-fit: cover;
 }
 
 .testimonial-content {
@@ -692,6 +753,10 @@ section .card {
   -webkit-line-clamp: 5;
   line-clamp: 5;
   overflow: hidden;
+  color: #514343;
+  font-size: 0.96rem;
+  line-height: 1.75;
+  margin-bottom: 0;
 }
 
 .testimonial-text.expanded {
@@ -700,10 +765,6 @@ section .card {
   line-clamp: unset;
   overflow: visible;
 }
-
-/* La pausa por "leer más" y por interacción (hover/touch) se controla
-   directamente en JS modificando el estado del carrusel, por lo que
-   ya no depende de animation-play-state. */
 
 .read-more-btn {
   background: none;
@@ -718,48 +779,126 @@ section .card {
   align-self: flex-start;
 }
 
+.read-more-btn[hidden] {
+  display: none;
+}
+
 .read-more-btn:hover {
   color: var(--hover-color);
   text-decoration: underline;
 }
-
-/* -------------------------------------------------
-   PUNTOS INDICADORES (DOTS) DEL CARRUSEL
-   ------------------------------------------------- */
 
 .carousel-dots {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-top: 16px;
+  gap: 0;
+  margin-top: 10px;
   padding: 0 20px;
 }
 
 .carousel-dot {
-  width: 9px;
-  height: 9px;
+  position: relative;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   border: none;
   padding: 0;
-  background-color: rgba(230, 126, 159, 0.25);
+  background: transparent;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
-.carousel-dot:hover {
+.carousel-dot::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(230, 126, 159, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.25s ease, background-color 0.25s ease;
+}
+
+.carousel-dot:hover::before {
   background-color: var(--hover-color);
 }
 
-.carousel-dot.active {
+.carousel-dot.active::before {
+  width: 22px;
+  border-radius: 20px;
   background-color: var(--accent-color);
-  transform: scale(1.25);
 }
 
-/* Los anchos de cada slide (móvil = coverflow, tablet = 2 visibles,
-   desktop = 3 visibles) se calculan dinámicamente por JS y se aplican
-   mediante la variable --slide-width en .testimonial-track */
+@media (max-width: 767.98px) {
+  #testimonios {
+    padding-top: 3.75rem !important;
+    padding-bottom: 3.75rem !important;
+  }
+
+  #testimonios .section-title {
+    font-size: clamp(1.85rem, 9vw, 2.25rem);
+    line-height: 1.15;
+  }
+
+  .testimonial-intro {
+    margin-bottom: 1.7rem;
+    padding: 0 8px;
+    font-size: 0.94rem;
+    line-height: 1.6;
+  }
+
+  .testimonial-carousel {
+    padding-inline: 14px;
+  }
+
+  .testimonial-track {
+    gap: 14px;
+  }
+
+  .testimonial-card {
+    min-height: 340px;
+    padding: 24px 22px 22px;
+  }
+
+  .testimonial-text {
+    -webkit-line-clamp: 6;
+    line-clamp: 6;
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .carousel-controls {
+    margin-top: 18px;
+  }
+
+  .carousel-btn {
+    width: 46px;
+    height: 46px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .testimonial-card {
+    min-height: 350px;
+    padding: 26px 24px 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .testimonial-track,
+  .testimonial-card,
+  .carousel-btn,
+  .carousel-dot::before {
+    transition-duration: 0.01ms !important;
+  }
+}
 
 
 /* -------------------------------------------------

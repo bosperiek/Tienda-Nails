@@ -44,7 +44,8 @@
       <a class="navbar-brand" href="#inicio">
         <img src="imagenesPrincipal/logo4.svg" alt="Nanty Nails Logo" class="logo-img" />
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Abrir menú de navegación">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
@@ -370,14 +371,17 @@
   </section>
 
   <!-- Testimonios -->
-  <section id="testimonios" class="content-section py-5" style="background-color: #f9f6f2;">
+  <section id="testimonios" class="content-section py-5" aria-labelledby="testimonios-title">
     <div class="container">
-      <h2 class="text-center mb-5 section-title">Lo que dicen nuestros clientes</h2>
+      <span class="section-kicker">Experiencias reales</span>
+      <h2 id="testimonios-title" class="text-center mb-3 section-title">Lo que dicen nuestros clientes</h2>
+      <p class="testimonial-intro">Alumnas y clientas que confiaron en nuestros cursos, productos y atención.</p>
     </div>
 
-    <!-- Carrusel de testimonios (coverflow en móvil / marquee en escritorio) -->
-    <div class="testimonial-carousel">
-      <div class="testimonial-viewport">
+    <!-- Carrusel responsive de testimonios -->
+    <div class="testimonial-carousel" role="region" aria-roledescription="carrusel"
+      aria-label="Testimonios de clientas">
+      <div class="testimonial-viewport" tabindex="0">
         <div class="testimonial-track" id="testimonial-track">
 
           <div class="testimonial-slide">
@@ -517,12 +521,14 @@
         </div>
       </div>
 
-      <!-- Controles del carrusel: anterior / siguiente.
-             Centran la tarjeta vecina y pausan el giro hasta que el
-             mouse salga del carrusel (o se levante el dedo en móvil). -->
+      <!-- Controles del carrusel -->
       <div class="carousel-controls">
         <button class="carousel-btn prev-btn" type="button" aria-label="Testimonio anterior">
           <i class="bi bi-chevron-left"></i>
+        </button>
+        <button class="carousel-btn pause-btn" type="button" aria-label="Pausar testimonios"
+          aria-pressed="false">
+          <i class="bi bi-pause-fill"></i>
         </button>
         <button class="carousel-btn next-btn" type="button" aria-label="Siguiente testimonio">
           <i class="bi bi-chevron-right"></i>

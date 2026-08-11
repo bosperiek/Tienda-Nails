@@ -75,251 +75,230 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // --- 5 y 6. CARRUSEL DE TESTIMONIOS ---
-    // - Loop infinito (clonado del set original)
-    // - Controles manuales: anterior / pausa-play / siguiente
-    // - Pausa al pasar el mouse o tocar (escritorio/móvil)
-    // - "Leer más" pausa por completo el carrusel mientras se lee,
-    //   y se reanuda cuando el mouse sale de esa tarjeta o el usuario
-    //   toca/desliza en otra parte del carrusel.
+    // --- 5 y 6. CARRUSEL RESPONSIVE DE TESTIMONIOS ---
     (function initTestimonialCarousel() {
         const carousel = document.querySelector('.testimonial-carousel');
         const viewport = document.querySelector('.testimonial-viewport');
         const track = document.getElementById('testimonial-track');
         if (!carousel || !viewport || !track) return;
 
-        // Tarjetas originales (antes de cualquier clonado)
-        const originalSlides = Array.from(track.children);
-        if (originalSlides.length === 0) return;
-        const slideCount = originalSlides.length;
+        const slides = Array.from(track.children);
+        if (slides.length === 0) return;
 
-        // Clonamos el set completo y lo añadimos al final para loop infinito.
-        originalSlides.forEach(slide => {
-            const clone = slide.cloneNode(true);
-            clone.setAttribute('aria-hidden', 'true');
-            clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
-            track.appendChild(clone);
-        });
-
-        // --- Color distintivo por testimonio ---
-        // Cada tarjeta recibe un color de un set predefinido, según su
-        // posición. Como se asigna por índice (módulo del set de colores),
-        // funciona automáticamente aunque agregues más testimonios.
-        const accentPalette = ['#e67e9f', '#d8a47f', '#c98ea1', '#e3c08d', '#b98b73', '#caa6c9'];
-        Array.from(track.querySelectorAll('.testimonial-card')).forEach((card, idx) => {
-            const color = accentPalette[(idx % slideCount) % accentPalette.length];
-            card.style.setProperty('--testimonial-color', color);
-        });
-
-        let slideWidth = 0;
-        let offset = 0; // px desplazados hacia la izquierda
-        const speed = 38;          // px por segundo (velocidad normal del giro)
-        const slowFactor = 0.22;   // velocidad reducida al pasar mouse/touch encima
-
-        let isInteracting = false; // mouse encima / dedo sobre el carrusel (ralentiza)
-        let isReading = false;     // un testimonio está expandido ("leer más") — pausa total
-        let isManualPause = false; // tras usar flechas anterior/siguiente — pausa total
-        let isJumping = false;     // animación de salto (flechas/puntos) en curso
-        let lastTime = null;
-
-        // Calcula el ancho de cada slide en PX según el viewport actual.
-        // - Móvil: ~1 tarjeta centrada + fragmentos visibles a los lados (coverflow)
-        // - Tablet: 2 tarjetas completas visibles
-        // - Escritorio: 3 tarjetas completas visibles
-        function recalcSlideWidth() {
-            const vw = viewport.getBoundingClientRect().width;
-            let slidePx;
-
-            if (vw < 768) {
-                slidePx = Math.round(vw * 0.86);
-            } else if (vw < 992) {
-                slidePx = Math.round(vw / 2);
-            } else {
-                slidePx = Math.round(vw / 3);
-            }
-
-            slideWidth = slidePx;
-            track.style.setProperty('--slide-width', slidePx + 'px');
-
-            const total = slideCount * slideWidth;
-            offset = total > 0 ? ((offset % total) + total) % total : 0;
-            applyOffset();
-        }
-
-        function applyOffset() {
-            const total = slideCount * slideWidth;
-            const display = total > 0 ? ((offset % total) + total) % total : 0;
-            track.style.transform = `translateX(${-display}px)`;
-        }
-
-        recalcSlideWidth();
-
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(recalcSlideWidth, 150);
-        });
-
-        // --- Puntos indicadores (se generan según el número de testimonios) ---
+        const prevBtn = carousel.querySelector('.prev-btn');
+        const nextBtn = carousel.querySelector('.next-btn');
+        const pauseBtn = carousel.querySelector('.pause-btn');
         const dotsContainer = document.getElementById('testimonial-dots');
-        const dots = [];
-        if (dotsContainer) {
-            for (let i = 0; i < slideCount; i++) {
+        const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        const accentPalette = ['#e67e9f', '#d8a47f', '#c98ea1', '#e3c08d', '#b98b73', '#caa6c9'];
+
+        slides.forEach((slide, index) => {
+            slide.setAttribute('role', 'group');
+            slide.setAttribute('aria-roledescription', 'diapositiva');
+            slide.setAttribute('aria-label', `${index + 1} de ${slides.length}`);
+            const card = slide.querySelector('.testimonial-card');
+            const readMore = slide.querySelector('.read-more-btn');
+            const color = accentPalette[index % accentPalette.length];
+            if (card) card.style.setProperty('--testimonial-color', color);
+            if (readMore) readMore.setAttribute('aria-expanded', 'false');
+        });
+
+        let currentIndex = 0;
+        let visibleSlides = 1;
+        let slideWidth = 0;
+        let slideGap = 0;
+        let autoTimer = null;
+        let manuallyPaused = reducedMotion.matches;
+        let pointerInside = false;
+        let focusInside = false;
+        let isReading = false;
+        let dots = [];
+
+        function getMaxIndex() {
+            return Math.max(0, slides.length - visibleSlides);
+        }
+
+        function updatePauseButton() {
+            if (!pauseBtn) return;
+            const icon = pauseBtn.querySelector('i');
+            pauseBtn.setAttribute('aria-pressed', String(manuallyPaused));
+            pauseBtn.setAttribute('aria-label', manuallyPaused ? 'Reanudar testimonios' : 'Pausar testimonios');
+            if (icon) icon.className = manuallyPaused ? 'bi bi-play-fill' : 'bi bi-pause-fill';
+        }
+
+        function shouldAutoPlay() {
+            const focusBlocksPlayback = focusInside && document.activeElement !== pauseBtn;
+            return !manuallyPaused && !pointerInside && !focusBlocksPlayback && !isReading &&
+                !document.hidden && getMaxIndex() > 0;
+        }
+
+        function scheduleAutoPlay() {
+            window.clearTimeout(autoTimer);
+            if (!shouldAutoPlay()) return;
+            autoTimer = window.setTimeout(() => {
+                goTo(currentIndex + 1);
+                scheduleAutoPlay();
+            }, 6500);
+        }
+
+        function renderDots() {
+            if (!dotsContainer) return;
+            dotsContainer.innerHTML = '';
+            dots = [];
+            for (let index = 0; index <= getMaxIndex(); index++) {
                 const dot = document.createElement('button');
                 dot.type = 'button';
                 dot.className = 'carousel-dot';
-                dot.setAttribute('aria-label', 'Ir al testimonio ' + (i + 1));
-                dot.addEventListener('click', () => goToSlide(i));
+                dot.setAttribute('aria-label', `Mostrar grupo de testimonios ${index + 1}`);
+                dot.addEventListener('click', () => {
+                    goTo(index);
+                    scheduleAutoPlay();
+                });
                 dotsContainer.appendChild(dot);
                 dots.push(dot);
             }
         }
 
-        let activeIndex = -1;
-        function updateActiveDot() {
-            if (!dots.length || slideWidth === 0) return;
-            const total = slideCount * slideWidth;
-            const display = ((offset % total) + total) % total;
-            const index = Math.round(display / slideWidth) % slideCount;
-            if (index === activeIndex) return;
-            if (activeIndex >= 0 && dots[activeIndex]) {
-                dots[activeIndex].classList.remove('active');
-            }
-            activeIndex = index;
-            if (dots[activeIndex]) {
-                dots[activeIndex].classList.add('active');
-            }
-        }
-        updateActiveDot();
-
-        // --- Giro automático continuo ---
-        // - Normal: avanza a velocidad constante.
-        // - Hover/touch sobre el carrusel: se hace más lento (no se detiene).
-        // - Leyendo un testimonio o tras usar las flechas: pausa total.
-        function tick(time) {
-            if (lastTime === null) lastTime = time;
-            const dt = (time - lastTime) / 1000;
-            lastTime = time;
-
-            if (!isJumping && !isReading && !isManualPause) {
-                const currentSpeed = isInteracting ? speed * slowFactor : speed;
-                const total = slideCount * slideWidth;
-                offset += currentSpeed * dt;
-                if (total > 0 && offset >= total) offset -= total;
-                applyOffset();
-                updateActiveDot();
-            }
-            requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-
-        // --- Salto manual (anterior / siguiente / puntos) con animación suave ---
-        function jumpBy(delta, onDone) {
-            if (isJumping || slideWidth === 0) return;
-            isJumping = true;
-            const startOffset = offset;
-            const target = offset + delta;
-            const duration = 350;
-            const startTime = performance.now();
-
-            function step(now) {
-                const progress = Math.min((now - startTime) / duration, 1);
-                const eased = 1 - Math.pow(1 - progress, 3); // ease-out
-                offset = startOffset + (target - startOffset) * eased;
-                applyOffset();
-                updateActiveDot();
-                if (progress < 1) {
-                    requestAnimationFrame(step);
-                } else {
-                    offset = target;
-                    applyOffset();
-                    updateActiveDot();
-                    isJumping = false;
-                    lastTime = null;
-                    if (onDone) onDone();
-                }
-            }
-            requestAnimationFrame(step);
-        }
-
-        // Salta directamente al testimonio "index" (usado por los puntos),
-        // recorriendo siempre el camino más corto (adelante o atrás).
-        function goToSlide(index) {
-            if (slideWidth === 0) return;
-            const total = slideCount * slideWidth;
-            const display = ((offset % total) + total) % total;
-            const targetDisplay = index * slideWidth;
-            let diff = targetDisplay - display;
-            diff = ((diff % total) + total) % total;
-            if (diff > total / 2) diff -= total;
-            jumpBy(diff);
-        }
-
-        // --- Botones de control: anterior / siguiente ---
-        // Centran la tarjeta vecina y pausan el giro por completo hasta
-        // que el mouse salga del carrusel o se levante el dedo (móvil).
-        const prevBtn = carousel.querySelector('.prev-btn');
-        const nextBtn = carousel.querySelector('.next-btn');
-
-        if (prevBtn) {
-            prevBtn.addEventListener('click', () => {
-                jumpBy(-slideWidth, () => { isManualPause = true; });
+        function updateSlideAccessibility() {
+            slides.forEach((slide, index) => {
+                const isVisible = index >= currentIndex && index < currentIndex + visibleSlides;
+                slide.setAttribute('aria-hidden', String(!isVisible));
+                slide.querySelectorAll('button, a').forEach(control => {
+                    control.tabIndex = isVisible ? 0 : -1;
+                });
             });
-        }
-        if (nextBtn) {
-            nextBtn.addEventListener('click', () => {
-                jumpBy(slideWidth, () => { isManualPause = true; });
+
+            dots.forEach((dot, index) => {
+                const isActive = index === currentIndex;
+                dot.classList.toggle('active', isActive);
+                if (isActive) dot.setAttribute('aria-current', 'true');
+                else dot.removeAttribute('aria-current');
             });
         }
 
-        // --- Interacción general: ralentiza (no detiene) el giro ---
-        // Al salir del carrusel (mouse o touch) también se libera la
-        // pausa manual provocada por las flechas anterior/siguiente.
-        carousel.addEventListener('mouseenter', () => { isInteracting = true; });
-        carousel.addEventListener('mouseleave', () => {
-            isInteracting = false;
-            isManualPause = false;
-            lastTime = null;
+        function applyPosition(animate = true) {
+            track.classList.toggle('no-transition', !animate);
+            track.style.transform = `translate3d(${-currentIndex * (slideWidth + slideGap)}px, 0, 0)`;
+            if (!animate) {
+                requestAnimationFrame(() => track.classList.remove('no-transition'));
+            }
+            updateSlideAccessibility();
+        }
+
+        function goTo(index, animate = true) {
+            const maxIndex = getMaxIndex();
+            if (index < 0) currentIndex = maxIndex;
+            else if (index > maxIndex) currentIndex = 0;
+            else currentIndex = index;
+            applyPosition(animate);
+        }
+
+        function updateReadMoreVisibility() {
+            slides.forEach(slide => {
+                const text = slide.querySelector('.testimonial-text');
+                const button = slide.querySelector('.read-more-btn');
+                if (!text || !button || text.classList.contains('expanded')) return;
+                button.hidden = text.scrollHeight <= text.clientHeight + 1;
+            });
+        }
+
+        function recalculateLayout() {
+            const viewportWidth = viewport.getBoundingClientRect().width;
+            visibleSlides = viewportWidth < 768 ? 1 : viewportWidth < 992 ? 2 : 3;
+            slideGap = parseFloat(getComputedStyle(track).columnGap) || 0;
+            slideWidth = (viewportWidth - slideGap * (visibleSlides - 1)) / visibleSlides;
+            track.style.setProperty('--slide-width', `${slideWidth}px`);
+            currentIndex = Math.min(currentIndex, getMaxIndex());
+            renderDots();
+            applyPosition(false);
+            requestAnimationFrame(updateReadMoreVisibility);
+            scheduleAutoPlay();
+        }
+
+        prevBtn?.addEventListener('click', () => {
+            goTo(currentIndex - 1);
+            scheduleAutoPlay();
         });
 
-        // --- NUEVA LÓGICA DE ARRASTRE (SWIPE) PARA MÓVIL ---
-        let touchStartX = 0;
-        let touchStartOffset = 0;
+        nextBtn?.addEventListener('click', () => {
+            goTo(currentIndex + 1);
+            scheduleAutoPlay();
+        });
 
-        carousel.addEventListener('touchstart', (e) => {
-            isInteracting = true;
-            isManualPause = true; // Pausa el auto-giro al tocar
-            touchStartX = e.touches[0].clientX;
-            touchStartOffset = offset; // Guarda la posición actual del carrusel
-        }, { passive: true });
+        pauseBtn?.addEventListener('click', () => {
+            manuallyPaused = !manuallyPaused;
+            updatePauseButton();
+            scheduleAutoPlay();
+        });
 
-        carousel.addEventListener('touchmove', (e) => {
-            const currentX = e.touches[0].clientX;
-            const diff = touchStartX - currentX;
-            offset = touchStartOffset + diff; // Mueve el carrusel con el dedo
-            applyOffset();
-            updateActiveDot();
-        }, { passive: true });
+        carousel.addEventListener('mouseenter', () => {
+            pointerInside = true;
+            scheduleAutoPlay();
+        });
 
-        function handleTouchEnd() {
-            isInteracting = false;
-            isManualPause = false;
-            lastTime = null;
+        carousel.addEventListener('mouseleave', () => {
+            pointerInside = false;
+            scheduleAutoPlay();
+        });
 
-            // Calcular a qué tarjeta saltar después de soltar el dedo
-            const total = slideCount * slideWidth;
-            let display = ((offset % total) + total) % total;
-            let nearestIndex = Math.round(display / slideWidth) % slideCount;
+        carousel.addEventListener('focusin', () => {
+            focusInside = true;
+            scheduleAutoPlay();
+        });
 
-            // Animar suavemente hacia la tarjeta más cercana
-            goToSlide(nearestIndex);
+        carousel.addEventListener('focusout', event => {
+            if (!carousel.contains(event.relatedTarget)) {
+                focusInside = false;
+                scheduleAutoPlay();
+            }
+        });
+
+        viewport.addEventListener('keydown', event => {
+            if (event.key === 'ArrowLeft') {
+                event.preventDefault();
+                goTo(currentIndex - 1);
+                scheduleAutoPlay();
+            } else if (event.key === 'ArrowRight') {
+                event.preventDefault();
+                goTo(currentIndex + 1);
+                scheduleAutoPlay();
+            }
+        });
+
+        let dragStartX = 0;
+        let dragDistance = 0;
+        let isDragging = false;
+
+        viewport.addEventListener('pointerdown', event => {
+            if (event.pointerType === 'mouse') return;
+            isDragging = true;
+            dragStartX = event.clientX;
+            dragDistance = 0;
+            track.classList.add('dragging');
+            viewport.setPointerCapture?.(event.pointerId);
+            window.clearTimeout(autoTimer);
+        });
+
+        viewport.addEventListener('pointermove', event => {
+            if (!isDragging) return;
+            dragDistance = event.clientX - dragStartX;
+            const basePosition = -currentIndex * (slideWidth + slideGap);
+            track.style.transform = `translate3d(${basePosition + dragDistance}px, 0, 0)`;
+        });
+
+        function finishDrag() {
+            if (!isDragging) return;
+            isDragging = false;
+            track.classList.remove('dragging');
+            if (dragDistance < -50) goTo(currentIndex + 1);
+            else if (dragDistance > 50) goTo(currentIndex - 1);
+            else applyPosition();
+            scheduleAutoPlay();
         }
 
-        carousel.addEventListener('touchend', handleTouchEnd);
-        carousel.addEventListener('touchcancel', handleTouchEnd);
+        viewport.addEventListener('pointerup', finishDrag);
+        viewport.addEventListener('pointercancel', finishDrag);
 
-
-        // --- "Leer más": pausa total mientras se lee un testimonio ---
         carousel.addEventListener('click', function (e) {
             const btn = e.target.closest('.read-more-btn');
             if (!btn) return;
@@ -327,45 +306,41 @@ document.addEventListener("DOMContentLoaded", function () {
             const testimonialText = btn.previousElementSibling;
             if (!testimonialText) return;
 
-            const card = btn.closest('.testimonial-card');
-
-            if (testimonialText.classList.contains('expanded')) {
-                testimonialText.classList.remove('expanded');
-                btn.textContent = 'Leer más';
-                isReading = false;
-                lastTime = null;
-            } else {
-                testimonialText.classList.add('expanded');
-                btn.textContent = 'Leer menos';
-                isReading = true;
-
-                // Reanuda el giro en cuanto el mouse salga de esta tarjeta
-                if (card) {
-                    const resume = () => {
-                        isReading = false;
-                        lastTime = null;
-                        card.removeEventListener('mouseleave', resume);
-                    };
-                    card.addEventListener('mouseleave', resume, { once: true });
+            const willExpand = !testimonialText.classList.contains('expanded');
+            slides.forEach(slide => {
+                const text = slide.querySelector('.testimonial-text');
+                const button = slide.querySelector('.read-more-btn');
+                if (text !== testimonialText) text?.classList.remove('expanded');
+                if (button !== btn && button) {
+                    button.textContent = 'Leer más';
+                    button.setAttribute('aria-expanded', 'false');
                 }
-            }
+            });
+
+            testimonialText.classList.toggle('expanded', willExpand);
+            btn.textContent = willExpand ? 'Leer menos' : 'Leer más';
+            btn.setAttribute('aria-expanded', String(willExpand));
+            isReading = willExpand;
+            scheduleAutoPlay();
         });
 
-        // En táctil: si hay un testimonio expandido y el usuario toca
-        // en otra parte del carrusel, reanudamos el giro normal.
-        carousel.addEventListener('touchstart', function (e) {
-            if (!isReading) return;
-            const expandedText = carousel.querySelector('.testimonial-text.expanded');
-            if (!expandedText) return;
+        document.addEventListener('visibilitychange', scheduleAutoPlay);
 
-            const expandedCard = expandedText.closest('.testimonial-card');
-            const touchedCard = e.target.closest('.testimonial-card');
+        reducedMotion.addEventListener?.('change', event => {
+            if (event.matches) manuallyPaused = true;
+            updatePauseButton();
+            scheduleAutoPlay();
+        });
 
-            if (touchedCard !== expandedCard) {
-                isReading = false;
-                lastTime = null;
-            }
-        }, { passive: true });
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            window.clearTimeout(resizeTimer);
+            resizeTimer = window.setTimeout(recalculateLayout, 150);
+        });
+
+        updatePauseButton();
+        recalculateLayout();
+        document.fonts?.ready.then(updateReadMoreVisibility);
     })();
 
 });
