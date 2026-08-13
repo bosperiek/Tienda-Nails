@@ -1,8 +1,6 @@
 /* -------------------------------------------------
    ESTILOS BASE Y VARIABLES
    ------------------------------------------------- */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500&display=swap');
-
 /* Reset and base styles */
 *,
 *::before,
@@ -21,8 +19,8 @@
   --hover-color: #d85c82;
   --card-background-color: #ffffff;
   --navbar-footer-color: #2c2121;
-  --font-family-headings: 'Playfair Display', serif;
-  --font-family-body: 'Montserrat', sans-serif;
+  --font-family-headings: 'Cormorant Garamond', Georgia, serif;
+  --font-family-body: 'DM Sans', Arial, sans-serif;
   --glow-color: #e67e9f;
   --button-float-bg: #e67e9f;
   --button-float-text: #ffffff;
@@ -36,7 +34,7 @@ body {
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 /* -------------------------------------------------
@@ -198,6 +196,30 @@ html {
   color: #ffffff;
 }
 
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.btn-hero-outline {
+  border: 2px solid #ffffff;
+  border-radius: 50px;
+  color: #ffffff;
+  padding: 11px 30px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+
+.btn-hero-outline:hover {
+  background-color: #ffffff;
+  color: var(--primary-color);
+  transform: translateY(-3px);
+}
+
 /* -------------------------------------------------
    SECCIONES GENERALES
    ------------------------------------------------- */
@@ -208,6 +230,7 @@ html {
 
 .section-title {
   font-family: var(--font-family-headings);
+  font-weight: 700;
   color: var(--primary-color);
   font-size: 2.8rem;
   margin-bottom: 50px;
@@ -253,6 +276,7 @@ section .card {
 
 .card-title {
   font-family: var(--font-family-headings);
+  font-weight: 700;
   color: var(--primary-color);
 }
 
@@ -277,6 +301,170 @@ section .card {
 
 .service-card:hover .service-card-img {
   transform: scale(1.05);
+}
+
+/* Las tres rutas principales mantienen la estética actual con un movimiento más delicado. */
+#camino .camino-grid {
+  max-width: 1120px;
+  margin-inline: auto;
+}
+
+#camino .camino-card {
+  width: 100%;
+  max-width: 360px;
+  overflow: hidden;
+  border-color: rgba(230, 126, 159, 0.14);
+  box-shadow: 0 7px 22px rgba(59, 47, 47, 0.07);
+  transition: opacity 0.8s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s ease, border-color 0.45s ease;
+}
+
+#camino .camino-card .card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.6rem 1.4rem 1.7rem;
+}
+
+#camino .camino-card .card-text {
+  max-width: 29ch;
+  margin-inline: auto;
+  line-height: 1.65;
+}
+
+#camino .camino-card .btn {
+  margin-top: auto !important;
+}
+
+#camino .camino-card .service-card-img {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#camino .camino-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(230, 126, 159, 0.28);
+  box-shadow: 0 13px 30px rgba(59, 47, 47, 0.11);
+}
+
+#camino .camino-card:hover .service-card-img {
+  transform: scale(1.025);
+}
+
+.section-intro {
+  max-width: 680px;
+  margin: 0 auto 2rem;
+  color: var(--secondary-color);
+  text-align: center;
+}
+
+.services-compact {
+  background-color: #f9f6f2;
+}
+
+.service-summary-card .card-body {
+  min-height: 270px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 1.7rem 1.25rem 1.5rem;
+}
+
+.service-summary-card {
+  width: 100%;
+  max-width: 300px;
+  border-color: rgba(230, 126, 159, 0.14);
+  box-shadow: 0 7px 22px rgba(59, 47, 47, 0.07);
+  transition: opacity 0.8s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s ease, border-color 0.45s ease;
+}
+
+.service-summary-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(230, 126, 159, 0.28);
+  box-shadow: 0 12px 28px rgba(59, 47, 47, 0.1);
+}
+
+.service-summary-card .servicio-icon {
+  margin: 0 auto 1.15rem;
+  transition: background-color 0.45s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.service-summary-card:hover .servicio-icon {
+  transform: scale(1.04);
+}
+
+.service-summary-card .price-tag {
+  display: block;
+  margin-top: auto;
+  padding-top: 1.1rem;
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.service-summary-content {
+  width: 100%;
+}
+
+.service-summary-content .card-title {
+  font-size: 1.55rem;
+  line-height: 1.15;
+  margin-bottom: 0.6rem !important;
+}
+
+.service-summary-content .card-text {
+  line-height: 1.55;
+}
+
+.featured-products {
+  background-color: #ffffff;
+}
+
+.featured-products .service-card-img {
+  object-fit: contain;
+  padding: 0.75rem;
+  background-color: #ffffff;
+}
+
+.featured-products .card-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 86px;
+}
+
+/* Cursos con la misma elevación suave de las rutas y servicios. */
+#cursos .service-card {
+  overflow: hidden;
+  border-color: rgba(230, 126, 159, 0.14);
+  box-shadow: 0 7px 22px rgba(59, 47, 47, 0.07);
+  transition: opacity 0.8s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s ease, border-color 0.45s ease;
+}
+
+#cursos .service-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(230, 126, 159, 0.28);
+  box-shadow: 0 13px 30px rgba(59, 47, 47, 0.11);
+}
+
+#cursos .service-card .service-card-img {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#cursos .service-card:hover .service-card-img {
+  transform: scale(1.025);
+}
+
+#cursos .service-card .card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#cursos .service-card .btn {
+  margin-top: auto !important;
 }
 
 /* -------------------------------------------------
@@ -525,6 +713,73 @@ section .card {
   .servicio-icon {
     width: 60px;
     height: 60px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .hero-actions .btn {
+    width: min(100%, 260px);
+  }
+
+  .service-summary-card .card-body {
+    min-height: 245px;
+    padding: 1.45rem 1.1rem 1.3rem;
+  }
+
+  .service-summary-card .servicio-icon {
+    width: 54px;
+    height: 54px;
+    margin-bottom: 1rem;
+  }
+
+  .service-summary-card .servicio-icon i {
+    font-size: 1.25rem;
+  }
+
+  .service-summary-card .price-tag {
+    font-size: 1.15rem;
+    max-width: none;
+  }
+
+  .service-summary-card .card-text {
+    font-size: 0.94rem;
+  }
+
+  .service-summary-content .card-title {
+    font-size: 1.45rem;
+  }
+
+  .featured-products .service-card-img-container {
+    height: 155px;
+  }
+
+  .featured-products .card-body {
+    min-height: 76px;
+    padding: 0.85rem 0.65rem;
+  }
+
+  .featured-products .card-title {
+    font-size: 1rem;
+    margin-bottom: 0;
+  }
+
+  #camino .camino-grid {
+    --bs-gutter-y: 1.25rem;
+  }
+
+  #camino .camino-card {
+    max-width: 390px;
+  }
+
+  #camino .camino-card .service-card-img-container {
+    height: 185px;
+  }
+
+  #camino .camino-card .card-body {
+    padding: 1.35rem 1.2rem 1.5rem;
   }
 
 }
@@ -895,7 +1150,13 @@ section .card {
   .testimonial-track,
   .testimonial-card,
   .carousel-btn,
-  .carousel-dot::before {
+  .carousel-dot::before,
+  #camino .camino-card,
+  #camino .camino-card .service-card-img,
+  .service-summary-card,
+  .service-summary-card .servicio-icon,
+  #cursos .service-card,
+  #cursos .service-card .service-card-img {
     transition-duration: 0.01ms !important;
   }
 }
@@ -953,7 +1214,7 @@ section .card {
 }
 
 /* -------------------------------------------------
-   SERVICIOS PERSONALIZADOS — ÍCONOS Y PRECIOS
+   SERVICIOS — ÍCONOS Y PRECIOS
    ------------------------------------------------- */
 
 .servicio-icon {
@@ -991,10 +1252,4 @@ section .card {
 /* Precio en modales — color de marca */
 .precio-modal {
   color: var(--accent-color);
-}
-
-/* Botón agendar cita — centrado al final de servicios */
-#emprender .btn-hero {
-  padding: 14px 40px;
-  font-size: 1rem;
 }

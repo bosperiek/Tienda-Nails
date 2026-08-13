@@ -54,23 +54,56 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    // --- 4. SCROLL SUAVE PARA LOS ENLACES DE NAVEGACIÓN ---
+    // --- 4. SCROLL SUAVE Y PAUSADO PARA LOS ENLACES INTERNOS ---
+    let scrollAnimationId = null;
+
+    function scrollToSection(targetPosition) {
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (reduceMotion) {
+            window.scrollTo(0, targetPosition);
+            return;
+        }
+
+        if (scrollAnimationId) cancelAnimationFrame(scrollAnimationId);
+
+        const startPosition = window.pageYOffset;
+        const distance = targetPosition - startPosition;
+        const duration = 1050;
+        let startTime = null;
+
+        // Curva suave: acelera al comienzo y frena antes de llegar.
+        const easeInOutCubic = progress => progress < 0.5
+            ? 4 * progress * progress * progress
+            : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+        function animate(currentTime) {
+            if (startTime === null) startTime = currentTime;
+            const progress = Math.min((currentTime - startTime) / duration, 1);
+            window.scrollTo(0, startPosition + distance * easeInOutCubic(progress));
+
+            if (progress < 1) {
+                scrollAnimationId = requestAnimationFrame(animate);
+            } else {
+                scrollAnimationId = null;
+            }
+        }
+
+        scrollAnimationId = requestAnimationFrame(animate);
+    }
+
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-
             const targetId = this.getAttribute('href');
+            if (!targetId || targetId === '#') return;
+
             const targetElement = document.querySelector(targetId);
 
             if (targetElement) {
-                // Ajustar la altura del navbar para el scroll suave
+                e.preventDefault();
                 const navbarHeight = document.querySelector('#main-navbar').offsetHeight;
                 const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
-
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
+                scrollToSection(targetPosition);
             }
         });
     });

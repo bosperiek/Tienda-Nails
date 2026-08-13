@@ -1,771 +1,1061 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nanty Nails Shop: Productos, Cursos y Servicios de Belleza</title>
+    <meta
+      name="description"
+      content="Productos, cursos y servicios de uñas y belleza para aprender, cuidarte o comenzar tu propio negocio con Nanty Nails."
+    />
 
-  <title>Nanty Nails Shop: Insumos Profesionales y Cursos de Uñas</title>
-  <meta name="description"
-    content="Transforma tu pasión en negocio con Nanty Nails. Cursos de uñas profesionales e insumos de alta calidad con envíos a todo México." />
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tu-proyecto.vercel.app/" />
+    <meta
+      property="og:title"
+      content="Nanty Nails - Productos, Cursos y Servicios"
+    />
+    <meta
+      property="og:description"
+      content="Aprende, encuentra productos profesionales, reserva servicios y descubre opciones para emprender."
+    />
+    <meta
+      property="og:image"
+      content="https://tu-proyecto.vercel.app/imagenesPrincipal/logo4.svg"
+    />
 
-  <!-- Open Graph / Facebook / WhatsApp -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://tu-proyecto.vercel.app/" />
-  <meta property="og:title" content="Nanty Nails - Cursos e Insumos Profesionales" />
-  <meta property="og:description"
-    content="Aprende con nuestros cursos prácticos y abastece tu negocio con los mejores insumos." />
-  <meta property="og:image" content="https://tu-proyecto.vercel.app/imagenesPrincipal/logo4.svg" />
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Montserrat:wght@400;500&display=swap"
-    rel="stylesheet" />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
+    />
 
-  <!-- Bootstrap Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link
+      rel="preload"
+      as="image"
+      href="imagenesPrincipal/insumos-profesionales-unas-acabado-gel-nude-desktop.webp"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-  <link rel="preload" as="image" href="imagenesPrincipal/insumos-profesionales-unas-acabado-gel-nude-desktop.webp" />
-  <link rel="stylesheet" href="style.css" />
-</head>
-
-<body>
-  <!-- Navegación -->
-  <nav id="main-navbar" class="navbar navbar-expand-lg navbar-dark fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="#inicio">
-        <img src="imagenesPrincipal/logo4.svg" alt="Nanty Nails Logo" class="logo-img" />
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Abrir menú de navegación">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="#inicio">Inicio</a></li>
-          <li class="nav-item"><a class="nav-link" href="#por-que">Nosotros</a></li>
-          <li class="nav-item"><a class="nav-link" href="#servicios">Servicios</a></li>
-          <li class="nav-item"><a class="nav-link" href="#cursos">Cursos</a></li>
-          <li class="nav-item"><a class="nav-link" href="tienda.html">Insumos</a></li>
-          <li class="nav-item"><a class="nav-link" href="#footer">Contacto</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Hero Section -->
-  <section id="inicio" class="hero-section">
-    <div class="container text-center hero-content">
-      <h1 class="display-4 fw-bold mb-4">
-        Transforma tu pasión en profesión
-      </h1>
-      <p class="lead mb-5">
-        Cursos prácticos desde mi experiencia e insumos de calidad con envíos seguros a todo el país.
-      </p>
-      <a href="tienda.html" class="btn btn-hero btn-lg">Ver Catálogo</a>
-    </div>
-  </section>
-
-  <!-- SECCIÓN: POR QUÉ ELEGIRNOS -->
-  <section id="por-que" class="por-que-section py-5">
-    <div class="container">
-      <h2 class="text-center mb-5 section-title">¿Por qué elegirnos?</h2>
-      <div class="row g-4 justify-content-center text-center">
-        <div class="col-6 col-md-3">
-          <div class="por-que-item">
-            <div class="por-que-icon">
-              <i class="bi bi-truck"></i>
-            </div>
-            <h5>Envíos seguros</h5>
-            <p>A todo México, rápidos y con seguimiento</p>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="por-que-item">
-            <div class="por-que-icon">
-              <i class="bi bi-award"></i>
-            </div>
-            <h5>Materiales de calidad</h5>
-            <p>Insumos profesionales seleccionados</p>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="por-que-item">
-            <div class="por-que-icon">
-              <i class="bi bi-person-heart"></i>
-            </div>
-            <h5>Atención personalizada</h5>
-            <p>Te acompañamos en cada paso</p>
-          </div>
-        </div>
-        <div class="col-6 col-md-3">
-          <div class="por-que-item">
-            <div class="por-que-icon">
-              <i class="bi bi-patch-check"></i>
-            </div>
-            <h5>Experiencia comprobada</h5>
-            <p>Cientos de alumnas y clientas satisfechas</p>
-          </div>
+  <body>
+    <!-- Navegación -->
+    <nav id="main-navbar" class="navbar navbar-expand-lg navbar-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#inicio">
+          <img
+            src="imagenesPrincipal/logo4.svg"
+            alt="Nanty Nails Logo"
+            class="logo-img"
+          />
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Abrir menú de navegación"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#inicio">Inicio</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#servicios">Servicios</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#cursos">Cursos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="tienda.html">Emprender</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#footer">Contacto</a>
+            </li>
+          </ul>
         </div>
       </div>
-    </div>
-  </section>
+    </nav>
 
-  <!-- SECCIÓN: ENCUENTRA TU CAMINO -->
-  <section id="servicios" class="content-section py-5">
-    <div class="container">
-      <h2 class="text-center mb-5 section-title">Encuentra tu Camino</h2>
-      <div class="row g-4 justify-content-center">
-        <div class="col-md-4">
-          <div class="card service-card h-100">
-            <div class="service-card-img-container">
-              <img src="imagenesPrincipal/curso-profesional-unas-tecnicas-aplicacion-y-diseno.webp"
-                class="card-img-top service-card-img" loading="lazy"
-                alt="Instructora demostrando técnicas avanzadas de diseño." />
-            </div>
-            <div class="card-body text-center">
-              <h3 class="card-title">Para Aprender</h3>
-              <p class="card-text">Cursos prácticos desde nivel básico hasta avanzado. Ideal si empiezas o quieres
-                perfeccionar tus técnicas.</p>
-              <a href="#cursos" class="btn btn-primary mt-3">Ver Cursos</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card service-card h-100">
-            <div class="service-card-img-container">
-              <img src="imagenesPrincipal/interior-tienda-bodega-distribuidora-insumos-unas.png"
-                class="card-img-top service-card-img" alt="Insumos y productos de belleza" />
-            </div>
-            <div class="card-body text-center">
-              <h3 class="card-title">Para tu Negocio</h3>
-              <p class="card-text">Insumos de calidad con envíos rápidos y seguros. Abastece tu salón y olvídate de
-                preocupaciones.</p>
-              <a href="tienda.html" class="btn btn-primary mt-3">Ver Catálogo</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="card service-card h-100">
-            <div class="service-card-img-container">
-              <img src="imagenesPrincipal/paquete-emprendedor-kit-inicio-unas-con-curso.png"
-                class="card-img-top service-card-img" loading="lazy" alt="Paquete emprendedor completo." />
-            </div>
-            <div class="card-body text-center">
-              <h3 class="card-title">Para Emprender</h3>
-              <p class="card-text">Paquetes completos con curso + productos. Todo lo necesario para lanzar tu propio
-                negocio con éxito.</p>
-              <a href="#emprender" class="btn btn-primary mt-3">Empezar Ahora</a>
-            </div>
-          </div>
+    <!-- Hero Section -->
+    <section id="inicio" class="hero-section">
+      <div class="container text-center hero-content">
+        <h1 class="display-4 fw-bold mb-4">
+          Transforma tu pasión en profesión
+        </h1>
+        <p class="lead mb-4">
+          Productos, cursos y servicios de belleza para aprender, cuidarte o
+          comenzar tu propio negocio.
+        </p>
+        <div class="hero-actions">
+          <a href="tienda.html" class="btn btn-hero btn-lg">Ver catálogo</a>
+          <a
+            href="https://wa.me/525614782629?text=Hola%2C%20me%20gustar%C3%ADa%20agendar%20una%20cita"
+            class="btn btn-hero-outline btn-lg"
+            target="_blank"
+            rel="noopener"
+          >
+            <i class="bi bi-whatsapp me-2"></i>Reservar
+          </a>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Sección de Insumos -->
-  <section id="insumos" class="content-section py-5" style="background-color: #ffffff;">
-    <div class="container">
-      <h2 class="text-center mb-5 section-title">Insumos para tu Negocio</h2>
-      <div class="row g-4">
-        <div class="col-md-6 col-lg-4 product-card">
-          <div class="card service-card h-100">
-            <div class="service-card-img-container">
-              <img src="./imagenesPrincipal/kit-completo-unas-30-colores-lampara-48w-profesional.webp"
-                class="service-card-img" loading="lazy" alt="Kit de Uñas" />
-            </div>
-            <div class="card-body text-center">
-              <h3 class="card-title">Kit Completo de Uñas</h3>
-              <p class="card-text">Todo lo necesario para empezar a trabajar con uñas. Incluye 30 colores y herramientas
-                básicas.</p>
-              <div class="d-flex justify-content-center align-items-center mt-3">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalInsumo1">Comprar
-                  ahora</button>
+    <!-- SECCIÓN: ENCUENTRA TU CAMINO -->
+    <section id="camino" class="content-section py-5">
+      <div class="container">
+        <h2 class="text-center mb-5 section-title">Encuentra tu camino</h2>
+        <div class="row g-4 justify-content-center camino-grid">
+          <div class="col-md-4 d-flex justify-content-center">
+            <div class="card service-card camino-card h-100">
+              <div class="service-card-img-container">
+                <img
+                  src="imagenesPrincipal/curso-profesional-unas-tecnicas-aplicacion-y-diseno.webp"
+                  class="card-img-top service-card-img"
+                  loading="lazy"
+                  alt="Instructora demostrando técnicas avanzadas de diseño."
+                />
+              </div>
+              <div class="card-body text-center">
+                <h3 class="card-title">Para Aprender</h3>
+                <p class="card-text">
+                  Cursos prácticos desde nivel básico hasta avanzado. Ideal si
+                  empiezas o quieres perfeccionar tus técnicas.
+                </p>
+                <a href="#cursos" class="btn btn-primary mt-3">Ver cursos</a>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-6 col-lg-4 product-card">
-          <div class="card service-card h-100">
-            <div class="service-card-img-container">
-              <img
-                src="./imagenesPrincipal/kit-premium-extensiones-pestanas-profesional-adhesivo-grado-medico-pinzas.webp"
-                class="service-card-img" loading="lazy" alt="Kit de Pestañas" />
-            </div>
-            <div class="card-body text-center">
-              <h3 class="card-title">Kit de Pestañas Premium</h3>
-              <p class="card-text">Variedad de pestañas y adhesivos de alta calidad. Ideal para profesionales.</p>
-              <div class="d-flex justify-content-center align-items-center mt-3">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalInsumo2">Comprar
-                  ahora</button>
+          <div class="col-md-4 d-flex justify-content-center">
+            <div class="card service-card camino-card h-100">
+              <div class="service-card-img-container">
+                <img
+                  src="imagenesPrincipal/paquete-emprendedor-kit-inicio-unas-con-curso.png"
+                  class="card-img-top service-card-img"
+                  loading="lazy"
+                  alt="Kit profesional para emprender."
+                />
+              </div>
+              <div class="card-body text-center">
+                <h3 class="card-title">Para Emprender</h3>
+                <p class="card-text">
+                  Kits y herramientas para comenzar o profesionalizar tu
+                  negocio.
+                </p>
+                <a href="tienda.html" class="btn btn-primary mt-3"
+                  >Ver opciones para emprender</a
+                >
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-md-6 col-lg-4 product-card">
-          <div class="card service-card h-100">
-            <div class="service-card-img-container">
-              <img src="./imagenesPrincipal/maletin-organizador-profesional-unas-rigido-gran-capacidad.webp"
-                class="service-card-img" loading="lazy" alt="Maletín Profesional" />
-            </div>
-            <div class="card-body text-center">
-              <h3 class="card-title">Maletín Profesional</h3>
-              <p class="card-text">Organiza y transporta todos tus productos de forma segura y profesional.</p>
-              <div class="d-flex justify-content-center align-items-center mt-3">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalInsumo3">Comprar
-                  ahora</button>
+          <div class="col-md-4 d-flex justify-content-center">
+            <div class="card service-card camino-card h-100">
+              <div class="service-card-img-container">
+                <img
+                  src="imagenesPrincipal/curso-practico-aplicacion-unas-tecnicas-profesionales.webp"
+                  class="card-img-top service-card-img"
+                  loading="lazy"
+                  alt="Servicio profesional de uñas."
+                />
+              </div>
+              <div class="card-body text-center">
+                <h3 class="card-title">Servicios</h3>
+                <p class="card-text">
+                  Servicios de uñas y belleza, incluyendo uñas acrílicas, gel,
+                  exprés y planchado de cejas.
+                </p>
+                <a href="#servicios" class="btn btn-primary mt-3"
+                  >Ver servicios</a
+                >
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Sección de Cursos -->
-  <section id="cursos" class="content-section py-5" style="background-color: #f9f6f2;">
-    <div class="container">
-      <h2 class="text-center mb-5 section-title">Nuestros Cursos</h2>
-      <div class="row g-4">
-        <div class="col-md-6 col-lg-4 course-card">
-          <div class="card service-card h-100">
-            <div class="service-card-img-container">
-              <img src="./imagenesPrincipal/curso-basico-unas-acrilicas-profesional-kit-incluido-desde-cero.webp"
-                class="service-card-img" loading="lazy" alt="Curso básico de uñas acrílicas." />
-            </div>
-            <div class="card-body text-center">
-              <h3 class="card-title">Curso Básico de Uñas Acrílicas</h3>
-              <p class="card-text">Aprende la técnica desde cero con métodos de alta calidad. Material de práctica
-                incluido.</p>
-              <div class="d-flex justify-content-center align-items-center mt-3">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCurso1">Ver
-                  detalles</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4 course-card">
-          <div class="card service-card h-100">
-            <div class="service-card-img-container">
-              <img src="./imagenesPrincipal/curso-unas-avanzado-tecnicas-drill-poligel-rubber-base-press-on.png"
-                class="service-card-img" loading="lazy" alt="Curso avanzado de uñas." />
-            </div>
-            <div class="card-body text-center">
-              <h3 class="card-title">Curso de Uñas Medio - Avanzado</h3>
-              <p class="card-text">Este curso está diseñado para llevar tus habilidades al siguiente nivel.</p>
-              <div class="d-flex justify-content-center align-items-center mt-3">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCurso2">Ver
-                  detalles</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-4 course-card">
-          <div class="card service-card h-100">
-            <div class="service-card-img-container">
-              <img src="./imagenesPrincipal/curso-unas-express-tecnica-press-on-aplicacion-rapida.png"
-                class="service-card-img" loading="lazy" alt="Curso de uñas exprés." />
-            </div>
-            <div class="card-body text-center">
-              <h3 class="card-title">Curso de Uñas Exprés</h3>
-              <p class="card-text">Domina la técnica más rápida y rentable del mercado. Alta calidad en tiempo récord.
-              </p>
-              <div class="d-flex justify-content-center align-items-center mt-3">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCursoExpress">Ver
-                  detalles</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Sección de Servicios Personalizados -->
-  <section id="emprender" class="content-section py-5">
-    <div class="container">
-      <h2 class="text-center mb-5 section-title">Servicios Personalizados</h2>
-      <div class="row g-4">
-        <!-- Servicio 1 -->
-        <div class="col-md-6 mb-4">
-          <div class="card h-100">
-            <div class="card-body d-flex flex-column text-center">
-              <div class="servicio-icon mb-3">
-                <i class="bi bi-stars"></i>
-              </div>
-              <h3 class="card-title">Uñas Acrílicas</h3>
-              <p class="card-text"><strong>Duración del servicio:</strong> 1-2 horas, dependiendo el diseño.</p>
-              <p class="card-text"><strong>Duración del set:</strong> 2-4 semanas.</p>
-              <div class="mt-auto pt-3">
+    <!-- Servicios -->
+    <section id="servicios" class="content-section services-compact py-5">
+      <div class="container">
+        <h2 class="text-center mb-5 section-title">Servicios</h2>
+        <div class="row g-4 justify-content-center">
+          <div class="col-10 col-sm-6 col-lg-3 d-flex justify-content-center">
+            <div class="card h-100 service-summary-card">
+              <div class="card-body text-center">
+                <div class="servicio-icon"><i class="bi bi-stars"></i></div>
+                <div class="service-summary-content">
+                  <h3 class="card-title h5 mb-1">Uñas Acrílicas</h3>
+                  <p class="card-text mb-0">
+                    1–2 horas · duración de 2–4 semanas
+                  </p>
+                </div>
                 <span class="price-tag">$159</span>
               </div>
             </div>
           </div>
-        </div>
-        <!-- Servicio 2 -->
-        <div class="col-md-6 mb-4">
-          <div class="card h-100">
-            <div class="card-body d-flex flex-column text-center">
-              <div class="servicio-icon mb-3">
-                <i class="bi bi-gem"></i>
-              </div>
-              <h3 class="card-title">Uñas de Gel</h3>
-              <p class="card-text"><strong>Duración del servicio:</strong> 20 min.</p>
-              <p class="card-text"><strong>Duración del set:</strong> 3-4 semanas.</p>
-              <div class="mt-auto pt-3">
+          <div class="col-10 col-sm-6 col-lg-3 d-flex justify-content-center">
+            <div class="card h-100 service-summary-card">
+              <div class="card-body text-center">
+                <div class="servicio-icon"><i class="bi bi-gem"></i></div>
+                <div class="service-summary-content">
+                  <h3 class="card-title h5 mb-1">Uñas de Gel</h3>
+                  <p class="card-text mb-0">20 min · duración de 3–4 semanas</p>
+                </div>
                 <span class="price-tag">$99</span>
               </div>
             </div>
           </div>
-        </div>
-        <!-- Servicio 3 -->
-        <div class="col-md-6 mb-4">
-          <div class="card h-100">
-            <div class="card-body d-flex flex-column text-center">
-              <div class="servicio-icon mb-3">
-                <i class="bi bi-lightning-charge"></i>
-              </div>
-              <h3 class="card-title">Uñas Exprés</h3>
-              <p class="card-text"><strong>Servicio:</strong> Uñas press on con una duración de 30-40 min.</p>
-              <p class="card-text"><strong>Duración del set:</strong> 2-4 semanas.</p>
-              <div class="mt-auto pt-3">
+          <div class="col-10 col-sm-6 col-lg-3 d-flex justify-content-center">
+            <div class="card h-100 service-summary-card">
+              <div class="card-body text-center">
+                <div class="servicio-icon">
+                  <i class="bi bi-lightning-charge"></i>
+                </div>
+                <div class="service-summary-content">
+                  <h3 class="card-title h5 mb-1">Uñas Exprés</h3>
+                  <p class="card-text mb-0">
+                    30–40 min · duración de 2–4 semanas
+                  </p>
+                </div>
                 <span class="price-tag">Desde $120</span>
               </div>
             </div>
           </div>
-        </div>
-        <!-- Servicio 4 -->
-        <div class="col-md-6 mb-4">
-          <div class="card h-100">
-            <div class="card-body d-flex flex-column text-center">
-              <div class="servicio-icon mb-3">
-                <i class="bi bi-brush"></i>
-              </div>
-              <h3 class="card-title">Planchado de Cejas</h3>
-              <p class="card-text"><strong>Duración del servicio:</strong> 20 min.</p>
-              <p class="card-text"><strong>Resultado:</strong> Cejas peinadas, con más volumen y definición por varias
-                semanas.</p>
-              <div class="mt-auto pt-3">
+          <div class="col-10 col-sm-6 col-lg-3 d-flex justify-content-center">
+            <div class="card h-100 service-summary-card">
+              <div class="card-body text-center">
+                <div class="servicio-icon"><i class="bi bi-brush"></i></div>
+                <div class="service-summary-content">
+                  <h3 class="card-title h5 mb-1">Planchado de Cejas</h3>
+                  <p class="card-text mb-0">
+                    20 min · mayor volumen y definición
+                  </p>
+                </div>
                 <span class="price-tag">Desde $99</span>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- UN SOLO BOTÓN AL FINAL -->
-      <div class="text-center mt-4">
-        <a href="https://wa.me/525614782629?text=Hola%2C%20me%20gustar%C3%ADa%20agendar%20una%20cita" target="_blank"
-          class="btn btn-hero btn-lg">
-          <i class="bi bi-whatsapp me-2"></i> Agendar mi cita
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Testimonios -->
-  <section id="testimonios" class="content-section py-5" aria-labelledby="testimonios-title">
-    <div class="container">
-      <span class="section-kicker">Experiencias reales</span>
-      <h2 id="testimonios-title" class="text-center mb-3 section-title">Lo que dicen nuestros clientes</h2>
-      <p class="testimonial-intro">Alumnas y clientas que confiaron en nuestros cursos, productos y atención.</p>
-    </div>
-
-    <!-- Carrusel responsive de testimonios -->
-    <div class="testimonial-carousel" role="region" aria-roledescription="carrusel"
-      aria-label="Testimonios de clientas">
-      <div class="testimonial-viewport" tabindex="0">
-        <div class="testimonial-track" id="testimonial-track">
-
-          <div class="testimonial-slide">
-            <div class="testimonial-card h-100 d-flex flex-column">
-              <div class="stars mb-3">
-                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                  class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-              </div>
-              <div class="testimonial-content flex-grow-1">
-                <p class="testimonial-text">"Hola mi experiencia con Nanty la verdad es súper buena, yo le daría
-                  1000/10, súper paciente, aprendí con ella lo que nunca me explicaron y salí súper capacitada, la
-                  verdad ella tiene mucha variedad para platicar y nunca aburrirse, tiene mucha experiencia en este
-                  mundo de las uñas la verdad a todas las chicas deberían de tener la oportunidad de estar con ella en
-                  un curso aprendes muchísimo"</p>
-                <button class="read-more-btn">Leer más</button>
-              </div>
-              <div class="d-flex align-items-center mt-auto">
-                <img src="https://picsum.photos/seed/persona1/50/50.jpg" class="rounded-circle me-3" loading="lazy"
-                  alt="Cliente" />
-                <div>
-                  <h6 class="mb-0">Lizbeth</h6><small>Alumna</small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="testimonial-slide">
-            <div class="testimonial-card h-100 d-flex flex-column">
-              <div class="stars mb-3">
-                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                  class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-              </div>
-              <div class="testimonial-content flex-grow-1">
-                <p class="testimonial-text">"Hola el curso que me impartió la maestra Nancy Juárez fue un curso muy a
-                  detalle ya que ella tiene mucha paciencia, cuando no puedes te pone más atención hasta que logres
-                  realizar cada paso te lo explica a detalle para que no se te complique también aclara mucho tus dudas
-                  tiene buena actitud para enseñar la verdad estoy muy agradecida por qué aprendí muchas técnicas."</p>
-                <button class="read-more-btn">Leer más</button>
-              </div>
-              <div class="d-flex align-items-center mt-auto">
-                <img src="https://picsum.photos/seed/persona2/50/50.jpg" class="rounded-circle me-3" loading="lazy"
-                  alt="Cliente" />
-                <div>
-                  <h6 class="mb-0">Susana Aguilar</h6><small>Alumna</small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="testimonial-slide">
-            <div class="testimonial-card h-100 d-flex flex-column">
-              <div class="stars mb-3">
-                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                  class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-              </div>
-              <div class="testimonial-content flex-grow-1">
-                <p class="testimonial-text">"Me gustó mucho el curso, tiene un ambiente muy agradable y la maestra
-                  explica muy bien cada tema y nos da tiempo para la práctica, lo recomiendo mucho, se aprende 10 de
-                  10."</p>
-                <button class="read-more-btn">Leer más</button>
-              </div>
-              <div class="d-flex align-items-center mt-auto">
-                <img src="https://picsum.photos/seed/persona3/50/50.jpg" class="rounded-circle me-3" loading="lazy"
-                  alt="Cliente" />
-                <div>
-                  <h6 class="mb-0">Lucero Altamirano</h6><small>Alumna</small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="testimonial-slide">
-            <div class="testimonial-card h-100 d-flex flex-column">
-              <div class="stars mb-3">
-                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                  class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-              </div>
-              <div class="testimonial-content flex-grow-1">
-                <p class="testimonial-text">"Muchas gracias NANTY NAILS SHOP, mi último pedido llegó excelente así como
-                  todos los demás 😍😍 Estoy muy contenta por la atención, sin duda seguiré siendo su clienta y los
-                  recomiendo ampliamente, 100% seguros y confiables..✨"</p>
-                <button class="read-more-btn">Leer más</button>
-              </div>
-              <div class="d-flex align-items-center mt-auto">
-                <img src="https://picsum.photos/seed/persona4/50/50.jpg" class="rounded-circle me-3" loading="lazy"
-                  alt="Cliente" />
-                <div>
-                  <h6 class="mb-0">Imelda</h6><small>Ime Nails</small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="testimonial-slide">
-            <div class="testimonial-card h-100 d-flex flex-column">
-              <div class="stars mb-3">
-                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                  class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-              </div>
-              <div class="testimonial-content flex-grow-1">
-                <p class="testimonial-text">"Recomiendo ampliamente sus productos. Nan es muy cumplida y responsable en
-                  cada entrega. Maneja excelentes precios y una gran variedad en materiales para uñas y pestañas.
-                  ¡Siempre da gusto comprar con ella! 😗"</p>
-                <button class="read-more-btn">Leer más</button>
-              </div>
-              <div class="d-flex align-items-center mt-auto">
-                <img src="https://picsum.photos/seed/persona5/50/50.jpg" class="rounded-circle me-3" loading="lazy"
-                  alt="Cliente" />
-                <div>
-                  <h6 class="mb-0">Clienta Anónima</h6><small>Clienta</small>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="testimonial-slide">
-            <div class="testimonial-card h-100 d-flex flex-column">
-              <div class="stars mb-3">
-                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                  class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-              </div>
-              <div class="testimonial-content flex-grow-1">
-                <p class="testimonial-text">"Excelente atención por parte de Nanty Nails Shop, siempre me consiguen mis
-                  productos y todo llega rapidísimo, están en tendencia siempre gracias 🤩"</p>
-                <button class="read-more-btn">Leer más</button>
-              </div>
-              <div class="d-flex align-items-center mt-auto">
-                <img src="https://picsum.photos/seed/persona6/50/50.jpg" class="rounded-circle me-3" loading="lazy"
-                  alt="Cliente" />
-                <div>
-                  <h6 class="mb-0">Itzayana Valverde</h6><small>Clienta</small>
-                </div>
-              </div>
-            </div>
-          </div>
-
+        <div class="text-center mt-4">
+          <a
+            href="https://wa.me/525614782629?text=Hola%2C%20me%20gustar%C3%ADa%20agendar%20una%20cita"
+            target="_blank"
+            rel="noopener"
+            class="btn btn-hero btn-lg"
+          >
+            <i class="bi bi-whatsapp me-2"></i>Reservar por WhatsApp
+          </a>
         </div>
       </div>
+    </section>
 
-      <!-- Controles del carrusel -->
-      <div class="carousel-controls">
-        <button class="carousel-btn prev-btn" type="button" aria-label="Testimonio anterior">
-          <i class="bi bi-chevron-left"></i>
-        </button>
-        <button class="carousel-btn pause-btn" type="button" aria-label="Pausar testimonios"
-          aria-pressed="false">
-          <i class="bi bi-pause-fill"></i>
-        </button>
-        <button class="carousel-btn next-btn" type="button" aria-label="Siguiente testimonio">
-          <i class="bi bi-chevron-right"></i>
-        </button>
+    <!-- Productos destacados -->
+    <section
+      id="productos-destacados"
+      class="content-section featured-products py-5"
+    >
+      <div class="container">
+        <h2 class="text-center mb-3 section-title">Productos destacados</h2>
+        <p class="section-intro">
+          Una selección de básicos profesionales para tu mesa de trabajo.
+        </p>
+        <div class="row g-4">
+          <div class="col-6 col-lg-4 product-card">
+            <div class="card service-card h-100">
+              <div class="service-card-img-container">
+                <img
+                  src="imagenes/acrilico-cover-strong-pink-fantasy-nails-1oz.webp"
+                  class="service-card-img"
+                  loading="lazy"
+                  alt="Acrílico Cover Strong Pink de Fantasy Nails"
+                />
+              </div>
+              <div class="card-body text-center">
+                <h3 class="card-title h5">Acrílico Cover Strong Pink</h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-4 product-card">
+            <div class="card service-card h-100">
+              <div class="service-card-img-container">
+                <img
+                  src="imagenes/base-coat-gel-organic-nails-15ml.webp"
+                  class="service-card-img"
+                  loading="lazy"
+                  alt="Base Coat Gel de Organic Nails"
+                />
+              </div>
+              <div class="card-body text-center">
+                <h3 class="card-title h5">Base Coat Gel Organic Nails</h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-4 product-card">
+            <div class="card service-card h-100">
+              <div class="service-card-img-container">
+                <img
+                  src="imagenes/drill-pulidor-unas-profesional-25000rpm-blanco.webp"
+                  class="service-card-img"
+                  loading="lazy"
+                  alt="Drill pulidor profesional blanco para uñas"
+                />
+              </div>
+              <div class="card-body text-center">
+                <h3 class="card-title h5">Drill Profesional 25,000 RPM</h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-4 product-card">
+            <div class="card service-card h-100">
+              <div class="service-card-img-container">
+                <img
+                  src="imagenes/set-de-pinceles.webp"
+                  class="service-card-img"
+                  loading="lazy"
+                  alt="Set profesional de pinceles para uñas"
+                />
+              </div>
+              <div class="card-body text-center">
+                <h3 class="card-title h5">Set de Pinceles</h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-4 product-card">
+            <div class="card service-card h-100">
+              <div class="service-card-img-container">
+                <img
+                  src="imagenes/top-coat-organic-brillo-finalizador.webp"
+                  class="service-card-img"
+                  loading="lazy"
+                  alt="Top Coat Organic Nails de brillo finalizador"
+                />
+              </div>
+              <div class="card-body text-center">
+                <h3 class="card-title h5">Top Coat Organic Nails</h3>
+              </div>
+            </div>
+          </div>
+          <div class="col-6 col-lg-4 product-card">
+            <div class="card service-card h-100">
+              <div class="service-card-img-container">
+                <img
+                  src="imagenes/kit-de-gel-miss-cherry-nude.webp"
+                  class="service-card-img"
+                  loading="lazy"
+                  alt="Kit de gel nude Miss Cherry"
+                />
+              </div>
+              <div class="card-body text-center">
+                <h3 class="card-title h5">Kit de Gel Miss Cherry Nude</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt-4">
+          <a href="tienda.html" class="btn btn-primary btn-lg"
+            >Ver catálogo completo</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN: POR QUÉ ELEGIRNOS -->
+    <section id="por-que" class="por-que-section py-5">
+      <div class="container">
+        <h2 class="text-center mb-5 section-title">¿Por qué elegirnos?</h2>
+        <div class="row g-4 justify-content-center text-center">
+          <div class="col-6 col-md-3">
+            <div class="por-que-item">
+              <div class="por-que-icon"><i class="bi bi-truck"></i></div>
+              <h5>Envíos seguros</h5>
+              <p>A todo México, rápidos y con seguimiento</p>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="por-que-item">
+              <div class="por-que-icon"><i class="bi bi-award"></i></div>
+              <h5>Materiales de calidad</h5>
+              <p>Productos profesionales seleccionados</p>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="por-que-item">
+              <div class="por-que-icon"><i class="bi bi-person-heart"></i></div>
+              <h5>Atención personalizada</h5>
+              <p>Te acompañamos en cada paso</p>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="por-que-item">
+              <div class="por-que-icon"><i class="bi bi-patch-check"></i></div>
+              <h5>Experiencia comprobada</h5>
+              <p>Cientos de alumnas y clientas satisfechas</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cursos -->
+    <section
+      id="cursos"
+      class="content-section py-5"
+      style="background-color: #f9f6f2"
+    >
+      <div class="container">
+        <h2 class="text-center mb-5 section-title">Nuestros Cursos</h2>
+        <div class="row g-4">
+          <div class="col-md-6 col-lg-4 course-card">
+            <div class="card service-card h-100">
+              <div class="service-card-img-container">
+                <img
+                  src="./imagenesPrincipal/curso-basico-unas-acrilicas-profesional-kit-incluido-desde-cero.webp"
+                  class="service-card-img"
+                  loading="lazy"
+                  alt="Curso básico de uñas acrílicas."
+                />
+              </div>
+              <div class="card-body text-center">
+                <h3 class="card-title">Curso Básico de Uñas Acrílicas</h3>
+                <p class="card-text">
+                  Aprende la técnica desde cero con material de práctica
+                  incluido.
+                </p>
+                <button
+                  class="btn btn-primary mt-3"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalCurso1"
+                >
+                  Ver detalles
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 course-card">
+            <div class="card service-card h-100">
+              <div class="service-card-img-container">
+                <img
+                  src="./imagenesPrincipal/curso-unas-avanzado-tecnicas-drill-poligel-rubber-base-press-on.png"
+                  class="service-card-img"
+                  loading="lazy"
+                  alt="Curso avanzado de uñas."
+                />
+              </div>
+              <div class="card-body text-center">
+                <h3 class="card-title">Curso de Uñas Medio - Avanzado</h3>
+                <p class="card-text">
+                  Lleva tus habilidades y técnicas al siguiente nivel.
+                </p>
+                <button
+                  class="btn btn-primary mt-3"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalCurso2"
+                >
+                  Ver detalles
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-4 course-card">
+            <div class="card service-card h-100">
+              <div class="service-card-img-container">
+                <img
+                  src="./imagenesPrincipal/curso-unas-express-tecnica-press-on-aplicacion-rapida.png"
+                  class="service-card-img"
+                  loading="lazy"
+                  alt="Curso de uñas exprés."
+                />
+              </div>
+              <div class="card-body text-center">
+                <h3 class="card-title">Curso de Uñas Exprés</h3>
+                <p class="card-text">
+                  Domina una técnica rápida, práctica y rentable.
+                </p>
+                <button
+                  class="btn btn-primary mt-3"
+                  data-bs-toggle="modal"
+                  data-bs-target="#modalCursoExpress"
+                >
+                  Ver detalles
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section
+      id="testimonios"
+      class="content-section py-5"
+      aria-labelledby="testimonios-title"
+    >
+      <div class="container">
+        <span class="section-kicker">Experiencias reales</span>
+        <h2 id="testimonios-title" class="text-center mb-3 section-title">
+          Lo que dicen nuestros clientes
+        </h2>
+        <p class="testimonial-intro">
+          Alumnas y clientas que confiaron en nuestros cursos, productos y
+          atención.
+        </p>
       </div>
 
-      <!-- Puntos indicadores: se generan automáticamente según el número
+      <!-- Carrusel responsive de testimonios -->
+      <div
+        class="testimonial-carousel"
+        role="region"
+        aria-roledescription="carrusel"
+        aria-label="Testimonios de clientas"
+      >
+        <div class="testimonial-viewport" tabindex="0">
+          <div class="testimonial-track" id="testimonial-track">
+            <div class="testimonial-slide">
+              <div class="testimonial-card h-100 d-flex flex-column">
+                <div class="stars mb-3">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i
+                  ><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i
+                  ><i class="bi bi-star-fill"></i>
+                </div>
+                <div class="testimonial-content flex-grow-1">
+                  <p class="testimonial-text">
+                    "Hola mi experiencia con Nanty la verdad es súper buena, yo
+                    le daría 1000/10, súper paciente, aprendí con ella lo que
+                    nunca me explicaron y salí súper capacitada, la verdad ella
+                    tiene mucha variedad para platicar y nunca aburrirse, tiene
+                    mucha experiencia en este mundo de las uñas la verdad a
+                    todas las chicas deberían de tener la oportunidad de estar
+                    con ella en un curso aprendes muchísimo"
+                  </p>
+                  <button class="read-more-btn">Leer más</button>
+                </div>
+                <div class="d-flex align-items-center mt-auto">
+                  <img
+                    src="https://picsum.photos/seed/persona1/50/50.jpg"
+                    class="rounded-circle me-3"
+                    loading="lazy"
+                    alt="Cliente"
+                  />
+                  <div>
+                    <h6 class="mb-0">Lizbeth</h6>
+                    <small>Alumna</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial-slide">
+              <div class="testimonial-card h-100 d-flex flex-column">
+                <div class="stars mb-3">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i
+                  ><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i
+                  ><i class="bi bi-star-fill"></i>
+                </div>
+                <div class="testimonial-content flex-grow-1">
+                  <p class="testimonial-text">
+                    "Hola el curso que me impartió la maestra Nancy Juárez fue
+                    un curso muy a detalle ya que ella tiene mucha paciencia,
+                    cuando no puedes te pone más atención hasta que logres
+                    realizar cada paso te lo explica a detalle para que no se te
+                    complique también aclara mucho tus dudas tiene buena actitud
+                    para enseñar la verdad estoy muy agradecida por qué aprendí
+                    muchas técnicas."
+                  </p>
+                  <button class="read-more-btn">Leer más</button>
+                </div>
+                <div class="d-flex align-items-center mt-auto">
+                  <img
+                    src="https://picsum.photos/seed/persona2/50/50.jpg"
+                    class="rounded-circle me-3"
+                    loading="lazy"
+                    alt="Cliente"
+                  />
+                  <div>
+                    <h6 class="mb-0">Susana Aguilar</h6>
+                    <small>Alumna</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial-slide">
+              <div class="testimonial-card h-100 d-flex flex-column">
+                <div class="stars mb-3">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i
+                  ><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i
+                  ><i class="bi bi-star-fill"></i>
+                </div>
+                <div class="testimonial-content flex-grow-1">
+                  <p class="testimonial-text">
+                    "Me gustó mucho el curso, tiene un ambiente muy agradable y
+                    la maestra explica muy bien cada tema y nos da tiempo para
+                    la práctica, lo recomiendo mucho, se aprende 10 de 10."
+                  </p>
+                  <button class="read-more-btn">Leer más</button>
+                </div>
+                <div class="d-flex align-items-center mt-auto">
+                  <img
+                    src="https://picsum.photos/seed/persona3/50/50.jpg"
+                    class="rounded-circle me-3"
+                    loading="lazy"
+                    alt="Cliente"
+                  />
+                  <div>
+                    <h6 class="mb-0">Lucero Altamirano</h6>
+                    <small>Alumna</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial-slide">
+              <div class="testimonial-card h-100 d-flex flex-column">
+                <div class="stars mb-3">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i
+                  ><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i
+                  ><i class="bi bi-star-fill"></i>
+                </div>
+                <div class="testimonial-content flex-grow-1">
+                  <p class="testimonial-text">
+                    "Muchas gracias NANTY NAILS SHOP, mi último pedido llegó
+                    excelente así como todos los demás 😍😍 Estoy muy contenta
+                    por la atención, sin duda seguiré siendo su clienta y los
+                    recomiendo ampliamente, 100% seguros y confiables..✨"
+                  </p>
+                  <button class="read-more-btn">Leer más</button>
+                </div>
+                <div class="d-flex align-items-center mt-auto">
+                  <img
+                    src="https://picsum.photos/seed/persona4/50/50.jpg"
+                    class="rounded-circle me-3"
+                    loading="lazy"
+                    alt="Cliente"
+                  />
+                  <div>
+                    <h6 class="mb-0">Imelda</h6>
+                    <small>Ime Nails</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial-slide">
+              <div class="testimonial-card h-100 d-flex flex-column">
+                <div class="stars mb-3">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i
+                  ><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i
+                  ><i class="bi bi-star-fill"></i>
+                </div>
+                <div class="testimonial-content flex-grow-1">
+                  <p class="testimonial-text">
+                    "Recomiendo ampliamente sus productos. Nan es muy cumplida y
+                    responsable en cada entrega. Maneja excelentes precios y una
+                    gran variedad en materiales para uñas y pestañas. ¡Siempre
+                    da gusto comprar con ella! 😗"
+                  </p>
+                  <button class="read-more-btn">Leer más</button>
+                </div>
+                <div class="d-flex align-items-center mt-auto">
+                  <img
+                    src="https://picsum.photos/seed/persona5/50/50.jpg"
+                    class="rounded-circle me-3"
+                    loading="lazy"
+                    alt="Cliente"
+                  />
+                  <div>
+                    <h6 class="mb-0">Clienta Anónima</h6>
+                    <small>Clienta</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial-slide">
+              <div class="testimonial-card h-100 d-flex flex-column">
+                <div class="stars mb-3">
+                  <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i
+                  ><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i
+                  ><i class="bi bi-star-fill"></i>
+                </div>
+                <div class="testimonial-content flex-grow-1">
+                  <p class="testimonial-text">
+                    "Excelente atención por parte de Nanty Nails Shop, siempre
+                    me consiguen mis productos y todo llega rapidísimo, están en
+                    tendencia siempre gracias 🤩"
+                  </p>
+                  <button class="read-more-btn">Leer más</button>
+                </div>
+                <div class="d-flex align-items-center mt-auto">
+                  <img
+                    src="https://picsum.photos/seed/persona6/50/50.jpg"
+                    class="rounded-circle me-3"
+                    loading="lazy"
+                    alt="Cliente"
+                  />
+                  <div>
+                    <h6 class="mb-0">Itzayana Valverde</h6>
+                    <small>Clienta</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controles del carrusel -->
+        <div class="carousel-controls">
+          <button
+            class="carousel-btn prev-btn"
+            type="button"
+            aria-label="Testimonio anterior"
+          >
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          <button
+            class="carousel-btn pause-btn"
+            type="button"
+            aria-label="Pausar testimonios"
+            aria-pressed="false"
+          >
+            <i class="bi bi-pause-fill"></i>
+          </button>
+          <button
+            class="carousel-btn next-btn"
+            type="button"
+            aria-label="Siguiente testimonio"
+          >
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+
+        <!-- Puntos indicadores: se generan automáticamente según el número
              de testimonios, así que al agregar más tarjetas en el futuro
              no hay que tocar nada aquí. -->
-      <div class="carousel-dots" id="testimonial-dots" aria-label="Seleccionar testimonio"></div>
-    </div>
-  </section>
+        <div
+          class="carousel-dots"
+          id="testimonial-dots"
+          aria-label="Seleccionar testimonio"
+        ></div>
+      </div>
+    </section>
 
-  <!-- Footer -->
-  <footer id="footer" class="content-section py-5">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4 mb-4">
-          <h5 class="text-white">NantyNails</h5>
-          <p>Tu aliado para transformar tu pasión por la belleza en una profesión rentable. Ofrecemos cursos de
-            vanguardia y los mejores insumos del mercado.</p>
-          <div class="d-flex mt-4">
-            <a href="#" class="me-3 fs-4 text-white"><i class="bi bi-facebook"></i></a>
-            <a href="#" class="me-3 fs-4 text-white"><i class="bi bi-instagram"></i></a>
-            <a href="#" class="me-3 fs-4 text-white"><i class="fab fa-tiktok"></i></a>
+    <!-- Footer -->
+    <footer id="footer" class="content-section py-5">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 mb-4">
+            <h5 class="text-white">NantyNails</h5>
+            <p>
+              Tu aliado para transformar tu pasión por la belleza en una
+              profesión rentable. Encuentra productos, cursos y servicios con
+              atención personalizada.
+            </p>
+            <div class="d-flex mt-4">
+              <a
+                href="https://www.facebook.com/nancy23juarezperez"
+                class="me-3 fs-4 text-white"
+                ><i class="bi bi-facebook"></i
+              ></a>
+              <a
+                href="https://www.tiktok.com/@nantynailsshop"
+                class="me-3 fs-4 text-white"
+                ><i class="fab fa-tiktok"></i
+              ></a>
+            </div>
+          </div>
+          <div class="col-md-4 mb-4">
+            <h5 class="text-white">Enlaces Rápidos</h5>
+            <ul class="list-unstyled">
+              <li><a href="#inicio" class="text-decoration-none">Inicio</a></li>
+              <li>
+                <a href="#servicios" class="text-decoration-none">Servicios</a>
+              </li>
+              <li><a href="#cursos" class="text-decoration-none">Cursos</a></li>
+              <li>
+                <a href="tienda.html" class="text-decoration-none">Productos</a>
+              </li>
+              <li>
+                <a href="#footer" class="text-decoration-none">Contacto</a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-4 mb-4">
+            <h5 class="text-white">Contacto y Horarios</h5>
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                <i class="bi bi-geo-alt-fill text-accent-color me-2"></i>Av.
+                México Manzana 10 Lote 22, Tulpetlac, 55400 Ecatepec de Morelos,
+                Méx.
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-telephone-fill text-accent-color me-2"></i> +52
+                5576120988
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-envelope-fill text-accent-color me-2"></i>
+                fernandoiek12@gmail.com
+              </li>
+              <li class="mt-3 mb-2">
+                <i class="bi bi-clock-fill text-accent-color me-2"></i> Lunes a
+                Viernes: 9:00 AM - 6:00 PM
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-clock-fill text-accent-color me-2"></i> Sábados:
+                10:00 AM - 4:00 PM
+              </li>
+            </ul>
           </div>
         </div>
-        <div class="col-md-4 mb-4">
-          <h5 class="text-white">Enlaces Rápidos</h5>
-          <ul class="list-unstyled">
-            <li><a href="#inicio" class="text-decoration-none">Inicio</a></li>
-            <li><a href="#servicios" class="text-decoration-none">Servicios</a></li>
-            <li><a href="#cursos" class="text-decoration-none">Cursos</a></li>
-            <li><a href="#insumos" class="text-decoration-none">Insumos</a></li>
-            <li><a href="#footer" class="text-decoration-none">Contacto</a></li>
-          </ul>
-        </div>
-        <div class="col-md-4 mb-4">
-          <h5 class="text-white">Contacto y Horarios</h5>
-          <ul class="list-unstyled">
-            <li class="mb-2"><i class="bi bi-geo-alt-fill text-accent-color me-2"></i>Av. México Manzana 10 Lote 22,
-              Tulpetlac, 55400 Ecatepec de Morelos, Méx.</li>
-            <li class="mb-2"><i class="bi bi-telephone-fill text-accent-color me-2"></i> +1 (123) 456-7890</li>
-            <li class="mb-2"><i class="bi bi-envelope-fill text-accent-color me-2"></i> info@nantynails.com</li>
-            <li class="mt-3 mb-2"><i class="bi bi-clock-fill text-accent-color me-2"></i> Lunes a Viernes: 9:00 AM -
-              6:00 PM</li>
-            <li class="mb-2"><i class="bi bi-clock-fill text-accent-color me-2"></i> Sábados: 10:00 AM - 4:00 PM</li>
-          </ul>
+        <hr class="bg-light my-4" />
+        <div class="text-center">
+          <p>&copy; 2025 NantyNails. Todos los derechos reservados.</p>
         </div>
       </div>
-      <hr class="bg-light my-4" />
-      <div class="text-center">
-        <p>&copy; 2025 NantyNails. Todos los derechos reservados.</p>
-      </div>
-    </div>
-  </footer>
+    </footer>
 
-  <!-- Botón Flotante -->
-  <a href="https://wa.me/525614782629?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n."
-    class="floating-button" target="_blank">
-    <i class="bi bi-chat-dots-fill"></i>
-    <span>Contáctanos</span>
-  </a>
+    <!-- Botón Flotante -->
+    <a
+      href="https://wa.me/525614782629?text=Hola%2C%20me%20gustar%C3%ADa%20obtener%20m%C3%A1s%20informaci%C3%B3n."
+      class="floating-button"
+      target="_blank"
+    >
+      <i class="bi bi-chat-dots-fill"></i>
+      <span>Contáctanos</span>
+    </a>
 
-  <!-- Modales Cursos -->
-  <div class="modal fade" id="modalCurso1" tabindex="-1" aria-labelledby="modalCurso1Label" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalCurso1Label">Curso Básico de Uñas Acrílicas</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <h6>¿Qué aprenderás en este curso?</h6>
-          <p>Este curso intensivo está diseñado para que <strong>aprendas</strong> las técnicas esenciales y empieces a
-            construir tu carrera profesional.</p>
-          <ul>
-            <li><strong>Aplicación en Tip y Escultural:</strong> Las dos técnicas fundamentales para construir uñas de
-              acrílico.</li>
-            <li><strong>6 Puntas Básicas de Salón:</strong> Estructura y técnica para satisfacer a cualquier clienta.
-            </li>
-            <li><strong>Acabado y Diseño:</strong> Acabados modernos y diseños en tendencia (french, encapsulado).</li>
-            <li><strong>Relleno y Mantenimiento:</strong> Técnica correcta para el retiro y relleno.</li>
-          </ul>
-          <p><strong>🎁 Kit Profesional Incluido:</strong> Monómero, polvos acrílicos esenciales, pincel y herramientas.
-          </p>
-          <p><strong>⏱️ Duración:</strong> 20 horas (4 semanas, 5 horas por semana).</p>
-          <h4 class="fw-bold text-center">Inversión Total: <span class="precio-modal">$3,000 MXN</span></h4>
-        </div>
-        <div class="modal-footer">
-          <a href="https://wa.me/525614782629?text=Hola,%20estoy%20interesada%20en%20el%20curso:%20Curso%20de%20Uñas%20Acrílicas%20Básico"
-            target="_blank" class="btn btn-primary btn-lg w-100">¡Quiero inscribirme!</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="modalCurso2" tabindex="-1" aria-labelledby="modalCurso2Label" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalCurso2Label">Curso de Uñas Medio Avanzado</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <h6>¿Qué aprenderás en este curso?</h6>
-          <p>Domina técnicas avanzadas y optimiza tu tiempo de trabajo para lograr resultados profesionales.</p>
-          <ul>
-            <li><strong>Nivelación:</strong> Prepara la uña natural para una aplicación perfecta.</li>
-            <li><strong>Rubber Base:</strong> Base flexible y resistente para uñas más fuertes.</li>
-            <li><strong>Poligel:</strong> Sistema híbrido que combina lo mejor del gel y acrílico.</li>
-            <li><strong>Press On:</strong> Uñas postizas de alta calidad para aplicación rápida.</li>
-            <li><strong>Uso Profesional de Drill:</strong> Optimiza tu trabajo y reduce tiempos.</li>
-            <li><strong>Reducción de Tiempo:</strong> Uñas más rápidas y con cero desprendimiento.</li>
-          </ul>
-          <p><strong>🎁 Incluye:</strong> Kit de productos y drill profesional.</p>
-          <p><strong>⏱️ Duración:</strong> 4-6 semanas.</p>
-          <h4 class="fw-bold text-center">Inversión Total: <span class="precio-modal">$4,000 MXN</span></h4>
-        </div>
-        <div class="modal-footer">
-          <a href="https://wa.me/525614782629?text=Hola,%20estoy%20interesada%20en%20el%20curso:%20Curso%20de%20Uñas%20Medio%20Avanzado"
-            target="_blank" class="btn btn-primary btn-lg w-100">¡Quiero inscribirme!</a>
+    <!-- Modales Cursos -->
+    <div
+      class="modal fade"
+      id="modalCurso1"
+      tabindex="-1"
+      aria-labelledby="modalCurso1Label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalCurso1Label">
+              Curso Básico de Uñas Acrílicas
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <h6>¿Qué aprenderás en este curso?</h6>
+            <p>
+              Este curso intensivo está diseñado para que
+              <strong>aprendas</strong> las técnicas esenciales y empieces a
+              construir tu carrera profesional.
+            </p>
+            <ul>
+              <li>
+                <strong>Aplicación en Tip y Escultural:</strong> Las dos
+                técnicas fundamentales para construir uñas de acrílico.
+              </li>
+              <li>
+                <strong>6 Puntas Básicas de Salón:</strong> Estructura y técnica
+                para satisfacer a cualquier clienta.
+              </li>
+              <li>
+                <strong>Acabado y Diseño:</strong> Acabados modernos y diseños
+                en tendencia (french, encapsulado).
+              </li>
+              <li>
+                <strong>Relleno y Mantenimiento:</strong> Técnica correcta para
+                el retiro y relleno.
+              </li>
+            </ul>
+            <p>
+              <strong>🎁 Kit Profesional Incluido:</strong> Monómero, polvos
+              acrílicos esenciales, pincel y herramientas.
+            </p>
+            <p>
+              <strong>⏱️ Duración:</strong> 20 horas (4 semanas, 5 horas por
+              semana).
+            </p>
+            <h4 class="fw-bold text-center">
+              Inversión Total: <span class="precio-modal">$3,000 MXN</span>
+            </h4>
+          </div>
+          <div class="modal-footer">
+            <a
+              href="https://wa.me/525614782629?text=Hola,%20estoy%20interesada%20en%20el%20curso:%20Curso%20de%20Uñas%20Acrílicas%20Básico"
+              target="_blank"
+              class="btn btn-primary btn-lg w-100"
+              >¡Quiero inscribirme!</a
+            >
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="modal fade" id="modalCursoExpress" tabindex="-1" aria-labelledby="modalCursoExpressLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalCursoExpressLabel">Curso Uñas Exprés</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <h6>¿Qué aprenderás en este curso?</h6>
-          <p>Domina la técnica más rápida y rentable del mercado. Ideal para ofrecer un servicio de alta calidad en
-            tiempo récord.</p>
-          <ul>
-            <li><strong>Aplicación de Press On Rápida:</strong> Set completo en solo 20 a 30 minutos.</li>
-            <li><strong>Técnica de Duración:</strong> Sets que duran de 2 a 4 semanas.</li>
-            <li><strong>Uso Profesional del Drill:</strong> Preparación segura y eficiente.</li>
-          </ul>
-          <p><strong>🎁 Incluye:</strong> Kit de productos, drill profesional y puntas.</p>
-          <p><strong>⏱️ Duración:</strong> 1 semana.</p>
-          <h4 class="fw-bold text-center">Inversión Total: <span class="precio-modal">$2,500 MXN</span></h4>
-        </div>
-        <div class="modal-footer">
-          <a href="https://wa.me/525614782629?text=Hola,%20estoy%20interesada%20en%20el%20curso:%20Curso%20U%C3%B1as%20Expr%C3%A9ss"
-            target="_blank" class="btn btn-primary btn-lg w-100">¡Quiero inscribirme!</a>
+    <div
+      class="modal fade"
+      id="modalCurso2"
+      tabindex="-1"
+      aria-labelledby="modalCurso2Label"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalCurso2Label">
+              Curso de Uñas Medio Avanzado
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <h6>¿Qué aprenderás en este curso?</h6>
+            <p>
+              Domina técnicas avanzadas y optimiza tu tiempo de trabajo para
+              lograr resultados profesionales.
+            </p>
+            <ul>
+              <li>
+                <strong>Nivelación:</strong> Prepara la uña natural para una
+                aplicación perfecta.
+              </li>
+              <li>
+                <strong>Rubber Base:</strong> Base flexible y resistente para
+                uñas más fuertes.
+              </li>
+              <li>
+                <strong>Poligel:</strong> Sistema híbrido que combina lo mejor
+                del gel y acrílico.
+              </li>
+              <li>
+                <strong>Press On:</strong> Uñas postizas de alta calidad para
+                aplicación rápida.
+              </li>
+              <li>
+                <strong>Uso Profesional de Drill:</strong> Optimiza tu trabajo y
+                reduce tiempos.
+              </li>
+              <li>
+                <strong>Reducción de Tiempo:</strong> Uñas más rápidas y con
+                cero desprendimiento.
+              </li>
+            </ul>
+            <p>
+              <strong>🎁 Incluye:</strong> Kit de productos y drill profesional.
+            </p>
+            <p><strong>⏱️ Duración:</strong> 4-6 semanas.</p>
+            <h4 class="fw-bold text-center">
+              Inversión Total: <span class="precio-modal">$4,000 MXN</span>
+            </h4>
+          </div>
+          <div class="modal-footer">
+            <a
+              href="https://wa.me/525614782629?text=Hola,%20estoy%20interesada%20en%20el%20curso:%20Curso%20de%20Uñas%20Medio%20Avanzado"
+              target="_blank"
+              class="btn btn-primary btn-lg w-100"
+              >¡Quiero inscribirme!</a
+            >
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Modales Insumos -->
-  <div class="modal fade" id="modalInsumo1" tabindex="-1" aria-labelledby="modalInsumo1Label" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalInsumo1Label">Kit Completo de Uñas</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <h6>Todo lo que necesitas para empezar.</h6>
-          <p>Este kit está pensado para profesionales que buscan calidad y variedad.</p>
-          <ul>
-            <li>Lámpara UV/LED de 48W.</li>
-            <li>Set de 30 colores de gel semipermanente.</li>
-            <li>Base, top coat y primer.</li>
-            <li>Herramientas de manicura y limas.</li>
-            <li>Pinceles para decoración.</li>
-          </ul>
-          <p><strong>Envío:</strong> ¡A todo el país, pregunta por este kit!</p>
-        </div>
-        <div class="modal-footer">
-          <a href="https://wa.me/525614782629?text=Hola,%20me%20interesa%20comprar%20el%20Kit%20Completo%20de%20Uñas"
-            target="_blank" class="btn btn-primary btn-lg w-100">¡Lo quiero!</a>
+    <div
+      class="modal fade"
+      id="modalCursoExpress"
+      tabindex="-1"
+      aria-labelledby="modalCursoExpressLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalCursoExpressLabel">
+              Curso Uñas Exprés
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <h6>¿Qué aprenderás en este curso?</h6>
+            <p>
+              Domina la técnica más rápida y rentable del mercado. Ideal para
+              ofrecer un servicio de alta calidad en tiempo récord.
+            </p>
+            <ul>
+              <li>
+                <strong>Aplicación de Press On Rápida:</strong> Set completo en
+                solo 20 a 30 minutos.
+              </li>
+              <li>
+                <strong>Técnica de Duración:</strong> Sets que duran de 2 a 4
+                semanas.
+              </li>
+              <li>
+                <strong>Uso Profesional del Drill:</strong> Preparación segura y
+                eficiente.
+              </li>
+            </ul>
+            <p>
+              <strong>🎁 Incluye:</strong> Kit de productos, drill profesional y
+              puntas.
+            </p>
+            <p><strong>⏱️ Duración:</strong> 1 semana.</p>
+            <h4 class="fw-bold text-center">
+              Inversión Total: <span class="precio-modal">$2,500 MXN</span>
+            </h4>
+          </div>
+          <div class="modal-footer">
+            <a
+              href="https://wa.me/525614782629?text=Hola,%20estoy%20interesada%20en%20el%20curso:%20Curso%20U%C3%B1as%20Expr%C3%A9ss"
+              target="_blank"
+              class="btn btn-primary btn-lg w-100"
+              >¡Quiero inscribirme!</a
+            >
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="modal fade" id="modalInsumo2" tabindex="-1" aria-labelledby="modalInsumo2Label" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalInsumo2Label">Kit de Pestañas Premium</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <h6>Calidad profesional para tus clientas.</h6>
-          <p>Insumos de la más alta calidad para aplicaciones de extensiones de pestañas.</p>
-          <ul>
-            <li>Mix de blisters de pestañas (curva D y C).</li>
-            <li>Adhesivo de grado médico (secado rápido).</li>
-            <li>Pinzas de precisión (recta y curva).</li>
-            <li>Parches de hidrogel y cepillos.</li>
-          </ul>
-        </div>
-        <div class="modal-footer">
-          <a href="https://wa.me/525614782629?text=Hola,%20me%20interesa%20comprar%20el%20Kit%20de%20Pestañas%20Premium"
-            target="_blank" class="btn btn-primary btn-lg w-100">¡Lo quiero!</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade" id="modalInsumo3" tabindex="-1" aria-labelledby="modalInsumo3Label" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalInsumo3Label">Maletín Profesional</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <h6>Organización y estilo para tus herramientas.</h6>
-          <p>Un maletín espacioso y resistente para transportar tus productos de forma segura.</p>
-          <ul>
-            <li>Compartimentos ajustables.</li>
-            <li>Material rígido y fácil de limpiar.</li>
-            <li>Cerradura de seguridad.</li>
-            <li>Disponible en varios colores.</li>
-          </ul>
-        </div>
-        <div class="modal-footer">
-          <a href="https://wa.me/525614782629?text=Hola,%20me%20interesa%20comprar%20el%20Maletín%20Profesional"
-            target="_blank" class="btn btn-primary btn-lg w-100">¡Lo quiero!</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="main.js"></script>
-</body>
-
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+  </body>
 </html>
