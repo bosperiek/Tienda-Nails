@@ -48,8 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return slug.replace(/[-_]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     }
 
-    misProductos.forEach((p, i) => { if (typeof p._id === 'undefined') p._id = i; });
-
     misProductos.forEach(p => {
         try {
             const slug = extractCategorySlug(p);
@@ -315,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Guardamos el producto activo en una variable que el listener siempre lee al momento del click
         currentModalProduct = prod;
         if (modalAddBtn) {
-            const inCart = carrito[String(prod._id)];
+            const inCart = carrito[String(prod.id)];
             modalAddBtn.innerHTML = inCart
                 ? `<i class="bi bi-check-lg me-1"></i> En carrito (${inCart.qty})`
                 : `<i class="bi bi-bag-plus me-1"></i> Añadir al carrito`;
@@ -342,7 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
         modalAddBtn.addEventListener('click', () => {
             if (!currentModalProduct) return;
             addToCart(currentModalProduct);
-            const item = carrito[String(currentModalProduct._id)];
+            const item = carrito[String(currentModalProduct.id)];
             modalAddBtn.innerHTML = `<i class="bi bi-check-lg me-1"></i> En carrito (${item ? item.qty : 1})`;
         });
     }
@@ -397,7 +395,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const tarjeta = document.createElement('div');
             tarjeta.className = 'card h-100';
-            tarjeta.dataset.id = prod._id;
+            tarjeta.dataset.id = prod.id;
 
             const imgContainer = document.createElement('div');
             imgContainer.className = 'card-img-container';
@@ -434,15 +432,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const likeBtn = document.createElement('button');
             likeBtn.className = 'btn-like';
             likeBtn.type = 'button';
-            const lr = (window.getLikes) ? window.getLikes(prod._id) : 0;
+            const lr = (window.getLikes) ? window.getLikes(prod.id) : 0;
             likeBtn.innerHTML = `❤ ${lr}`;
-            if (window.hasLiked && window.hasLiked(prod._id)) likeBtn.classList.add('liked');
-            likeBtn.addEventListener('click', (e) => { e.stopPropagation(); if (window.miToggleLike) window.miToggleLike(prod._id); });
+            if (window.hasLiked && window.hasLiked(prod.id)) likeBtn.classList.add('liked');
+            likeBtn.addEventListener('click', (e) => { e.stopPropagation(); if (window.miToggleLike) window.miToggleLike(prod.id); });
 
             const btnAdd = document.createElement('button');
             btnAdd.className = 'btn-add';
             btnAdd.type = 'button';
-            const inCart = carrito[String(prod._id)];
+            const inCart = carrito[String(prod.id)];
             btnAdd.textContent = inCart ? `En carrito (${inCart.qty})` : 'Agregar';
             btnAdd.addEventListener('click', (e) => { e.stopPropagation(); addToCart(prod); });
 
@@ -463,7 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------
     // CARRITO
     // -------------------------------------------------------
-    const CART_KEY = 'miCarritoNanty_v1';
+    const CART_KEY = 'miCarritoNanty_v2';
     let carrito = {};
 
     function loadCart() {
@@ -486,7 +484,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addToCart(product) {
-        const id = String(product._id);
+        const id = String(product.id);
         const llaves = Object.keys(product);
         const nombre = product.data || product.nombre || product.name || 'Producto';
         const precioRaw = product.data2 || product.price || '';
@@ -624,13 +622,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------
     // LIKES
     // -------------------------------------------------------
-    const LIKES_KEY = 'miLikesNanty_v1';
+    const LIKES_KEY = 'miLikesNanty_v2';
+    const LIKED_FLAGS_KEY = 'miLikedFlagsNanty_v2';
     let likesMap = {};
     let likedFlags = {};
 
     function loadLikes() {
         try { likesMap = JSON.parse(localStorage.getItem(LIKES_KEY)) || {}; } catch (e) {}
-        try { likedFlags = JSON.parse(localStorage.getItem('likedFlags')) || {}; } catch (e) {}
+        try { likedFlags = JSON.parse(localStorage.getItem(LIKED_FLAGS_KEY)) || {}; } catch (e) {}
     }
 
     window.getLikes   = (id) => likesMap[String(id)] || 0;
@@ -645,7 +644,7 @@ document.addEventListener('DOMContentLoaded', () => {
             likedFlags[id] = true;
         }
         localStorage.setItem(LIKES_KEY, JSON.stringify(likesMap));
-        localStorage.setItem('likedFlags', JSON.stringify(likedFlags));
+        localStorage.setItem(LIKED_FLAGS_KEY, JSON.stringify(likedFlags));
         applyFilters();
     };
 
@@ -659,8 +658,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('productosActualizados', (e) => {
         misProductos = e.detail;
 
-        // Reasignar ids y normalizar categorías con los datos nuevos
-        misProductos.forEach((p, i) => { if (typeof p._id === 'undefined') p._id = i; });
+        // Normalizar categorías con los datos nuevos
         misProductos.forEach(p => {
             try {
                 const slug = extractCategorySlug(p);

@@ -1,5 +1,4 @@
 // URL de tu Google Sheet publicado vía opensheet
-// Reemplaza TU_SHEET_ID por el ID real de tu Google Sheet
 const SHEET_ID = "1pwoKKCUUlxmqUQGEMCEemXHngq-4wWUMPfMReI2vQdA";
 const SHEET_NOMBRE = "productos"; // nombre exacto de la pestaña/hoja
 const SHEET_URL = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NOMBRE}`;
@@ -23,7 +22,10 @@ function alCargarProductos(callback) {
 async function cargarProductosDesdeSheet() {
     try {
         const res = await fetch(SHEET_URL);
-        if (!res.ok) throw new Error("Error al obtener el sheet: " + res.status);
+
+        if (!res.ok) {
+            throw new Error("Error al obtener el sheet: " + res.status);
+        }
 
         const filas = await res.json();
 
@@ -31,6 +33,7 @@ async function cargarProductosDesdeSheet() {
         misProductos = filas
             .filter(p => p.data && p.data.trim() !== "")
             .map(p => ({
+                id: (p.id || "").trim(),
                 category: (p.category || "").trim(),
                 data: (p.data || "").trim(),
                 data2: (p.data2 || "").trim(),
@@ -43,11 +46,20 @@ async function cargarProductosDesdeSheet() {
         listenersProductos.length = 0;
 
         // Dispara un evento global por si otras partes del código lo escuchan
-        document.dispatchEvent(new CustomEvent("productosActualizados", { detail: misProductos }));
+        document.dispatchEvent(
+            new CustomEvent("productosActualizados", {
+                detail: misProductos
+            })
+        );
 
         return misProductos;
+
     } catch (err) {
-        console.error("No se pudieron cargar los productos desde Google Sheets:", err);
+        console.error(
+            "No se pudieron cargar los productos desde Google Sheets:",
+            err
+        );
+
         return [];
     }
 }
