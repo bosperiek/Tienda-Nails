@@ -144,19 +144,41 @@ document.addEventListener('DOMContentLoaded', () => {
     // ORDENADO Y FILTRADO
     // -------------------------------------------------------
     function parsePrice(val) {
-        if (!val) return 0;
-        const s = String(val).replace(/[^0-9.,-]/g, '').replace(',', '.');
-        const n = parseFloat(s);
-        return isNaN(n) ? 0 : n;
+        if (typeof val === 'number') {
+            return Number.isFinite(val) && val >= 0 ? val : null;
+        }
+
+        if (typeof val !== 'string') return null;
+
+        const text = val.trim();
+        if (!text) return null;
+
+        const validFormat = /^\$?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/;
+        if (!validFormat.test(text)) return null;
+
+        const number = Number(text.replace(/^\$/, '').replace(/,/g, ''));
+        return Number.isFinite(number) && number >= 0 ? number : null;
     }
+
+    const currencyFormatter = new Intl.NumberFormat("es-MX", {
+        style: "currency",
+        currency: "MXN"
+    });
 
     function sortList(list, sortVal) {
         const copy = list.slice();
         if (!sortVal) return copy;
-        if (sortVal === 'price-asc') {
-            copy.sort((a, b) => parsePrice(a.data2 || a.price || '') - parsePrice(b.data2 || b.price || ''));
-        } else if (sortVal === 'price-desc') {
-            copy.sort((a, b) => parsePrice(b.data2 || b.price || '') - parsePrice(a.data2 || a.price || ''));
+        if (sortVal === 'price-asc' || sortVal === 'price-desc') {
+            copy.sort((a, b) => {
+                const priceA = a.data2;
+                const priceB = b.data2;
+
+                if (priceA === null && priceB === null) return 0;
+                if (priceA === null) return 1;
+                if (priceB === null) return -1;
+
+                return sortVal === 'price-asc' ? priceA - priceB : priceB - priceA;
+            });
         } else if (sortVal === 'name-asc') {
             copy.sort((a, b) => (a.data || a.nombre || '').toString().toLowerCase().localeCompare((b.data || b.nombre || '').toString().toLowerCase()));
         } else if (sortVal === 'name-desc') {
@@ -267,12 +289,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function getProductData(prod) {
         const llaves = Object.keys(prod);
         const keyNombre = llaves.find(k => /(^data\b|nom|name|titul|title|producto|descripcion)/i.test(k)) || llaves[0];
-        const keyPrecio = llaves.find(k => /(^data2\b|precio|price|cost|valor)/i.test(k)) || llaves[1];
         let keyImg = llaves.find(k => /(image|img|src|url|foto|link)/i.test(k) && typeof prod[k] === 'string' && /^https?:\/\//i.test(prod[k]));
         if (!keyImg) keyImg = llaves.find(k => typeof prod[k] === 'string' && /^https?:\/\//i.test(prod[k]) && /\.(jpg|png|webp|jpeg)/i.test(prod[k]));
         return {
             nombre: prod[keyNombre] || 'Producto',
-            precio: prod[keyPrecio] || '',
+            precio: prod.data2,
             imgUrl: prod[keyImg] || prod.image || ''
         };
     }
@@ -292,7 +313,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             modalTitle.textContent = nombre;
             if (modalPrice) {
-                modalPrice.textContent = precio ? formatPriceForDisplay(precio) : '';
+                modalPrice.textContent = formatPriceForDisplay(precio);
             }
 
             modalImg.src = imgUrl;
@@ -341,7 +362,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!currentModalProduct) return;
             addToCart(currentModalProduct);
             const item = carrito[String(currentModalProduct.id)];
-            modalAddBtn.innerHTML = `<i class="bi bi-check-lg me-1"></i> En carrito (${item ? item.qty : 1})`;
+            modalAddBtn.innerHTML = item
+                ? `<i class="bi bi-check-lg me-1"></i> En carrito (${item.qty})`
+                : `<i class="bi bi-bag-plus me-1"></i> Añadir al carrito`;
         });
     }
 
@@ -427,7 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const divPrice = document.createElement('div');
             divPrice.className = 'card-price';
-            divPrice.textContent = precio;
+            divPrice.textContent = formatPriceForDisplay(precio);
 
             const likeBtn = document.createElement('button');
             likeBtn.className = 'btn-like';
@@ -469,6 +492,25 @@ document.addEventListener('DOMContentLoaded', () => {
             const raw = localStorage.getItem(CART_KEY);
             carrito = raw ? JSON.parse(raw) : {};
         } catch (e) { carrito = {}; }
+
+        let cartUpdated = false;
+        Object.values(carrito).forEach(item => {
+            if (!item || typeof item !== 'object') return;
+
+            const currentPrice = parsePrice(item.precio);
+            const legacyPrice = currentPrice !== null ? currentPrice : parsePrice(item.precioRaw);
+
+            if (item.precio !== legacyPrice || Object.prototype.hasOwnProperty.call(item, 'precioRaw')) {
+                item.precio = legacyPrice;
+                delete item.precioRaw;
+                cartUpdated = true;
+            }
+        });
+
+        if (cartUpdated) {
+            try { localStorage.setItem(CART_KEY, JSON.stringify(carrito)); } catch (e) {}
+        }
+
         updateCartBadge();
     }
 
@@ -485,13 +527,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addToCart(product) {
         const id = String(product.id);
+        const precio = product.data2;
+        if (!Number.isFinite(precio) || precio < 0) return;
+
         const llaves = Object.keys(product);
         const nombre = product.data || product.nombre || product.name || 'Producto';
-        const precioRaw = product.data2 || product.price || '';
         const imgKey = llaves.find(k => /image|img|src/i.test(k));
         const img = product[imgKey] || '';
 
-        if (!carrito[id]) carrito[id] = { id, nombre, precioRaw, qty: 0, img };
+        if (!carrito[id]) carrito[id] = { id, nombre, precio, qty: 0, img };
         carrito[id].qty += 1;
         saveCart();
         updateAddButtonForProduct(id);
@@ -533,8 +577,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function formatPriceForDisplay(p) {
-        const n = parsePrice(p);
-        return isNaN(n) ? p || '' : `$${n.toFixed(2)}`;
+        return Number.isFinite(p) && p >= 0 ? currencyFormatter.format(p) : '';
     }
 
     function renderCartItems() {
@@ -549,7 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <span class="cart-empty-icon">🛍️</span>
                     <p>¡Tu carrito está vacío!<br><small>Agrega tus productos favoritos</small></p>
                 </div>`;
-            if (cartTotalEl) cartTotalEl.textContent = '$0.00';
+            if (cartTotalEl) cartTotalEl.textContent = formatPriceForDisplay(0);
             return;
         }
 
@@ -560,7 +603,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <img src="${item.img}" alt="${item.nombre}">
                 <div class="flex-fill">
                     <div class="cart-item-name">${item.nombre}</div>
-                    <div class="cart-item-price">${formatPriceForDisplay(item.precioRaw)}</div>
+                    <div class="cart-item-price">${formatPriceForDisplay(item.precio)}</div>
                 </div>
                 <div class="d-flex align-items-center gap-2">
                     <button class="btn-qty" onclick="window.miChangeQty('${item.id}', ${item.qty - 1})">−</button>
@@ -568,10 +611,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button class="btn-qty" onclick="window.miChangeQty('${item.id}', ${item.qty + 1})">+</button>
                 </div>`;
             cartItemsEl.appendChild(row);
-            total += parsePrice(item.precioRaw) * item.qty;
+            if (Number.isFinite(item.precio) && Number.isFinite(item.qty)) {
+                total += item.precio * item.qty;
+            }
         });
 
-        if (cartTotalEl) cartTotalEl.textContent = `$${total.toFixed(2)}`;
+        if (cartTotalEl) cartTotalEl.textContent = formatPriceForDisplay(total);
     }
 
     window.miChangeQty = changeQty;
@@ -582,10 +627,12 @@ document.addEventListener('DOMContentLoaded', () => {
         let lines = ['*Nuevo Pedido Nanty Nails 💅*'];
         let total = 0;
         entries.forEach(i => {
-            lines.push(`• ${i.qty} x ${i.nombre} (${formatPriceForDisplay(i.precioRaw)})`);
-            total += parsePrice(i.precioRaw) * i.qty;
+            lines.push(`• ${i.qty} x ${i.nombre} (${formatPriceForDisplay(i.precio)})`);
+            if (Number.isFinite(i.precio) && Number.isFinite(i.qty)) {
+                total += i.precio * i.qty;
+            }
         });
-        lines.push(`\n*Total estimado: $${total.toFixed(2)}*`);
+        lines.push(`\n*Total estimado: ${formatPriceForDisplay(total)}*`);
         const wa = localStorage.getItem('waNumber') || '5614782629';
         window.open(`https://wa.me/${wa}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
     });

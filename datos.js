@@ -19,6 +19,23 @@ function alCargarProductos(callback) {
     }
 }
 
+function normalizarPrecioSheet(valor) {
+    if (typeof valor === 'number') {
+        return Number.isFinite(valor) && valor >= 0 ? valor : null;
+    }
+
+    if (typeof valor !== 'string') return null;
+
+    const texto = valor.trim();
+    if (!texto) return null;
+
+    const formatoValido = /^\$?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/;
+    if (!formatoValido.test(texto)) return null;
+
+    const numero = Number(texto.replace(/^\$/, '').replace(/,/g, ''));
+    return Number.isFinite(numero) && numero >= 0 ? numero : null;
+}
+
 async function cargarProductosDesdeSheet() {
     try {
         const res = await fetch(SHEET_URL);
@@ -36,7 +53,7 @@ async function cargarProductosDesdeSheet() {
                 id: (p.id || "").trim(),
                 category: (p.category || "").trim(),
                 data: (p.data || "").trim(),
-                data2: (p.data2 || "").trim(),
+                data2: normalizarPrecioSheet(p.data2),
                 altTexto: (p.altTexto || "").trim(),
                 image: (p.image || "").trim()
             }));
