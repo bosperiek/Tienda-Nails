@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return copy;
     }
 
-    function applyFilters() {
+    function applyFilters({ resetLimit = true } = {}) {
         const filtrados = misProductos.filter(producto => {
             const textoOK = searchText === '' || JSON.stringify(producto).toLowerCase().includes(searchText);
             if (!textoOK) return false;
@@ -204,7 +204,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         filteredAndSorted = sortList(filtrados, selectedSort);
         currentPage = 1;
-        currentLimit = itemsPerPage;
+        if (resetLimit) {
+            currentLimit = itemsPerPage;
+        }
         renderPaginated();
         renderCategoryButtons();
     }
@@ -727,7 +729,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Volver a filtrar/ordenar y repintar la tienda con los datos actualizados
-        applyFilters();
+        applyFilters({ resetLimit: false });
     });
 
     // -------------------------------------------------------

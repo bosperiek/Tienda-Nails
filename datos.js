@@ -47,7 +47,7 @@ async function cargarProductosDesdeSheet() {
         const filas = await res.json();
 
         // Normaliza los datos (por si vienen espacios o vacíos)
-        misProductos = filas
+        const nuevosProductos = filas
             .filter(p => p.data && p.data.trim() !== "")
             .map(p => ({
                 id: (p.id || "").trim(),
@@ -57,6 +57,12 @@ async function cargarProductosDesdeSheet() {
                 altTexto: (p.altTexto || "").trim(),
                 image: (p.image || "").trim()
             }));
+
+        if (JSON.stringify(nuevosProductos) === JSON.stringify(misProductos)) {
+            return misProductos;
+        }
+
+        misProductos = nuevosProductos;
 
         // Avisa a quien esté esperando los datos
         listenersProductos.forEach(cb => cb(misProductos));
