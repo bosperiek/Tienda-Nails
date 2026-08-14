@@ -605,7 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const row = document.createElement('div');
             row.className = 'cart-item d-flex gap-2 align-items-center mb-3 border-bottom pb-2';
             row.innerHTML = `
-                <img src="${item.img}" alt="${item.nombre}">
+                <img src="${item.img}" alt="">
                 <div class="flex-fill">
                     <div class="cart-item-name">${item.nombre}</div>
                     <div class="cart-item-price">${formatPriceForDisplay(item.precio)}</div>
