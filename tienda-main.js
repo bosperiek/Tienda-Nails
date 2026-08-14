@@ -291,10 +291,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const keyNombre = llaves.find(k => /(^data\b|nom|name|titul|title|producto|descripcion)/i.test(k)) || llaves[0];
         let keyImg = llaves.find(k => /(image|img|src|url|foto|link)/i.test(k) && typeof prod[k] === 'string' && /^https?:\/\//i.test(prod[k]));
         if (!keyImg) keyImg = llaves.find(k => typeof prod[k] === 'string' && /^https?:\/\//i.test(prod[k]) && /\.(jpg|png|webp|jpeg)/i.test(prod[k]));
+        const altProducto =
+            String(prod.altTexto || '').trim()
+            || String(prod.data || '').trim()
+            || 'Producto';
         return {
             nombre: prod[keyNombre] || 'Producto',
             precio: prod.data2,
-            imgUrl: prod[keyImg] || prod.image || ''
+            imgUrl: prod[keyImg] || prod.image || '',
+            altProducto
         };
     }
 
@@ -303,7 +308,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         currentModalIndex = index;
 
-        const { nombre, precio, imgUrl } = getProductData(prod);
+        const { nombre, precio, imgUrl, altProducto } = getProductData(prod);
 
         // Mostrar loader + animar salida de imagen
         if (modalLoader) modalLoader.classList.add('visible');
@@ -317,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             modalImg.src = imgUrl;
-            modalImg.alt = nombre;
+            modalImg.alt = altProducto;
 
             modalImg.onload = () => {
                 if (modalLoader) modalLoader.classList.remove('visible');
@@ -411,7 +416,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const fragmento = document.createDocumentFragment();
 
         lista.forEach((prod, listIndex) => {
-            const { nombre, precio, imgUrl } = getProductData(prod);
+            const { nombre, precio, imgUrl, altProducto } = getProductData(prod);
 
             const col = document.createElement('div');
             col.className = 'col-6 col-md-4 col-lg-3';
@@ -426,7 +431,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const imgEl = document.createElement('img');
             imgEl.className = 'card-img';
-            imgEl.alt = nombre;
+            imgEl.alt = altProducto;
             imgEl.src = imgUrl;
             imgEl.loading = 'lazy';
 
