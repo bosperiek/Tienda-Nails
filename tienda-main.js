@@ -139,6 +139,85 @@ document.addEventListener('DOMContentLoaded', () => {
     const sortSelect = document.getElementById('sort');
     const loadingEl = document.getElementById('loading');
     const paginationContainer = document.getElementById('pagination');
+    const catalogStatusEl = document.getElementById('catalog-status');
+    const catalogStatusMessageEl = document.getElementById('catalog-status-message');
+    const retryProductsBtn = document.getElementById('retry-products');
+    const gridProductosEl = document.getElementById('grid-productos');
+
+    function actualizarInterfazEstadoCatalogo(estado) {
+        if (!estado) return;
+
+        const hasProducts = estado.hasProducts === true;
+        let message = '';
+        let showStatus = false;
+        let showRetry = false;
+        let hideCatalog = false;
+        let alertClass = 'alert-warning';
+        let role = 'status';
+        let ariaLive = 'polite';
+
+        if (estado.status === 'loading') {
+            hideCatalog = !hasProducts;
+        } else if (estado.status === 'cache') {
+            message = 'Mostrando una copia guardada del catálogo. Algunos precios o productos podrían haber cambiado.';
+            showStatus = true;
+            showRetry = true;
+        } else if (estado.status === 'error' && hasProducts) {
+            message = 'Mostrando una copia guardada del catálogo. No pudimos verificar la actualización.';
+            showStatus = true;
+            showRetry = true;
+        } else if (estado.status === 'empty' && hasProducts) {
+            message = 'No pudimos verificar la actualización. Se conserva el catálogo disponible.';
+            showStatus = true;
+            showRetry = true;
+        } else if (
+            (estado.status === 'error' || estado.status === 'empty')
+            && !hasProducts
+        ) {
+            message = 'No pudimos cargar el catálogo. Revisa tu conexión e inténtalo nuevamente.';
+            showStatus = true;
+            showRetry = true;
+            hideCatalog = true;
+            alertClass = 'alert-danger';
+            role = 'alert';
+            ariaLive = 'assertive';
+        }
+
+        if (catalogStatusEl) {
+            catalogStatusEl.classList.remove('alert-warning', 'alert-danger');
+            catalogStatusEl.classList.add(alertClass);
+            catalogStatusEl.classList.toggle('d-none', !showStatus);
+            catalogStatusEl.setAttribute('role', role);
+            catalogStatusEl.setAttribute('aria-live', ariaLive);
+        }
+        if (catalogStatusMessageEl) catalogStatusMessageEl.textContent = message;
+        if (retryProductsBtn) retryProductsBtn.classList.toggle('d-none', !showRetry);
+        if (gridProductosEl) gridProductosEl.hidden = hideCatalog;
+        if (hideCatalog && loadingEl) loadingEl.hidden = true;
+    }
+
+    if (typeof productosEstadoActual !== 'undefined') {
+        actualizarInterfazEstadoCatalogo(productosEstadoActual);
+    }
+
+    document.addEventListener('productosEstado', (event) => {
+        actualizarInterfazEstadoCatalogo(event.detail);
+    });
+
+    if (retryProductsBtn) {
+        retryProductsBtn.addEventListener('click', async () => {
+            if (retryProductsBtn.disabled) return;
+
+            retryProductsBtn.disabled = true;
+            retryProductsBtn.textContent = 'Reintentando…';
+            try {
+                await cargarProductosDesdeSheet();
+            } finally {
+                retryProductsBtn.textContent = 'Reintentar';
+                retryProductsBtn.disabled = false;
+            }
+        });
+    }
 
     if (loadingEl) {
         loadingEl.addEventListener('click', () => {

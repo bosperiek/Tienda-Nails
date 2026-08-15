@@ -110,6 +110,10 @@
 
     <!-- ===================== GRID DE PRODUCTOS ===================== -->
     <main>
+      <div id="catalog-status" class="alert d-none" role="status" aria-live="polite">
+        <span id="catalog-status-message"></span>
+        <button id="retry-products" type="button" class="btn btn-sm btn-outline-dark ms-2 d-none">Reintentar</button>
+      </div>
       <div id="grid-productos" class="row g-3"></div>
       <nav id="pagination" aria-label="Paginación" class="d-flex justify-content-center mt-4" hidden></nav>
       <button type="button" id="loading" class="btn btn-outline-secondary d-block mx-auto my-3" hidden>Ver más</button>
