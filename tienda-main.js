@@ -828,7 +828,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         localStorage.setItem(LIKES_KEY, JSON.stringify(likesMap));
         localStorage.setItem(LIKED_FLAGS_KEY, JSON.stringify(likedFlags));
-        applyFilters();
+        applyFilters({ resetLimit: false });
     };
 
     // -------------------------------------------------------
