@@ -87,8 +87,11 @@ async function cargarProductosDesdeSheet() {
     }
 }
 
-// Carga inicial al abrir la página
-cargarProductosDesdeSheet();
+const PRODUCTOS_REFRESH_MS = 5 * 60 * 1000;
 
-// Refresca cada 30 segundos para reflejar cambios hechos en el Sheet
-setInterval(cargarProductosDesdeSheet, 30000);
+async function actualizarProductosPeriodicamente() {
+    await cargarProductosDesdeSheet();
+    setTimeout(actualizarProductosPeriodicamente, PRODUCTOS_REFRESH_MS);
+}
+
+actualizarProductosPeriodicamente();
