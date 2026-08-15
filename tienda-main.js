@@ -862,6 +862,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Volver a filtrar/ordenar y repintar la tienda con los datos actualizados
         applyFilters({ resetLimit: false });
+
+        if (imageModalEl && imageModalEl.classList.contains('show') && currentModalProduct) {
+            const activeProductId = String(currentModalProduct.id);
+            const updatedModalIndex = filteredAndSorted.findIndex(
+                product => String(product.id) === activeProductId
+            );
+
+            if (updatedModalIndex === -1) {
+                getBsImageModal().hide();
+            } else {
+                loadModalImage(filteredAndSorted[updatedModalIndex], updatedModalIndex);
+            }
+        }
     });
 
     // -------------------------------------------------------
