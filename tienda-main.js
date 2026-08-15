@@ -527,7 +527,6 @@ document.addEventListener('DOMContentLoaded', () => {
             imgEl.src = imgUrl;
             imgEl.loading = 'lazy';
 
-            imgEl.addEventListener('click', () => ampliarImagen(prod, listIndex));
             imgContainer.addEventListener('click', () => ampliarImagen(prod, listIndex));
 
             imgEl.onload = () => { imgEl.classList.add('visible'); };
