@@ -359,6 +359,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalPrevBtn  = document.getElementById('modal-prev');
     const modalNextBtn  = document.getElementById('modal-next');
 
+    function actualizarContenidoBotonModal(item) {
+        if (!modalAddBtn) return;
+
+        const icon = document.createElement('i');
+        icon.className = item
+            ? 'bi bi-check-lg me-1'
+            : 'bi bi-bag-plus me-1';
+
+        const text = document.createElement('span');
+        text.textContent = item
+            ? ` En carrito (${item.qty})`
+            : ' Añadir al carrito';
+
+        modalAddBtn.replaceChildren(icon, text);
+    }
+
     // Inicializar el modal de Bootstrap de forma diferida para asegurar
     // que Bootstrap ya esté cargado cuando se use por primera vez.
     function getBsImageModal() {
@@ -420,9 +436,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentModalProduct = prod;
         if (modalAddBtn) {
             const inCart = carrito[String(prod.id)];
-            modalAddBtn.innerHTML = inCart
-                ? `<i class="bi bi-check-lg me-1"></i> En carrito (${inCart.qty})`
-                : `<i class="bi bi-bag-plus me-1"></i> Añadir al carrito`;
+            actualizarContenidoBotonModal(inCart);
         }
 
         // Actualizar botones de navegación
@@ -447,9 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!currentModalProduct) return;
             addToCart(currentModalProduct);
             const item = carrito[String(currentModalProduct.id)];
-            modalAddBtn.innerHTML = item
-                ? `<i class="bi bi-check-lg me-1"></i> En carrito (${item.qty})`
-                : `<i class="bi bi-bag-plus me-1"></i> Añadir al carrito`;
+            actualizarContenidoBotonModal(item);
         });
     }
 
@@ -541,7 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
             likeBtn.className = 'btn-like';
             likeBtn.type = 'button';
             const lr = (window.getLikes) ? window.getLikes(prod.id) : 0;
-            likeBtn.innerHTML = `❤ ${lr}`;
+            likeBtn.textContent = `❤ ${lr}`;
             if (window.hasLiked && window.hasLiked(prod.id)) likeBtn.classList.add('liked');
             likeBtn.addEventListener('click', (e) => { e.stopPropagation(); if (window.miToggleLike) window.miToggleLike(prod.id); });
 
