@@ -58,6 +58,11 @@ async function cargarProductosDesdeSheet() {
                 image: (p.image || "").trim()
             }));
 
+        if (nuevosProductos.length === 0) {
+            console.warn('Google Sheets devolvió un catálogo vacío. Se conserva el catálogo actual.');
+            return misProductos;
+        }
+
         if (JSON.stringify(nuevosProductos) === JSON.stringify(misProductos)) {
             return misProductos;
         }
