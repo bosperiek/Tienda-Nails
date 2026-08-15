@@ -649,7 +649,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateAddButtonForProduct(id) {
-        const card = document.querySelector(`.card[data-id="${id}"]`);
+        const safeId = CSS.escape(String(id));
+        const card = document.querySelector(`.card[data-id="${safeId}"]`);
         if (card) {
             const btn = card.querySelector('.btn-add');
             if (btn) {
