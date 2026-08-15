@@ -684,17 +684,55 @@ document.addEventListener('DOMContentLoaded', () => {
         entries.forEach(item => {
             const row = document.createElement('div');
             row.className = 'cart-item d-flex gap-2 align-items-center mb-3 border-bottom pb-2';
-            row.innerHTML = `
-                <img src="${item.img}" alt="">
-                <div class="flex-fill">
-                    <div class="cart-item-name">${item.nombre}</div>
-                    <div class="cart-item-price">${formatPriceForDisplay(item.precio)}</div>
-                </div>
-                <div class="d-flex align-items-center gap-2">
-                    <button class="btn-qty" onclick="window.miChangeQty('${item.id}', ${item.qty - 1})">−</button>
-                    <span class="qty-number">${item.qty}</span>
-                    <button class="btn-qty" onclick="window.miChangeQty('${item.id}', ${item.qty + 1})">+</button>
-                </div>`;
+
+            const img = document.createElement('img');
+            img.src = item.img;
+            img.alt = '';
+
+            const info = document.createElement('div');
+            info.className = 'flex-fill';
+
+            const name = document.createElement('div');
+            name.className = 'cart-item-name';
+            name.textContent = item.nombre;
+
+            const price = document.createElement('div');
+            price.className = 'cart-item-price';
+            price.textContent = formatPriceForDisplay(item.precio);
+
+            info.appendChild(name);
+            info.appendChild(price);
+
+            const qtyControls = document.createElement('div');
+            qtyControls.className = 'd-flex align-items-center gap-2';
+
+            const decreaseBtn = document.createElement('button');
+            decreaseBtn.type = 'button';
+            decreaseBtn.className = 'btn-qty';
+            decreaseBtn.textContent = '−';
+            decreaseBtn.addEventListener('click', () => {
+                changeQty(item.id, item.qty - 1);
+            });
+
+            const qtyNumber = document.createElement('span');
+            qtyNumber.className = 'qty-number';
+            qtyNumber.textContent = item.qty;
+
+            const increaseBtn = document.createElement('button');
+            increaseBtn.type = 'button';
+            increaseBtn.className = 'btn-qty';
+            increaseBtn.textContent = '+';
+            increaseBtn.addEventListener('click', () => {
+                changeQty(item.id, item.qty + 1);
+            });
+
+            qtyControls.appendChild(decreaseBtn);
+            qtyControls.appendChild(qtyNumber);
+            qtyControls.appendChild(increaseBtn);
+
+            row.appendChild(img);
+            row.appendChild(info);
+            row.appendChild(qtyControls);
             cartItemsEl.appendChild(row);
             if (Number.isFinite(item.precio) && Number.isFinite(item.qty)) {
                 total += item.precio * item.qty;
