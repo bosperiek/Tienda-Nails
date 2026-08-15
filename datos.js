@@ -7,10 +7,32 @@ const CATALOGO_CACHE_KEY = 'tiendaCatalogoCache_v1';
 // Esta variable queda disponible igual que antes,
 // pero ahora se llena de forma asíncrona desde el Sheet.
 let misProductos = [];
+let productosEstadoActual = {
+    status: 'loading',
+    savedAt: null,
+    hasProducts: false
+};
 
 // Callbacks que se ejecutan cuando los productos ya están listos
 // (útil si tu código necesita saber cuándo llegaron los datos)
 const listenersProductos = [];
+
+function actualizarEstadoProductos(status, {
+    savedAt = null,
+    hasProducts = misProductos.length > 0
+} = {}) {
+    productosEstadoActual = {
+        status,
+        savedAt,
+        hasProducts
+    };
+
+    document.dispatchEvent(
+        new CustomEvent('productosEstado', {
+            detail: productosEstadoActual
+        })
+    );
+}
 
 function alCargarProductos(callback) {
     if (misProductos.length > 0) {
@@ -98,11 +120,18 @@ async function cargarProductosDesdeSheet() {
             }));
 
         if (nuevosProductos.length === 0) {
+            actualizarEstadoProductos('empty', {
+                hasProducts: misProductos.length > 0
+            });
             console.warn('Google Sheets devolvió un catálogo vacío. Se conserva el catálogo actual.');
             return misProductos;
         }
 
         guardarCatalogoCache(nuevosProductos);
+        actualizarEstadoProductos('online', {
+            savedAt: Date.now(),
+            hasProducts: true
+        });
 
         if (JSON.stringify(nuevosProductos) === JSON.stringify(misProductos)) {
             return misProductos;
@@ -124,6 +153,9 @@ async function cargarProductosDesdeSheet() {
         return misProductos;
 
     } catch (err) {
+        actualizarEstadoProductos('error', {
+            hasProducts: misProductos.length > 0
+        });
         console.error(
             "No se pudieron cargar los productos desde Google Sheets:",
             err
@@ -136,6 +168,10 @@ async function cargarProductosDesdeSheet() {
 const catalogoCache = leerCatalogoCache();
 if (misProductos.length === 0 && catalogoCache) {
     misProductos = catalogoCache.products;
+    actualizarEstadoProductos('cache', {
+        savedAt: catalogoCache.savedAt,
+        hasProducts: true
+    });
     listenersProductos.forEach(cb => cb(misProductos));
     listenersProductos.length = 0;
     document.dispatchEvent(
