@@ -445,12 +445,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateNavButtons() {
         if (modalPrevBtn) modalPrevBtn.disabled = currentModalIndex <= 0;
-        if (modalNextBtn) modalNextBtn.disabled = currentModalIndex >= currentVisibleList.length - 1;
+        if (modalNextBtn) modalNextBtn.disabled = currentModalIndex >= filteredAndSorted.length - 1;
     }
 
-    function ampliarImagen(prod, index) {
+    function ampliarImagen(prod) {
         if (!imageModalEl) return;
-        loadModalImage(prod, index);
+        const productId = String(prod.id);
+        const index = filteredAndSorted.findIndex(item => String(item.id) === productId);
+        if (index === -1) return;
+        loadModalImage(filteredAndSorted[index], index);
         getBsImageModal().show();
     }
 
@@ -469,14 +472,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalPrevBtn) {
         modalPrevBtn.addEventListener('click', () => {
             if (currentModalIndex > 0) {
-                loadModalImage(currentVisibleList[currentModalIndex - 1], currentModalIndex - 1);
+                loadModalImage(filteredAndSorted[currentModalIndex - 1], currentModalIndex - 1);
             }
         });
     }
     if (modalNextBtn) {
         modalNextBtn.addEventListener('click', () => {
-            if (currentModalIndex < currentVisibleList.length - 1) {
-                loadModalImage(currentVisibleList[currentModalIndex + 1], currentModalIndex + 1);
+            if (currentModalIndex < filteredAndSorted.length - 1) {
+                loadModalImage(filteredAndSorted[currentModalIndex + 1], currentModalIndex + 1);
             }
         });
     }
@@ -485,9 +488,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (imageModalEl) {
         imageModalEl.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft' && currentModalIndex > 0) {
-                loadModalImage(currentVisibleList[currentModalIndex - 1], currentModalIndex - 1);
-            } else if (e.key === 'ArrowRight' && currentModalIndex < currentVisibleList.length - 1) {
-                loadModalImage(currentVisibleList[currentModalIndex + 1], currentModalIndex + 1);
+                loadModalImage(filteredAndSorted[currentModalIndex - 1], currentModalIndex - 1);
+            } else if (e.key === 'ArrowRight' && currentModalIndex < filteredAndSorted.length - 1) {
+                loadModalImage(filteredAndSorted[currentModalIndex + 1], currentModalIndex + 1);
             }
         });
     }
@@ -507,7 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const fragmento = document.createDocumentFragment();
 
-        lista.forEach((prod, listIndex) => {
+        lista.forEach(prod => {
             const { nombre, precio, imgUrl, altProducto } = getProductData(prod);
 
             const col = document.createElement('div');
@@ -527,7 +530,7 @@ document.addEventListener('DOMContentLoaded', () => {
             imgEl.src = imgUrl;
             imgEl.loading = 'lazy';
 
-            imgContainer.addEventListener('click', () => ampliarImagen(prod, listIndex));
+            imgContainer.addEventListener('click', () => ampliarImagen(prod));
 
             imgEl.onload = () => { imgEl.classList.add('visible'); };
             imgEl.onerror = () => {
