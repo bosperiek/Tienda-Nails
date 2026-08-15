@@ -2,6 +2,7 @@
 const SHEET_ID = "1pwoKKCUUlxmqUQGEMCEemXHngq-4wWUMPfMReI2vQdA";
 const SHEET_NOMBRE = "productos"; // nombre exacto de la pestaña/hoja
 const SHEET_URL = `https://opensheet.elk.sh/${SHEET_ID}/${SHEET_NOMBRE}`;
+const CATALOGO_CACHE_KEY = 'tiendaCatalogoCache_v1';
 
 // Esta variable queda disponible igual que antes,
 // pero ahora se llena de forma asíncrona desde el Sheet.
@@ -16,6 +17,44 @@ function alCargarProductos(callback) {
         callback(misProductos);
     } else {
         listenersProductos.push(callback);
+    }
+}
+
+function guardarCatalogoCache(products) {
+    if (!Array.isArray(products) || products.length === 0) return;
+
+    const cache = {
+        version: 1,
+        savedAt: Date.now(),
+        products
+    };
+
+    try {
+        localStorage.setItem(CATALOGO_CACHE_KEY, JSON.stringify(cache));
+    } catch (err) {
+        console.warn('No se pudo guardar el respaldo local del catálogo:', err);
+    }
+}
+
+function leerCatalogoCache() {
+    try {
+        const raw = localStorage.getItem(CATALOGO_CACHE_KEY);
+        if (!raw) return null;
+
+        const cache = JSON.parse(raw);
+        if (
+            !cache
+            || cache.version !== 1
+            || !Array.isArray(cache.products)
+            || cache.products.length === 0
+        ) {
+            return null;
+        }
+
+        return cache;
+    } catch (err) {
+        console.warn('No se pudo leer el respaldo local del catálogo:', err);
+        return null;
     }
 }
 
@@ -63,6 +102,8 @@ async function cargarProductosDesdeSheet() {
             return misProductos;
         }
 
+        guardarCatalogoCache(nuevosProductos);
+
         if (JSON.stringify(nuevosProductos) === JSON.stringify(misProductos)) {
             return misProductos;
         }
@@ -90,6 +131,18 @@ async function cargarProductosDesdeSheet() {
 
         return [];
     }
+}
+
+const catalogoCache = leerCatalogoCache();
+if (misProductos.length === 0 && catalogoCache) {
+    misProductos = catalogoCache.products;
+    listenersProductos.forEach(cb => cb(misProductos));
+    listenersProductos.length = 0;
+    document.dispatchEvent(
+        new CustomEvent("productosActualizados", {
+            detail: misProductos
+        })
+    );
 }
 
 const PRODUCTOS_REFRESH_MS = 5 * 60 * 1000;
