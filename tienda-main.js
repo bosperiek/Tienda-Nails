@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentVisibleList = [];
     let currentModalIndex = -1;
     let currentModalProduct = null;
+    let modalTriggerElement = null;
 
     const categoriesContainer = document.getElementById('categories');
 
@@ -448,11 +449,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modalNextBtn) modalNextBtn.disabled = currentModalIndex >= filteredAndSorted.length - 1;
     }
 
-    function ampliarImagen(prod) {
+    function ampliarImagen(prod, triggerElement) {
         if (!imageModalEl) return;
         const productId = String(prod.id);
         const index = filteredAndSorted.findIndex(item => String(item.id) === productId);
         if (index === -1) return;
+        modalTriggerElement = triggerElement;
         loadModalImage(filteredAndSorted[index], index);
         getBsImageModal().show();
     }
@@ -493,6 +495,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadModalImage(filteredAndSorted[currentModalIndex + 1], currentModalIndex + 1);
             }
         });
+
+        imageModalEl.addEventListener('hide.bs.modal', () => {
+            const activeElement = document.activeElement;
+            if (activeElement && imageModalEl.contains(activeElement)) {
+                activeElement.blur();
+            }
+        });
+
+        imageModalEl.addEventListener('hidden.bs.modal', () => {
+            if (modalTriggerElement && document.contains(modalTriggerElement)) {
+                modalTriggerElement.focus();
+            }
+            modalTriggerElement = null;
+        });
     }
 
     // -------------------------------------------------------
@@ -523,6 +539,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const imgContainer = document.createElement('div');
             imgContainer.className = 'card-img-container';
             imgContainer.title = 'Clic para ampliar';
+            imgContainer.tabIndex = 0;
+            imgContainer.setAttribute('role', 'button');
+            imgContainer.setAttribute('aria-label', `Ampliar imagen de ${nombre}`);
 
             const imgEl = document.createElement('img');
             imgEl.className = 'card-img';
@@ -530,7 +549,12 @@ document.addEventListener('DOMContentLoaded', () => {
             imgEl.src = imgUrl;
             imgEl.loading = 'lazy';
 
-            imgContainer.addEventListener('click', () => ampliarImagen(prod));
+            imgContainer.addEventListener('click', (e) => ampliarImagen(prod, e.currentTarget));
+            imgContainer.addEventListener('keydown', (e) => {
+                if (e.key !== 'Enter' && e.key !== ' ') return;
+                e.preventDefault();
+                ampliarImagen(prod, e.currentTarget);
+            });
 
             imgEl.onload = () => { imgEl.classList.add('visible'); };
             imgEl.onerror = () => {

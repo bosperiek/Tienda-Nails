@@ -160,14 +160,14 @@
           <div class="modal-image-header">
             <div class="modal-image-header-left">
               <span class="modal-image-tag">Vista previa</span>
-              <h6 class="modal-image-title" id="modalTitle">Producto</h6>
+              <h6 class="modal-image-title" id="modalTitle" aria-live="polite">Producto</h6>
             </div>
             <div class="modal-image-header-right">
               <!-- Navegación entre productos -->
-              <button class="modal-nav-btn" id="modal-prev" aria-label="Producto anterior" title="Anterior">
+              <button type="button" class="modal-nav-btn" id="modal-prev" aria-label="Producto anterior" title="Anterior">
                 <i class="bi bi-chevron-left"></i>
               </button>
-              <button class="modal-nav-btn" id="modal-next" aria-label="Producto siguiente" title="Siguiente">
+              <button type="button" class="modal-nav-btn" id="modal-next" aria-label="Producto siguiente" title="Siguiente">
                 <i class="bi bi-chevron-right"></i>
               </button>
               <button type="button" class="modal-close-btn" data-bs-dismiss="modal" aria-label="Cerrar">
@@ -189,7 +189,7 @@
           <!-- Footer con precio y botón añadir -->
           <div class="modal-image-footer">
             <div class="modal-product-price" id="modalPrice"></div>
-            <button class="modal-add-btn" id="modal-add-to-cart">
+            <button type="button" class="modal-add-btn" id="modal-add-to-cart">
               <i class="bi bi-bag-plus me-1"></i> Añadir al carrito
             </button>
           </div>
