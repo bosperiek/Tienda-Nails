@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentModalProduct = null;
     let modalTriggerElement = null;
     let isModalImageZoomed = false;
+    let modalSwipeStart = null;
+    let didModalImageSwipe = false;
 
     const categoriesContainer = document.getElementById('categories');
 
@@ -354,6 +356,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------
     const imageModalEl  = document.getElementById('imageModal');
     const modalImg      = document.getElementById('modalImage');
+    const modalImageWrapper = modalImg?.closest('.modal-image-wrapper');
     const modalTitle    = document.getElementById('modalTitle');
     const modalPrice    = document.getElementById('modalPrice');
     const modalLoader   = document.getElementById('modal-loader');
@@ -465,12 +468,61 @@ document.addEventListener('DOMContentLoaded', () => {
         modalImg.setAttribute('tabindex', '0');
         modalImg.setAttribute('aria-label', 'Alternar zoom de la imagen del producto');
         modalImg.setAttribute('aria-pressed', 'false');
+        modalImg.draggable = false;
 
-        modalImg.addEventListener('click', toggleModalImageZoom);
+        modalImg.addEventListener('click', () => {
+            if (didModalImageSwipe) {
+                didModalImageSwipe = false;
+                return;
+            }
+            toggleModalImageZoom();
+        });
         modalImg.addEventListener('keydown', (e) => {
             if (e.key !== 'Enter' && e.key !== ' ') return;
             e.preventDefault();
             toggleModalImageZoom();
+        });
+    }
+
+    if (modalImageWrapper) {
+        modalImageWrapper.addEventListener('pointerdown', (e) => {
+            if (!e.isPrimary || e.button !== 0) return;
+            didModalImageSwipe = false;
+            modalSwipeStart = {
+                pointerId: e.pointerId,
+                x: e.clientX,
+                y: e.clientY
+            };
+            e.target.setPointerCapture?.(e.pointerId);
+        });
+
+        modalImageWrapper.addEventListener('pointerup', (e) => {
+            if (!modalSwipeStart || e.pointerId !== modalSwipeStart.pointerId) return;
+
+            const deltaX = e.clientX - modalSwipeStart.x;
+            const deltaY = e.clientY - modalSwipeStart.y;
+            const isHorizontalSwipe = Math.abs(deltaX) >= 50 && Math.abs(deltaX) > Math.abs(deltaY);
+            modalSwipeStart = null;
+
+            if (!isHorizontalSwipe) return;
+
+            didModalImageSwipe = true;
+            setTimeout(() => {
+                didModalImageSwipe = false;
+            }, 0);
+
+            if (isModalImageZoomed || !currentModalProduct) return;
+
+            if (deltaX < 0) {
+                modalNextBtn?.click();
+            } else {
+                modalPrevBtn?.click();
+            }
+        });
+
+        modalImageWrapper.addEventListener('pointercancel', () => {
+            modalSwipeStart = null;
+            didModalImageSwipe = false;
         });
     }
 

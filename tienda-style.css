@@ -618,6 +618,7 @@ main {
   border: 1px solid rgba(230, 126, 159, 0.1);
   border-radius: 16px;
   overflow: hidden;
+  touch-action: pan-y;
 }
 
 .modal-product-img {
