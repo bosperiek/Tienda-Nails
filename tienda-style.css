@@ -462,6 +462,10 @@ main {
   border: 1px solid rgba(230, 126, 159, 0.2);
   border-radius: 24px;
   box-shadow: var(--shadow-modal);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100dvh - 2rem);
   overflow: hidden;
   animation: modalIn 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -481,6 +485,7 @@ main {
 /* --- Header del modal imagen --- */
 .modal-image-header {
   display: flex;
+  flex: 0 0 auto;
   align-items: flex-start;
   justify-content: space-between;
   padding: 17px 16px 13px 20px;
@@ -592,10 +597,14 @@ main {
 .modal-image-body {
   padding: 18px;
   background: #fbf6f4;
-  min-height: 220px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .modal-image-wrapper {
@@ -613,6 +622,7 @@ main {
 
 .modal-product-img {
   max-height: 58vh;
+  max-height: 58dvh;
   max-width: 100%;
   width: auto;
   border-radius: 12px;
@@ -665,6 +675,7 @@ main {
   background: #fff;
   border-top: 1px solid rgba(230, 126, 159, 0.14);
   display: flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
@@ -995,6 +1006,8 @@ footer .text-center {
 
   .modal-image-content {
     border-radius: 18px 18px 0 0;
+    max-height: calc(100vh - 1rem);
+    max-height: calc(100dvh - 1rem);
   }
 
   #imageModal .modal-dialog {
@@ -1002,8 +1015,31 @@ footer .text-center {
     margin: 0;
   }
 
+  .modal-image-body {
+    padding: 12px;
+  }
+
+  .modal-image-wrapper {
+    min-height: 160px;
+  }
+
   .modal-product-img {
     max-height: 52vh;
+    max-height: 52dvh;
+  }
+
+  .modal-image-footer {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 14px 14px;
+  }
+
+  .modal-product-price {
+    flex: 1 0 auto;
+  }
+
+  .modal-add-btn {
+    flex: 1 1 220px;
   }
 
   .floating-button span {
@@ -1013,6 +1049,48 @@ footer .text-center {
   .floating-button {
     padding: 12px 14px;
     border-radius: 50%;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .modal-nav-btn,
+  .modal-close-btn {
+    width: 44px;
+    height: 44px;
+  }
+
+  .modal-add-btn {
+    min-height: 44px;
+  }
+}
+
+@media (max-height: 600px) {
+  .modal-image-content {
+    max-height: calc(100vh - 1rem);
+    max-height: calc(100dvh - 1rem);
+  }
+
+  .modal-image-header {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  .modal-image-body {
+    padding: 8px 12px;
+  }
+
+  .modal-image-wrapper {
+    min-height: 120px;
+  }
+
+  .modal-product-img {
+    max-height: 42vh;
+    max-height: 42dvh;
+  }
+
+  .modal-image-footer {
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
 }
 
