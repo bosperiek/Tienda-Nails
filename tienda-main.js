@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentModalIndex = -1;
     let currentModalProduct = null;
     let modalTriggerElement = null;
+    let isModalImageZoomed = false;
 
     const categoriesContainer = document.getElementById('categories');
 
@@ -383,6 +384,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return bootstrap.Modal.getOrCreateInstance(imageModalEl);
     }
 
+    function resetModalImageZoom() {
+        isModalImageZoomed = false;
+        if (!modalImg) return;
+        modalImg.classList.remove('is-zoomed');
+        modalImg.setAttribute('aria-pressed', 'false');
+    }
+
+    function toggleModalImageZoom() {
+        if (!modalImg || modalImg.classList.contains('changing')) return;
+        isModalImageZoomed = !isModalImageZoomed;
+        modalImg.classList.toggle('is-zoomed', isModalImageZoomed);
+        modalImg.setAttribute('aria-pressed', String(isModalImageZoomed));
+    }
+
     function getProductData(prod) {
         const llaves = Object.keys(prod);
         const keyNombre = llaves.find(k => /(^data\b|nom|name|titul|title|producto|descripcion)/i.test(k)) || llaves[0];
@@ -403,6 +418,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadModalImage(prod, index) {
         if (!modalImg || !modalTitle) return;
 
+        resetModalImageZoom();
         currentModalIndex = index;
 
         const { nombre, precio, imgUrl, altProducto } = getProductData(prod);
@@ -442,6 +458,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Actualizar botones de navegación
         updateNavButtons();
+    }
+
+    if (modalImg) {
+        modalImg.setAttribute('role', 'button');
+        modalImg.setAttribute('tabindex', '0');
+        modalImg.setAttribute('aria-label', 'Alternar zoom de la imagen del producto');
+        modalImg.setAttribute('aria-pressed', 'false');
+
+        modalImg.addEventListener('click', toggleModalImageZoom);
+        modalImg.addEventListener('keydown', (e) => {
+            if (e.key !== 'Enter' && e.key !== ' ') return;
+            e.preventDefault();
+            toggleModalImageZoom();
+        });
     }
 
     function updateNavButtons() {
@@ -497,6 +527,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         imageModalEl.addEventListener('hide.bs.modal', () => {
+            resetModalImageZoom();
             const activeElement = document.activeElement;
             if (activeElement && imageModalEl.contains(activeElement)) {
                 activeElement.blur();

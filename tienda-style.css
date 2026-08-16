@@ -632,10 +632,17 @@ main {
   cursor: zoom-in;
 }
 
+.modal-product-img.is-zoomed {
+  transform: scale(1.6);
+  transform-origin: center center;
+  cursor: zoom-out;
+}
+
 /* Transición al cambiar imagen */
 .modal-product-img.changing {
   opacity: 0;
   transform: scale(0.96);
+  pointer-events: none;
 }
 
 /* Loader mientras carga la imagen */
