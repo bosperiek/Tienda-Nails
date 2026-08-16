@@ -999,14 +999,13 @@ footer .text-center {
   }
 
   /* Modal imagen en móvil */
-  .modal-image-content {
-    max-height: calc(100vh - 2rem);
-    max-height: calc(100dvh - 2rem);
+  .modal-image-header {
+    padding: 14px 12px 12px;
+    gap: 8px;
   }
 
-  #imageModal .modal-dialog {
-    width: 92vw;
-    max-width: 560px;
+  .modal-image-header-right {
+    gap: 4px;
   }
 
   .modal-image-body {
@@ -1029,12 +1028,13 @@ footer .text-center {
   }
 
   .modal-product-price {
-    flex: 1 0 auto;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .modal-add-btn {
-    flex: 1 1 180px;
-    max-width: 260px;
+    flex: 0 1 auto;
+    max-width: 100%;
   }
 
   .floating-button span {
@@ -1080,6 +1080,8 @@ footer .text-center {
 @media (max-width: 991.98px) {
   #imageModal .modal-dialog {
     --bs-modal-margin: 1rem;
+    width: min(560px, calc(100% - 2rem));
+    max-width: none;
     align-items: center;
     margin: var(--bs-modal-margin) auto;
   }
