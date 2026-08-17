@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let activeCategory = '';
     let searchText = '';
     const itemsPerPage = 24;
+    const eagerProductImageCount = 4;
     let currentLimit = itemsPerPage;
     let currentPage = 1;
     let selectedSort = '';
@@ -437,7 +438,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 modalPrice.textContent = formatPriceForDisplay(precio);
             }
 
-            modalImg.src = imgUrl;
             modalImg.alt = altProducto;
 
             modalImg.onload = () => {
@@ -449,6 +449,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (modalLoader) modalLoader.classList.remove('visible');
                 modalImg.classList.remove('changing');
             };
+            modalImg.src = imgUrl;
         }, 120);
 
         // Botón añadir al carrito desde el modal
@@ -609,7 +610,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const fragmento = document.createDocumentFragment();
 
-        lista.forEach(prod => {
+        lista.forEach((prod, index) => {
             const { nombre, precio, imgUrl, altProducto } = getProductData(prod);
 
             const col = document.createElement('div');
@@ -627,10 +628,10 @@ document.addEventListener('DOMContentLoaded', () => {
             imgContainer.setAttribute('aria-label', `Ampliar imagen de ${nombre}`);
 
             const imgEl = document.createElement('img');
+            imgEl.loading = index < eagerProductImageCount ? 'eager' : 'lazy';
+            imgEl.decoding = 'async';
             imgEl.className = 'card-img';
             imgEl.alt = altProducto;
-            imgEl.src = imgUrl;
-            imgEl.loading = 'lazy';
 
             imgContainer.addEventListener('click', (e) => ampliarImagen(prod, e.currentTarget));
             imgContainer.addEventListener('keydown', (e) => {
@@ -644,6 +645,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 imgEl.src = 'https://placehold.co/300x300/f8f0ed/e67e9f?text=Sin+Imagen';
                 imgEl.classList.add('visible');
             };
+            imgEl.src = imgUrl;
 
             imgContainer.appendChild(imgEl);
 
