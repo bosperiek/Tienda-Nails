@@ -905,29 +905,55 @@ main {
    ------------------------------------------------- */
 .floating-button {
   position: fixed;
-  bottom: 22px;
-  right: 22px;
-  background: #25d366;
+  bottom: 40px;
+  right: 40px;
+  background-color: var(--accent);
   color: #fff;
-  padding: 10px 20px;
-  border-radius: var(--radius-btn);
+  padding: 12px 15px;
+  border-radius: 30px;
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 0.92rem;
-  z-index: 1050;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.25), 0 0 22px 4px rgba(230, 126, 159, 0.3);
-  border: 2px solid rgba(230, 126, 159, 0.5);
-  transition: all 0.3s ease;
+  font-size: 1.1rem;
+  font-weight: 500;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 20px 5px var(--glow-color);
+  z-index: 100;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border: 2px solid var(--glow-color);
+  overflow: hidden;
+  width: 60px;
+  justify-content: center;
+}
+
+.floating-button i {
+  margin-right: 0;
+  font-size: 1.3rem;
+  color: #fff;
+  transition: margin-right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.floating-button span {
+  opacity: 0;
+  max-width: 0;
+  white-space: nowrap;
+  transition: opacity 0.3s ease-out, max-width 0.3s ease-out;
 }
 
 .floating-button:hover {
-  background: #1ebe57;
-  transform: translateY(-3px);
+  padding: 12px 20px;
+  width: auto;
+  transform: translateY(-5px) scale(1.05);
   color: #fff;
+}
+
+.floating-button:hover i {
+  margin-right: 8px;
+}
+
+.floating-button:hover span {
+  opacity: 1;
+  max-width: 150px;
+  transition: opacity 0.4s ease-in 0.1s, max-width 0.4s ease-in 0.1s;
 }
 
 /* -------------------------------------------------
@@ -971,6 +997,37 @@ footer .text-center {
    12. RESPONSIVE
    ------------------------------------------------- */
 @media (max-width: 767.98px) {
+  .floating-button {
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    width: 50px;
+  }
+
+  .floating-button i {
+    font-size: 1.1rem;
+    margin-right: 0;
+  }
+
+  .floating-button:hover {
+    padding: 10px 15px;
+  }
+
+  .floating-button:hover i {
+    margin-right: 6px;
+  }
+
+  .floating-button span {
+    max-width: 0;
+    opacity: 0;
+  }
+
+  .floating-button:hover span {
+    opacity: 1;
+    max-width: 100px;
+  }
+
   #grid-productos>div {
     width: 50% !important;
     flex: 0 0 50%;
