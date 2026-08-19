@@ -1020,7 +1020,7 @@ main {
   justify-content: center;
 }
 
-.floating-button i {
+.floating-button svg {
   margin-right: 0;
   font-size: 1.3rem;
   color: #fff;
@@ -1041,7 +1041,7 @@ main {
   color: #fff;
 }
 
-.floating-button:hover i {
+.floating-button:hover svg {
   margin-right: 8px;
 }
 
@@ -1100,7 +1100,7 @@ footer .text-center {
     width: 50px;
   }
 
-  .floating-button i {
+  .floating-button svg {
     font-size: 1.1rem;
     margin-right: 0;
   }
@@ -1109,7 +1109,7 @@ footer .text-center {
     padding: 10px 15px;
   }
 
-  .floating-button:hover i {
+  .floating-button:hover svg {
     margin-right: 6px;
   }
 

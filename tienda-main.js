@@ -371,10 +371,29 @@ document.addEventListener('DOMContentLoaded', () => {
     function actualizarContenidoBotonModal(item) {
         if (!modalAddBtn) return;
 
-        const icon = document.createElement('i');
-        icon.className = item
-            ? 'bi bi-check-lg me-1'
-            : 'bi bi-bag-plus me-1';
+        const svgNamespace = 'http://www.w3.org/2000/svg';
+        const icon = document.createElementNS(svgNamespace, 'svg');
+        icon.setAttribute('class', 'me-1');
+        icon.setAttribute('width', '1em');
+        icon.setAttribute('height', '1em');
+        icon.setAttribute('viewBox', '0 0 24 24');
+        icon.setAttribute('fill', 'none');
+        icon.setAttribute('stroke', 'currentColor');
+        icon.setAttribute('stroke-width', '2');
+        icon.setAttribute('stroke-linecap', 'round');
+        icon.setAttribute('stroke-linejoin', 'round');
+        icon.setAttribute('aria-hidden', 'true');
+        icon.setAttribute('focusable', 'false');
+
+        const pathData = item
+            ? ['M5 12l4 4L19 6']
+            : ['M6 8h12l1 13H5L6 8Z', 'M9 10V6a3 3 0 0 1 6 0v4', 'M12 13v5', 'M9.5 15.5h5'];
+
+        pathData.forEach((data) => {
+            const path = document.createElementNS(svgNamespace, 'path');
+            path.setAttribute('d', data);
+            icon.appendChild(path);
+        });
 
         const text = document.createElement('span');
         text.textContent = item
