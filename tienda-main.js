@@ -148,11 +148,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const catalogStatusMessageEl = document.getElementById('catalog-status-message');
     const retryProductsBtn = document.getElementById('retry-products');
     const gridProductosEl = document.getElementById('grid-productos');
+    const catalogSkeletonEl = document.getElementById('catalog-skeleton');
 
     function actualizarInterfazEstadoCatalogo(estado) {
         if (!estado) return;
 
         const hasProducts = estado.hasProducts === true;
+        const showSkeleton = estado.status === 'loading' && estado.hasProducts !== true;
         let message = '';
         let showStatus = false;
         let showRetry = false;
@@ -197,6 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (catalogStatusMessageEl) catalogStatusMessageEl.textContent = message;
         if (retryProductsBtn) retryProductsBtn.classList.toggle('d-none', !showRetry);
+        if (catalogSkeletonEl) catalogSkeletonEl.hidden = !showSkeleton;
         if (gridProductosEl) gridProductosEl.hidden = hideCatalog;
         if (hideCatalog && loadingEl) loadingEl.hidden = true;
     }
