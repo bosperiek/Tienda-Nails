@@ -5,6 +5,46 @@
    rediseñado con navegación y animaciones.
    ========================================================== */
 
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./fonts/dm-sans.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('./fonts/dm-sans.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/dm-sans.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('./fonts/cormorant-garamond.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('./fonts/cormorant-garamond.woff2') format('woff2');
+}
+
 :root {
   /* Paleta exacta del index */
   --bg-body: #f8f0ed;
