@@ -690,7 +690,7 @@ section .card {
     padding-top: 60px;
   }
 
-  .por-que-item h5 {
+  .por-que-item h3 {
     font-size: 1.05rem;
   }
 
@@ -989,8 +989,10 @@ section .card {
   font-size: 0.9rem;
 }
 
-.testimonial-card h6 {
+.testimonial-card .testimonial-name {
   font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.2;
   margin-bottom: 0.2rem;
 }
 
@@ -1214,7 +1216,7 @@ section .card {
   color: #ffffff;
 }
 
-.por-que-item h5 {
+.por-que-item h3 {
   font-family: var(--font-family-headings);
   color: var(--primary-color);
   font-size: 1rem;
