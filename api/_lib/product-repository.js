@@ -1,11 +1,11 @@
 'use strict';
 
-const openSheetProvider = require('./opensheet-provider');
+const cachedProductProvider = require('./cached-product-provider');
 const { normalizeProduct } = require('./product-normalizer');
 
 const PRODUCT_ID_PATTERN = /^prod_[0-9]+$/;
 
-function createProductRepository(provider = openSheetProvider) {
+function createProductRepository(provider = cachedProductProvider) {
     if (!provider || typeof provider.fetchRows !== 'function') {
         throw new TypeError('El proveedor debe implementar fetchRows().');
     }
