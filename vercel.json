@@ -1,5 +1,17 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/producto/:id(prod_[0-9]+)/:slug",
+      "destination": "/producto/:id/:slug/",
+      "permanent": true
+    },
+    {
+      "source": "/producto/:id(prod_[0-9]+)",
+      "destination": "/producto/:id/",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/producto/:id(prod_[0-9]+)/:slug/",
