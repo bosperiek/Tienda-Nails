@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/producto/:id(prod_[0-9]+)/:slug/",
+      "destination": "/api/producto?id=:id&slug=:slug"
+    },
+    {
+      "source": "/producto/:id(prod_[0-9]+)/",
+      "destination": "/api/producto?id=:id"
+    }
+  ]
+}
