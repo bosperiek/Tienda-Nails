@@ -365,8 +365,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalPrice    = document.getElementById('modalPrice');
     const modalLoader   = document.getElementById('modal-loader');
     const modalAddBtn   = document.getElementById('modal-add-to-cart');
+    const modalProductLink = document.getElementById('modal-product-link');
     const modalPrevBtn  = document.getElementById('modal-prev');
     const modalNextBtn  = document.getElementById('modal-next');
+
+    function createCanonicalProductPath(prod, productName) {
+        if (!window.NantyProductUrl || typeof window.NantyProductUrl.createProductPath !== 'function') {
+            return null;
+        }
+
+        return window.NantyProductUrl.createProductPath({
+            id: prod.id,
+            name: productName
+        });
+    }
+
+    function updateProductLink(link, prod, productName) {
+        if (!link) return;
+
+        const productPath = createCanonicalProductPath(prod, productName);
+        if (!productPath) {
+            link.removeAttribute('href');
+            link.hidden = true;
+            return;
+        }
+
+        link.href = productPath;
+        link.hidden = false;
+    }
 
     function actualizarContenidoBotonModal(item) {
         if (!modalAddBtn) return;
@@ -448,6 +474,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentModalIndex = index;
 
         const { nombre, precio, imgUrl, altProducto } = getProductData(prod);
+        updateProductLink(modalProductLink, prod, nombre);
 
         // Mostrar loader + animar salida de imagen
         if (modalLoader) modalLoader.classList.add('visible');
@@ -682,6 +709,11 @@ document.addEventListener('DOMContentLoaded', () => {
             divPrice.className = 'card-price';
             divPrice.textContent = formatPriceForDisplay(precio);
 
+            const productLink = document.createElement('a');
+            productLink.className = 'card-product-link';
+            productLink.textContent = 'Ver producto';
+            updateProductLink(productLink, prod, nombre);
+
             const likeBtn = document.createElement('button');
             likeBtn.className = 'btn-like';
             likeBtn.type = 'button';
@@ -699,6 +731,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             cuerpo.appendChild(h3);
             cuerpo.appendChild(divPrice);
+            cuerpo.appendChild(productLink);
             cuerpo.appendChild(likeBtn);
             cuerpo.appendChild(btnAdd);
 
