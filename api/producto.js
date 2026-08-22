@@ -17,6 +17,9 @@ const HTML_HEADERS = Object.freeze({
     'X-Content-Type-Options': 'nosniff',
     'Referrer-Policy': 'strict-origin-when-cross-origin'
 });
+const PRODUCT_CACHE_CONTROL = 'public, max-age=0, must-revalidate';
+const PRODUCT_CDN_CACHE_CONTROL = 'public, s-maxage=300, stale-while-revalidate=300';
+const NO_STORE_CACHE_CONTROL = 'no-store';
 
 const STATUS_PAGES = Object.freeze({
     404: '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Producto no encontrado | Nanty Nails Shop</title></head><body><main><h1>Producto no encontrado</h1><p>No encontramos el producto solicitado.</p></main></body></html>',
@@ -31,9 +34,21 @@ function setHeaders(response, headers = {}) {
     });
 }
 
+function setCacheHeaders(response, statusCode) {
+    if (statusCode === 200) {
+        response.setHeader('Cache-Control', PRODUCT_CACHE_CONTROL);
+        response.setHeader('Vercel-CDN-Cache-Control', PRODUCT_CDN_CACHE_CONTROL);
+        return;
+    }
+
+    response.setHeader('Cache-Control', NO_STORE_CACHE_CONTROL);
+    response.removeHeader?.('Vercel-CDN-Cache-Control');
+}
+
 function sendResponse(request, response, statusCode, body = '', headers = {}) {
     response.statusCode = statusCode;
     setHeaders(response, headers);
+    setCacheHeaders(response, statusCode);
     response.end(request.method === 'HEAD' ? undefined : body);
 }
 
