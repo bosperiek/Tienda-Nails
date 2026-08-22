@@ -1,9 +1,12 @@
 'use strict';
 
-const BOOTSTRAP_CSS_URL = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css';
+const WHATSAPP_NUMBER = '525614782629';
 const PRICE_FORMATTER = new Intl.NumberFormat('es-MX', {
     style: 'currency',
     currency: 'MXN'
+});
+const STOCK_FORMATTER = new Intl.NumberFormat('es-MX', {
+    maximumFractionDigits: 2
 });
 
 function escapeHtml(value) {
@@ -24,6 +27,17 @@ function requireNonEmptyString(value, fieldName) {
     return value.trim();
 }
 
+function normalizeOptionalText(value) {
+    if (typeof value !== 'string') return null;
+
+    const normalized = value.trim();
+    return normalized === '' ? null : normalized;
+}
+
+function normalizeOptionalNumber(value) {
+    return Number.isFinite(value) && value >= 0 ? value : null;
+}
+
 function validateHttpUrl(value, fieldName, { required = false } = {}) {
     if (value === null || value === undefined || value === '') {
         if (required) {
@@ -41,10 +55,8 @@ function validateHttpUrl(value, fieldName, { required = false } = {}) {
         return null;
     }
 
-    const normalized = value.trim();
-
     try {
-        const parsed = new URL(normalized);
+        const parsed = new URL(value.trim());
         if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
             if (required) {
                 throw new TypeError(`${fieldName} debe utilizar http o https.`);
@@ -53,7 +65,7 @@ function validateHttpUrl(value, fieldName, { required = false } = {}) {
             return null;
         }
 
-        return normalized;
+        return parsed.href;
     } catch (error) {
         if (required) {
             if (error instanceof TypeError && error.message.startsWith(fieldName)) {
@@ -65,6 +77,65 @@ function validateHttpUrl(value, fieldName, { required = false } = {}) {
 
         return null;
     }
+}
+
+function resolveHttpUrl(value, baseUrl) {
+    if (typeof value !== 'string' || value.trim() === '') return null;
+
+    try {
+        const parsed = new URL(value.trim(), baseUrl);
+        return parsed.protocol === 'http:' || parsed.protocol === 'https:'
+            ? parsed.href
+            : null;
+    } catch (error) {
+        return null;
+    }
+}
+
+function hasSameText(firstValue, secondValue) {
+    if (!firstValue || !secondValue) return false;
+
+    return firstValue.localeCompare(secondValue, 'es', {
+        sensitivity: 'base'
+    }) === 0;
+}
+
+function createWhatsAppUrl({ productName, price, canonicalUrl }) {
+    const message = [
+        `Hola, me gustaría consultar el producto: ${productName}.`,
+        price === null ? null : `Precio: ${PRICE_FORMATTER.format(price)}.`,
+        `Página: ${canonicalUrl}`
+    ].filter(Boolean).join('\n');
+    const whatsappUrl = new URL(`https://wa.me/${WHATSAPP_NUMBER}`);
+    whatsappUrl.searchParams.set('text', message);
+    return whatsappUrl.href;
+}
+
+function renderPrice({ price, salePrice }) {
+    if (salePrice !== null) {
+        const regularPrice = price === null
+            ? ''
+            : `<span class="product-price__regular">
+                <span class="visually-hidden">Precio regular: </span>
+                ${escapeHtml(PRICE_FORMATTER.format(price))}
+              </span>`;
+
+        return `<div class="product-price" aria-label="Precio del producto">
+          <span class="product-price__sale">
+            <span class="visually-hidden">Precio de oferta: </span>
+            ${escapeHtml(PRICE_FORMATTER.format(salePrice))}
+          </span>
+          ${regularPrice}
+        </div>`;
+    }
+
+    if (price !== null) {
+        return `<p class="product-price product-price--single">
+          ${escapeHtml(PRICE_FORMATTER.format(price))}
+        </p>`;
+    }
+
+    return '<p class="product-price product-price--unavailable">Precio no disponible</p>';
 }
 
 function renderProductPage({ product, canonicalUrl, siteUrl, imageUrl = null } = {}) {
@@ -83,68 +154,110 @@ function renderProductPage({ product, canonicalUrl, siteUrl, imageUrl = null } =
     const homeUrl = new URL('/', safeSiteUrl).href;
     const catalogUrl = new URL('/tienda.html', safeSiteUrl).href;
     const logoUrl = new URL('/imagenesPrincipal/logo4.svg', safeSiteUrl).href;
+    const stylesheetUrl = new URL('/css/producto.css', safeSiteUrl).href;
+
+    const category = normalizeOptionalText(product.category);
+    const visibleCategory = category && !hasSameText(category, productName)
+        ? category
+        : null;
+    const description = normalizeOptionalText(product.description);
+    const brand = normalizeOptionalText(product.brand);
+    const subcategory = normalizeOptionalText(product.subcategory);
+    const price = normalizeOptionalNumber(product.price);
+    const salePrice = normalizeOptionalNumber(product.salePrice);
+    const stock = normalizeOptionalNumber(product.stock);
+    const altText = normalizeOptionalText(product.altText) || productName;
 
     const escapedId = escapeHtml(productId);
     const escapedName = escapeHtml(productName);
-    const escapedCategory = escapeHtml(product.category);
-    const escapedDescription = escapeHtml(product.description);
-    const escapedBrand = escapeHtml(product.brand);
-    const escapedAltText = escapeHtml(
-        typeof product.altText === 'string' && product.altText.trim() !== ''
-            ? product.altText.trim()
-            : productName
-    );
+    const escapedCategory = escapeHtml(visibleCategory);
+    const escapedDescription = escapeHtml(description);
+    const escapedBrand = escapeHtml(brand);
+    const escapedSubcategory = escapeHtml(subcategory);
+    const escapedAltText = escapeHtml(altText);
 
-    const categoryBreadcrumb = product.category
-        ? `<li class="breadcrumb-item">${escapedCategory}</li>`
+    const categoryBreadcrumb = visibleCategory
+        ? `<li><span>${escapedCategory}</span></li>`
         : '';
-    const categoryContent = product.category
-        ? `<p class="text-uppercase text-secondary fw-semibold mb-2">${escapedCategory}</p>`
+    const categoryContent = visibleCategory
+        ? `<p class="product-category">${escapedCategory}</p>`
         : '';
-    const descriptionContent = product.description
-        ? `<section class="mt-4" aria-labelledby="product-description-heading">
-              <h2 id="product-description-heading" class="h5">Descripción</h2>
-              <p class="mb-0">${escapedDescription}</p>
-            </section>`
+    const descriptionContent = description
+        ? `<section class="product-description" aria-labelledby="product-description-heading">
+            <h2 id="product-description-heading">Descripción</h2>
+            <p>${escapedDescription}</p>
+          </section>`
         : '';
-    const brandContent = product.brand
-        ? `<dl class="row mt-4 mb-0">
-              <dt class="col-auto">Marca</dt>
-              <dd class="col mb-0">${escapedBrand}</dd>
-            </dl>`
+
+    const additionalImageUrls = Array.isArray(product.additionalImages)
+        ? [...new Set(product.additionalImages
+            .map(value => resolveHttpUrl(value, safeSiteUrl))
+            .filter(url => url && url !== safeImageUrl))]
+        : [];
+    const additionalImagesContent = additionalImageUrls.length > 0
+        ? `<div class="product-gallery__additional" aria-label="Imágenes adicionales del producto">
+            ${additionalImageUrls.map((url, index) => `<figure>
+              <img
+                src="${escapeHtml(url)}"
+                alt="${escapeHtml(`${productName}, vista adicional ${index + 1}`)}"
+                loading="lazy"
+                decoding="async"
+              >
+            </figure>`).join('')}
+          </div>`
         : '';
-    const priceContent = Number.isFinite(product.price) && product.price >= 0
-        ? escapeHtml(PRICE_FORMATTER.format(product.price))
-        : 'Precio no disponible';
     const imageContent = safeImageUrl
-        ? `<figure class="col-12 col-lg-6 mb-4 mb-lg-0">
+        ? `<figure class="product-gallery__primary">
             <img
               src="${escapeHtml(safeImageUrl)}"
-              class="img-fluid rounded shadow-sm product-image"
               alt="${escapedAltText}"
               loading="eager"
               decoding="async"
             >
           </figure>`
-        : `<div class="col-12 col-lg-6 mb-4 mb-lg-0">
-            <div class="border rounded bg-light p-5 text-center text-secondary">
-              Imagen no disponible
-            </div>
+        : `<div class="product-gallery__primary product-gallery__fallback" role="img" aria-label="Imagen no disponible para ${escapedName}">
+            <span>Imagen no disponible</span>
           </div>`;
+
+    const detailRows = [
+        visibleCategory
+            ? `<div><dt>Categoría</dt><dd>${escapedCategory}</dd></div>`
+            : '',
+        subcategory
+            ? `<div><dt>Subcategoría</dt><dd>${escapedSubcategory}</dd></div>`
+            : '',
+        brand
+            ? `<div><dt>Marca</dt><dd>${escapedBrand}</dd></div>`
+            : '',
+        stock !== null
+            ? `<div><dt>Existencias</dt><dd>${escapeHtml(STOCK_FORMATTER.format(stock))}</dd></div>`
+            : '',
+        `<div><dt>Referencia</dt><dd>${escapedId}</dd></div>`
+    ].filter(Boolean).join('');
+
+    const displayedPrice = salePrice ?? price;
+    const whatsappUrl = createWhatsAppUrl({
+        productName,
+        price: displayedPrice,
+        canonicalUrl: safeCanonicalUrl
+    });
 
     return `<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f8f0ed">
     <title>${escapedName} | Nanty Nails Shop</title>
     <link rel="canonical" href="${escapeHtml(safeCanonicalUrl)}">
-    <link rel="stylesheet" href="${BOOTSTRAP_CSS_URL}">
+    <link rel="stylesheet" href="${escapeHtml(stylesheetUrl)}">
   </head>
   <body>
-    <header class="border-bottom bg-light">
-      <div class="container py-3 d-flex flex-wrap align-items-center justify-content-between gap-3">
-        <a href="${escapeHtml(homeUrl)}" aria-label="Ir al inicio de Nanty Nails Shop">
+    <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
+
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="site-brand" href="${escapeHtml(homeUrl)}" aria-label="Ir al inicio de Nanty Nails Shop">
           <img
             src="${escapeHtml(logoUrl)}"
             alt="Nanty Nails Shop"
@@ -152,42 +265,67 @@ function renderProductPage({ product, canonicalUrl, siteUrl, imageUrl = null } =
             height="60"
           >
         </a>
-        <nav aria-label="Navegación principal">
-          <a class="me-3" href="${escapeHtml(homeUrl)}">Inicio</a>
-          <a href="${escapeHtml(catalogUrl)}">Catálogo</a>
+        <nav class="site-navigation" aria-label="Navegación principal">
+          <a href="${escapeHtml(homeUrl)}">Inicio</a>
+          <a href="${escapeHtml(catalogUrl)}" aria-current="page">Catálogo</a>
         </nav>
       </div>
     </header>
 
-    <nav class="container pt-4" aria-label="Migas de pan">
-      <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item"><a href="${escapeHtml(homeUrl)}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="${escapeHtml(catalogUrl)}">Catálogo</a></li>
-        ${categoryBreadcrumb}
-        <li class="breadcrumb-item active" aria-current="page">${escapedName}</li>
-      </ol>
-    </nav>
+    <div class="breadcrumb-shell">
+      <nav class="breadcrumb" aria-label="Migas de pan">
+        <ol>
+          <li><a href="${escapeHtml(homeUrl)}">Inicio</a></li>
+          <li><a href="${escapeHtml(catalogUrl)}">Catálogo</a></li>
+          ${categoryBreadcrumb}
+          <li aria-current="page"><span>${escapedName}</span></li>
+        </ol>
+      </nav>
+    </div>
 
-    <main class="container py-5">
-      <article class="row align-items-start g-5">
-        ${imageContent}
-        <div class="col-12 col-lg-6">
+    <main id="contenido-principal" class="product-page">
+      <article class="product-layout">
+        <section class="product-gallery" aria-label="Imágenes de ${escapedName}">
+          ${imageContent}
+          ${additionalImagesContent}
+        </section>
+
+        <div class="product-summary">
           ${categoryContent}
-          <h1 class="display-6">${escapedName}</h1>
-          <p class="fs-3 fw-semibold mt-3 mb-0">${priceContent}</p>
+          <h1>${escapedName}</h1>
+          ${renderPrice({ price, salePrice })}
           ${descriptionContent}
-          ${brandContent}
-          <p class="small text-secondary mt-4 mb-0">Referencia: ${escapedId}</p>
-          <p class="mt-4 mb-0">
-            <a class="btn btn-outline-dark" href="${escapeHtml(catalogUrl)}">Volver al catálogo</a>
-          </p>
+
+          <div class="product-actions" aria-label="Acciones del producto">
+            <a class="product-button product-button--primary" href="${escapeHtml(whatsappUrl)}" target="_blank" rel="noopener noreferrer">
+              Consultar por WhatsApp
+            </a>
+            <a class="product-button product-button--secondary" href="${escapeHtml(catalogUrl)}">
+              Volver al catálogo
+            </a>
+          </div>
         </div>
       </article>
+
+      <section class="product-details" aria-labelledby="product-details-heading">
+        <div class="product-details__heading">
+          <p>Información</p>
+          <h2 id="product-details-heading">Detalles del producto</h2>
+        </div>
+        <dl>${detailRows}</dl>
+      </section>
     </main>
 
-    <footer class="border-top py-4">
-      <div class="container text-center">
-        <a href="${escapeHtml(catalogUrl)}">Explorar el catálogo de Nanty Nails Shop</a>
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        <div>
+          <p class="site-footer__brand">Nanty Nails Shop</p>
+          <p class="site-footer__copy">Tu aliado para transformar tu pasión por la belleza en una profesión rentable.</p>
+        </div>
+        <nav aria-label="Navegación del pie de página">
+          <a href="${escapeHtml(homeUrl)}">Inicio</a>
+          <a href="${escapeHtml(catalogUrl)}">Catálogo</a>
+        </nav>
       </div>
     </footer>
   </body>
