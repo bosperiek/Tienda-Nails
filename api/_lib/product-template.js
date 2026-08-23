@@ -1,6 +1,8 @@
 'use strict';
 
 const WHATSAPP_NUMBER = '525614782629';
+const SITE_NAME = 'Nanty Nails Shop';
+const METADATA_DESCRIPTION_MAX_LENGTH = 160;
 const PRICE_FORMATTER = new Intl.NumberFormat('es-MX', {
     style: 'currency',
     currency: 'MXN'
@@ -32,6 +34,28 @@ function normalizeOptionalText(value) {
 
     const normalized = value.trim();
     return normalized === '' ? null : normalized;
+}
+
+function truncateMetadataText(value, maxLength = METADATA_DESCRIPTION_MAX_LENGTH) {
+    const characters = Array.from(value);
+    if (characters.length <= maxLength) return value;
+
+    const ellipsis = '…';
+    const availableCharacters = maxLength - Array.from(ellipsis).length;
+    let truncated = characters.slice(0, availableCharacters).join('').trimEnd();
+    const lastSpaceIndex = truncated.lastIndexOf(' ');
+
+    if (lastSpaceIndex >= Math.floor(availableCharacters * 0.65)) {
+        truncated = truncated.slice(0, lastSpaceIndex);
+    }
+
+    return `${truncated.replace(/[\s,;:.!?-]+$/u, '')}${ellipsis}`;
+}
+
+function createMetadataDescription({ description, productName }) {
+    const sourceText = description || `Consulta ${productName} en ${SITE_NAME}.`;
+    const normalizedText = sourceText.replace(/\s+/gu, ' ').trim();
+    return truncateMetadataText(normalizedText);
 }
 
 function normalizeOptionalNumber(value) {
@@ -155,6 +179,10 @@ function renderProductPage({ product, canonicalUrl, siteUrl, imageUrl = null } =
     const catalogUrl = new URL('/tienda.html', safeSiteUrl).href;
     const logoUrl = new URL('/imagenesPrincipal/logo4.svg', safeSiteUrl).href;
     const stylesheetUrl = new URL('/css/producto.css', safeSiteUrl).href;
+    const socialFallbackImageUrl = new URL(
+        '/imagenesPrincipal/og-nanty-nails-shop.jpg',
+        safeSiteUrl
+    ).href;
 
     const category = normalizeOptionalText(product.category);
     const visibleCategory = category && !hasSameText(category, productName)
@@ -167,6 +195,11 @@ function renderProductPage({ product, canonicalUrl, siteUrl, imageUrl = null } =
     const salePrice = normalizeOptionalNumber(product.salePrice);
     const stock = normalizeOptionalNumber(product.stock);
     const altText = normalizeOptionalText(product.altText) || productName;
+    const pageTitle = `${productName} | ${SITE_NAME}`;
+    const metadataDescription = createMetadataDescription({
+        description,
+        productName
+    });
 
     const escapedId = escapeHtml(productId);
     const escapedName = escapeHtml(productName);
@@ -175,6 +208,19 @@ function renderProductPage({ product, canonicalUrl, siteUrl, imageUrl = null } =
     const escapedBrand = escapeHtml(brand);
     const escapedSubcategory = escapeHtml(subcategory);
     const escapedAltText = escapeHtml(altText);
+    const escapedPageTitle = escapeHtml(pageTitle);
+    const escapedMetadataDescription = escapeHtml(metadataDescription);
+
+    const productOpenGraphImage = safeImageUrl
+        ? `<meta property="og:image" content="${escapeHtml(safeImageUrl)}">
+    <meta property="og:image:alt" content="${escapedAltText}">
+    `
+        : '';
+    const openGraphImages = `${productOpenGraphImage}<meta property="og:image" content="${escapeHtml(socialFallbackImageUrl)}">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="${SITE_NAME}">`;
 
     const categoryBreadcrumb = visibleCategory
         ? `<li><span>${escapedCategory}</span></li>`
@@ -248,8 +294,16 @@ function renderProductPage({ product, canonicalUrl, siteUrl, imageUrl = null } =
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#f8f0ed">
-    <title>${escapedName} | Nanty Nails Shop</title>
+    <title>${escapedPageTitle}</title>
+    <meta name="description" content="${escapedMetadataDescription}">
     <link rel="canonical" href="${escapeHtml(safeCanonicalUrl)}">
+    <meta property="og:title" content="${escapedPageTitle}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="${escapeHtml(safeCanonicalUrl)}">
+    <meta property="og:description" content="${escapedMetadataDescription}">
+    <meta property="og:site_name" content="${SITE_NAME}">
+    <meta property="og:locale" content="es_MX">
+    ${openGraphImages}
     <link rel="stylesheet" href="${escapeHtml(stylesheetUrl)}">
   </head>
   <body>
