@@ -8,6 +8,7 @@ const {
     createProductUrl,
     isCanonicalProductSlug
 } = require('./_lib/product-url');
+const { resolveProductImageUrl } = require('./_lib/product-image-url');
 const { renderProductPage } = require('./_lib/product-template');
 
 const SITE_URL = process.env.SITE_URL || 'https://tienda-nails.vercel.app';
@@ -54,19 +55,6 @@ function sendResponse(request, response, statusCode, body = '', headers = {}) {
 
 function hasInvalidQueryValue(value) {
     return Array.isArray(value) || (value !== undefined && typeof value !== 'string');
-}
-
-function resolveProductImageUrl(image, siteUrl) {
-    if (typeof image !== 'string' || image.trim() === '') return null;
-
-    try {
-        const imageUrl = new URL(image.trim(), siteUrl);
-        return imageUrl.protocol === 'http:' || imageUrl.protocol === 'https:'
-            ? imageUrl.href
-            : null;
-    } catch (error) {
-        return null;
-    }
 }
 
 async function resolveActiveReplacementUrl(product, repository, siteUrl) {

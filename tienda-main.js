@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let searchText = '';
     const itemsPerPage = 24;
     const eagerProductImageCount = 4;
+    const imageUrlSchemePattern = /^[a-z][a-z0-9+.-]*:/i;
+    const unsafeImageWhitespacePattern = /[\u0000-\u0020\u007f]/u;
     let currentLimit = itemsPerPage;
     let currentPage = 1;
     let selectedSort = '';
@@ -26,6 +28,84 @@ document.addEventListener('DOMContentLoaded', () => {
     let didModalImageSwipe = false;
 
     const categoriesContainer = document.getElementById('categories');
+
+    function decodeImagePathSegment(value) {
+        let decoded = value;
+
+        for (let attempt = 0; attempt < 3; attempt += 1) {
+            const nextValue = decodeURIComponent(decoded);
+            if (nextValue === decoded) break;
+            decoded = nextValue;
+        }
+
+        return decoded;
+    }
+
+    function isSafeLocalImagePath(value) {
+        if (value.startsWith('//')
+            || value.includes('\\')
+            || unsafeImageWhitespacePattern.test(value)) {
+            return false;
+        }
+
+        const path = value.split(/[?#]/u, 1)[0];
+        if (!path || path.includes('//')) return false;
+
+        try {
+            return path.split('/').every(segment => {
+                if (segment === '') return true;
+
+                const decodedSegment = decodeImagePathSegment(segment);
+                return decodedSegment !== '.'
+                    && decodedSegment !== '..'
+                    && !decodedSegment.includes('/')
+                    && !decodedSegment.includes('\\')
+                    && !unsafeImageWhitespacePattern.test(decodedSegment);
+            });
+        } catch (error) {
+            return false;
+        }
+    }
+
+    function parseHttpsImageUrl(value) {
+        try {
+            const parsed = new URL(value);
+            if (parsed.protocol !== 'https:'
+                || !parsed.hostname
+                || parsed.username
+                || parsed.password) {
+                return null;
+            }
+
+            parsed.hash = '';
+            return parsed;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function resolveProductImageUrl(value) {
+        if (typeof value !== 'string') return '';
+
+        const normalized = value.trim();
+        if (!normalized
+            || normalized.startsWith('//')
+            || unsafeImageWhitespacePattern.test(normalized)) {
+            return '';
+        }
+
+        if (imageUrlSchemePattern.test(normalized)) {
+            const absoluteImageUrl = parseHttpsImageUrl(normalized);
+            return absoluteImageUrl ? absoluteImageUrl.href : '';
+        }
+
+        if (!isSafeLocalImagePath(normalized)) return '';
+
+        const pathWithoutFragment = normalized.split('#', 1)[0];
+        return pathWithoutFragment.startsWith('/')
+            ? pathWithoutFragment
+            : `/${pathWithoutFragment}`;
+    }
 
     // -------------------------------------------------------
     // UTILIDADES DE CATEGORÍA
@@ -453,8 +533,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function getProductData(prod) {
         const llaves = Object.keys(prod);
         const keyNombre = llaves.find(k => /(^data\b|nom|name|titul|title|producto|descripcion)/i.test(k)) || llaves[0];
-        let keyImg = llaves.find(k => /(image|img|src|url|foto|link)/i.test(k) && typeof prod[k] === 'string' && /^https?:\/\//i.test(prod[k]));
-        if (!keyImg) keyImg = llaves.find(k => typeof prod[k] === 'string' && /^https?:\/\//i.test(prod[k]) && /\.(jpg|png|webp|jpeg)/i.test(prod[k]));
+        const imageCandidates = [
+            prod.image,
+            ...llaves
+                .filter(key => /(image|imagen|img|src|foto)/i.test(key))
+                .map(key => prod[key])
+        ];
+        const imgUrl = imageCandidates
+            .map(resolveProductImageUrl)
+            .find(Boolean) || '';
         const altProducto =
             String(prod.altTexto || '').trim()
             || String(prod.data || '').trim()
@@ -462,7 +549,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return {
             nombre: prod[keyNombre] || 'Producto',
             precio: prod.data2,
-            imgUrl: prod[keyImg] || prod.image || '',
+            imgUrl,
             altProducto
         };
     }
@@ -498,7 +585,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (modalLoader) modalLoader.classList.remove('visible');
                 modalImg.classList.remove('changing');
             };
-            modalImg.src = imgUrl;
+            modalImg.src = imgUrl || 'https://placehold.co/400x400/f8f0ed/e67e9f?text=Sin+Imagen';
         }, 120);
 
         // Botón añadir al carrito desde el modal
@@ -694,7 +781,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 imgEl.src = 'https://placehold.co/300x300/f8f0ed/e67e9f?text=Sin+Imagen';
                 imgEl.classList.add('visible');
             };
-            imgEl.src = imgUrl;
+            imgEl.src = imgUrl || 'https://placehold.co/300x300/f8f0ed/e67e9f?text=Sin+Imagen';
 
             imgContainer.appendChild(imgEl);
 
@@ -793,10 +880,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const precio = product.data2;
         if (!Number.isFinite(precio) || precio < 0) return;
 
-        const llaves = Object.keys(product);
         const nombre = product.data || product.nombre || product.name || 'Producto';
-        const imgKey = llaves.find(k => /image|img|src/i.test(k));
-        const img = product[imgKey] || '';
+        const { imgUrl: img } = getProductData(product);
 
         if (!carrito[id]) carrito[id] = { id, nombre, precio, qty: 0, img };
         carrito[id].qty += 1;
@@ -865,7 +950,8 @@ document.addEventListener('DOMContentLoaded', () => {
             row.className = 'cart-item d-flex gap-2 align-items-center mb-3 border-bottom pb-2';
 
             const img = document.createElement('img');
-            img.src = item.img;
+            img.src = resolveProductImageUrl(item.img)
+                || 'https://placehold.co/300x300/f8f0ed/e67e9f?text=Sin+Imagen';
             img.alt = '';
 
             const info = document.createElement('div');

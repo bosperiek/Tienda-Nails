@@ -1,5 +1,7 @@
 'use strict';
 
+const { resolveProductImageUrl } = require('./product-image-url');
+
 const WHATSAPP_NUMBER = '525614782629';
 const SITE_NAME = 'Nanty Nails Shop';
 const METADATA_DESCRIPTION_MAX_LENGTH = 160;
@@ -113,19 +115,6 @@ function validateHttpUrl(value, fieldName, { required = false } = {}) {
     }
 }
 
-function resolveHttpUrl(value, baseUrl) {
-    if (typeof value !== 'string' || value.trim() === '') return null;
-
-    try {
-        const parsed = new URL(value.trim(), baseUrl);
-        return parsed.protocol === 'http:' || parsed.protocol === 'https:'
-            ? parsed.href
-            : null;
-    } catch (error) {
-        return null;
-    }
-}
-
 function hasSameText(firstValue, secondValue) {
     if (!firstValue || !secondValue) return false;
 
@@ -193,7 +182,7 @@ function renderProductPage({
         required: true
     });
     const safeSiteUrl = validateHttpUrl(siteUrl, 'siteUrl', { required: true });
-    const safeImageUrl = validateHttpUrl(imageUrl, 'imageUrl');
+    const safeImageUrl = resolveProductImageUrl(imageUrl, safeSiteUrl);
 
     const homeUrl = new URL('/', safeSiteUrl).href;
     const catalogUrl = new URL('/tienda.html', safeSiteUrl).href;
@@ -322,7 +311,7 @@ function renderProductPage({
 
     const additionalImageUrls = Array.isArray(product.additionalImages)
         ? [...new Set(product.additionalImages
-            .map(value => resolveHttpUrl(value, safeSiteUrl))
+            .map(value => resolveProductImageUrl(value, safeSiteUrl))
             .filter(url => url && url !== safeImageUrl))]
         : [];
     const additionalImagesContent = additionalImageUrls.length > 0
