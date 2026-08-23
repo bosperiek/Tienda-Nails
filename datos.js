@@ -155,9 +155,9 @@ function normalizarProductoSheet(fila) {
     if (Object.prototype.hasOwnProperty.call(fila, 'stock')) {
         producto.stock = normalizarNumeroOpcionalSheet(fila.stock);
     }
-    if (activeField) {
-        producto.active = normalizarBooleanoOpcionalSheet(fila[activeField]);
-    }
+    producto.active = activeField
+        ? normalizarBooleanoOpcionalSheet(fila[activeField])
+        : true;
 
     return producto;
 }

@@ -1,5 +1,5 @@
 function isCatalogProductAvailable(product) {
-    if (!product || product.active === false) return false;
+    if (!product || product.active !== true) return false;
     if (product.stock === null || typeof product.stock === 'undefined') return true;
     if (typeof product.stock !== 'number') return false;
     return Number.isFinite(product.stock) && product.stock > 0;

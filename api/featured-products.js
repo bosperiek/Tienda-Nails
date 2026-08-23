@@ -35,7 +35,7 @@ function isFeaturedProductAvailable(product) {
     if (!product
         || typeof product.id !== 'string'
         || !PRODUCT_ID_PATTERN.test(product.id)
-        || product.active === false
+        || product.active !== true
         || getEffectivePrice(product) === null) {
         return false;
     }
