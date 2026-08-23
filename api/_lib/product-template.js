@@ -21,6 +21,16 @@ function escapeHtml(value) {
     })[character]);
 }
 
+function serializeJsonLd(value) {
+    return JSON.stringify(value).replace(/[<>&\u2028\u2029]/g, character => ({
+        '<': '\\u003C',
+        '>': '\\u003E',
+        '&': '\\u0026',
+        '\u2028': '\\u2028',
+        '\u2029': '\\u2029'
+    })[character]);
+}
+
 function requireNonEmptyString(value, fieldName) {
     if (typeof value !== 'string' || value.trim() === '') {
         throw new TypeError(`${fieldName} debe ser un string no vacío.`);
@@ -195,6 +205,7 @@ function renderProductPage({ product, canonicalUrl, siteUrl, imageUrl = null } =
     const salePrice = normalizeOptionalNumber(product.salePrice);
     const stock = normalizeOptionalNumber(product.stock);
     const altText = normalizeOptionalText(product.altText) || productName;
+    const displayedPrice = salePrice ?? price;
     const pageTitle = `${productName} | ${SITE_NAME}`;
     const metadataDescription = createMetadataDescription({
         description,
@@ -221,6 +232,58 @@ function renderProductPage({ product, canonicalUrl, siteUrl, imageUrl = null } =
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="${SITE_NAME}">`;
+
+    const productStructuredData = {
+        '@type': 'Product',
+        '@id': `${safeCanonicalUrl}#product`,
+        name: productName,
+        url: safeCanonicalUrl
+    };
+
+    if (safeImageUrl) productStructuredData.image = safeImageUrl;
+    if (description) productStructuredData.description = description;
+    if (category) productStructuredData.category = category;
+    if (brand) {
+        productStructuredData.brand = {
+            '@type': 'Brand',
+            name: brand
+        };
+    }
+    if (displayedPrice !== null) {
+        productStructuredData.offers = {
+            '@type': 'Offer',
+            url: safeCanonicalUrl,
+            priceCurrency: 'MXN',
+            price: displayedPrice.toFixed(2)
+        };
+    }
+
+    const breadcrumbStructuredData = {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Inicio',
+                item: homeUrl
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Catálogo',
+                item: catalogUrl
+            },
+            {
+                '@type': 'ListItem',
+                position: 3,
+                name: productName
+            }
+        ]
+    };
+    const structuredData = serializeJsonLd({
+        '@context': 'https://schema.org',
+        '@graph': [productStructuredData, breadcrumbStructuredData]
+    });
 
     const categoryBreadcrumb = visibleCategory
         ? `<li><span>${escapedCategory}</span></li>`
@@ -281,7 +344,6 @@ function renderProductPage({ product, canonicalUrl, siteUrl, imageUrl = null } =
         `<div><dt>Referencia</dt><dd>${escapedId}</dd></div>`
     ].filter(Boolean).join('');
 
-    const displayedPrice = salePrice ?? price;
     const whatsappUrl = createWhatsAppUrl({
         productName,
         price: displayedPrice,
@@ -304,6 +366,7 @@ function renderProductPage({ product, canonicalUrl, siteUrl, imageUrl = null } =
     <meta property="og:site_name" content="${SITE_NAME}">
     <meta property="og:locale" content="es_MX">
     ${openGraphImages}
+    <script type="application/ld+json">${structuredData}</script>
     <link rel="stylesheet" href="${escapeHtml(stylesheetUrl)}">
   </head>
   <body>
