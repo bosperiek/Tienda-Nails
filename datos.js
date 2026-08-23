@@ -97,6 +97,71 @@ function normalizarPrecioSheet(valor) {
     return Number.isFinite(numero) && numero >= 0 ? numero : null;
 }
 
+function normalizarNumeroOpcionalSheet(valor) {
+    if (valor === null || valor === undefined || valor === '') return null;
+    if (typeof valor === 'number') {
+        return Number.isFinite(valor) && valor >= 0 ? valor : null;
+    }
+    if (typeof valor !== 'string') return null;
+
+    const texto = valor.trim();
+    if (!/^(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/.test(texto)) return null;
+
+    const numero = Number(texto.replace(/,/g, ''));
+    return Number.isFinite(numero) && numero >= 0 ? numero : null;
+}
+
+function normalizarBooleanoOpcionalSheet(valor) {
+    if (typeof valor === 'boolean') return valor;
+    if (valor === 1) return true;
+    if (valor === 0) return false;
+    if (typeof valor !== 'string') return null;
+
+    const texto = valor
+        .trim()
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/\p{Diacritic}/gu, '');
+
+    if (['true', '1', 'si', 'yes', 'activo'].includes(texto)) return true;
+    if (['false', '0', 'no', 'inactivo'].includes(texto)) return false;
+    return null;
+}
+
+function normalizarProductoSheet(fila) {
+    const producto = {
+        id: (fila.id || '').trim(),
+        category: (fila.category || '').trim(),
+        data: (fila.data || '').trim(),
+        data2: normalizarPrecioSheet(fila.data2),
+        altTexto: (fila.altTexto || '').trim(),
+        image: (fila.image || '').trim()
+    };
+
+    const salePriceField = Object.prototype.hasOwnProperty.call(fila, 'salePrice')
+        ? 'salePrice'
+        : Object.prototype.hasOwnProperty.call(fila, 'precioOferta')
+            ? 'precioOferta'
+            : null;
+    const activeField = Object.prototype.hasOwnProperty.call(fila, 'active')
+        ? 'active'
+        : Object.prototype.hasOwnProperty.call(fila, 'activo')
+            ? 'activo'
+            : null;
+
+    if (salePriceField) {
+        producto.salePrice = normalizarPrecioSheet(fila[salePriceField]);
+    }
+    if (Object.prototype.hasOwnProperty.call(fila, 'stock')) {
+        producto.stock = normalizarNumeroOpcionalSheet(fila.stock);
+    }
+    if (activeField) {
+        producto.active = normalizarBooleanoOpcionalSheet(fila[activeField]);
+    }
+
+    return producto;
+}
+
 async function cargarProductosDesdeSheet() {
     try {
         const res = await fetch(SHEET_URL);
@@ -110,14 +175,7 @@ async function cargarProductosDesdeSheet() {
         // Normaliza los datos (por si vienen espacios o vacíos)
         const nuevosProductos = filas
             .filter(p => p.data && p.data.trim() !== "")
-            .map(p => ({
-                id: (p.id || "").trim(),
-                category: (p.category || "").trim(),
-                data: (p.data || "").trim(),
-                data2: normalizarPrecioSheet(p.data2),
-                altTexto: (p.altTexto || "").trim(),
-                image: (p.image || "").trim()
-            }));
+            .map(normalizarProductoSheet);
 
         if (nuevosProductos.length === 0) {
             actualizarEstadoProductos('empty', {

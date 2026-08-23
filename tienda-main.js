@@ -332,8 +332,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!sortVal) return copy;
         if (sortVal === 'price-asc' || sortVal === 'price-desc') {
             copy.sort((a, b) => {
-                const priceA = a.data2;
-                const priceB = b.data2;
+                const priceA = window.NantyCart.getEffectivePrice(a);
+                const priceB = window.NantyCart.getEffectivePrice(b);
 
                 if (priceA === null && priceB === null) return 0;
                 if (priceA === null) return 1;
@@ -536,7 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
             || 'Producto';
         return {
             nombre: prod[keyNombre] || 'Producto',
-            precio: prod.data2,
+            precio: window.NantyCart.getEffectivePrice(prod),
             imgUrl,
             altProducto
         };
@@ -671,9 +671,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalAddBtn) {
         modalAddBtn.addEventListener('click', () => {
             if (!currentModalProduct) return;
-            addToCart(currentModalProduct);
-            const item = carrito[String(currentModalProduct.id)];
-            actualizarContenidoBotonModal(item);
+            const item = addToCart(currentModalProduct);
+            if (item) actualizarContenidoBotonModal(item);
         });
     }
 
@@ -823,11 +822,40 @@ document.addEventListener('DOMContentLoaded', () => {
     // CARRITO
     // -------------------------------------------------------
     const cartStore = window.NantyCart.createCartStore({ storage: localStorage });
+    const cartModalEl    = document.getElementById('cartModal');
+    const cartItemsEl    = document.getElementById('cart-items');
+    const cartTotalEl    = document.getElementById('cart-total');
+    const cartFeedbackEl = document.getElementById('cart-feedback');
+    const clearCartBtn   = document.getElementById('clear-cart');
+    const confirmCartBtn = document.getElementById('confirm-cart');
     let carrito = {};
+
+    function showCartFeedback(message, { error = false } = {}) {
+        if (!cartFeedbackEl) return;
+
+        cartFeedbackEl.textContent = message;
+        cartFeedbackEl.classList.remove('d-none', 'alert-info', 'alert-warning', 'alert-danger');
+        cartFeedbackEl.classList.add(error ? 'alert-danger' : 'alert-warning');
+        cartFeedbackEl.setAttribute('role', error ? 'alert' : 'status');
+        cartFeedbackEl.setAttribute('aria-live', error ? 'assertive' : 'polite');
+    }
+
+    function clearCartFeedback() {
+        if (!cartFeedbackEl) return;
+        cartFeedbackEl.textContent = '';
+        cartFeedbackEl.classList.add('d-none');
+        cartFeedbackEl.setAttribute('role', 'status');
+        cartFeedbackEl.setAttribute('aria-live', 'polite');
+    }
+
+    function showStorageError() {
+        showCartFeedback('El carrito no pudo guardarse. Intenta nuevamente.', { error: true });
+    }
 
     function loadCart() {
         carrito = cartStore.load();
         updateCartBadge();
+        if (!cartStore.getLastOperation().ok) showStorageError();
     }
 
     function updateCartBadge() {
@@ -837,19 +865,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addToCart(product) {
-        const id = String(product.id);
-        const precio = product.data2;
-        if (!Number.isFinite(precio) || precio < 0) return;
+        const precio = window.NantyCart.getEffectivePrice(product);
+        const stockUnavailable = typeof product.stock === 'number'
+            && Number.isFinite(product.stock)
+            && product.stock === 0;
+        if (product.active === false || stockUnavailable) {
+            showCartFeedback('Este producto ya no está disponible.', { error: true });
+            return null;
+        }
+        if (precio === null) return null;
 
         const nombre = product.data || product.nombre || product.name || 'Producto';
         const { imgUrl: img } = getProductData(product);
 
-        const item = cartStore.add({ id, nombre, precio, img });
-        if (!item) return;
+        const item = cartStore.add({ id: product.id, nombre, precio, img });
+        if (!item) {
+            if (cartStore.getLastOperation().code === 'storage-write'
+                || cartStore.getLastOperation().code === 'storage-read') {
+                showStorageError();
+            }
+            return null;
+        }
 
         carrito = cartStore.getCart();
+        clearCartFeedback();
         updateCartBadge();
-        updateAddButtonForProduct(id);
+        updateAddButtonForProduct(item.id);
+        return item;
     }
 
     function changeQty(id, qty) {
@@ -857,7 +899,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!cartStore.getItem(id)) return;
 
         cartStore.changeQty(id, qty);
+        if (!cartStore.getLastOperation().ok) {
+            showStorageError();
+            return;
+        }
+
         carrito = cartStore.getCart();
+        clearCartFeedback();
         updateCartBadge();
         renderCartItems();
         updateAddButtonForProduct(id);
@@ -875,18 +923,51 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    const cartModalEl    = document.getElementById('cartModal');
-    const cartItemsEl    = document.getElementById('cart-items');
-    const cartTotalEl    = document.getElementById('cart-total');
-    const clearCartBtn   = document.getElementById('clear-cart');
-    const confirmCartBtn = document.getElementById('confirm-cart');
+    function updateVisibleProductButtons() {
+        document.querySelectorAll('.card[data-id]').forEach(card => {
+            const id = card.dataset.id;
+            const button = card.querySelector('.btn-add');
+            const item = carrito[String(id)];
+            if (button) button.textContent = item ? `En carrito (${item.qty})` : 'Agregar';
+        });
 
-    if (cartModalEl) cartModalEl.addEventListener('show.bs.modal', renderCartItems);
+        if (currentModalProduct) {
+            actualizarContenidoBotonModal(carrito[String(currentModalProduct.id)]);
+        }
+    }
+
+    if (cartModalEl) cartModalEl.addEventListener('show.bs.modal', () => {
+        loadCart();
+        updateVisibleProductButtons();
+        renderCartItems();
+    });
     if (clearCartBtn) clearCartBtn.addEventListener('click', () => {
-        carrito = cartStore.clear();
+        const clearedCart = cartStore.clear();
+        if (!clearedCart) {
+            showStorageError();
+            return;
+        }
+
+        carrito = clearedCart;
+        clearCartFeedback();
         updateCartBadge();
         renderCartItems();
-        applyFilters();
+        updateVisibleProductButtons();
+    });
+
+    window.addEventListener('storage', event => {
+        if (event.key !== cartStore.key) return;
+
+        carrito = cartStore.load();
+        if (!cartStore.getLastOperation().ok) {
+            showStorageError();
+            return;
+        }
+
+        clearCartFeedback();
+        updateCartBadge();
+        updateVisibleProductButtons();
+        if (cartModalEl?.classList.contains('show')) renderCartItems();
     });
 
     function formatPriceForDisplay(p) {
@@ -974,8 +1055,48 @@ document.addEventListener('DOMContentLoaded', () => {
     window.miChangeQty = changeQty;
 
     if (confirmCartBtn) confirmCartBtn.addEventListener('click', () => {
+        carrito = cartStore.load();
+        if (!cartStore.getLastOperation().ok) {
+            showStorageError();
+            return;
+        }
+
+        updateCartBadge();
+        updateVisibleProductButtons();
+        renderCartItems();
+        if (Object.keys(carrito).length === 0) return;
+        if (!Array.isArray(misProductos) || misProductos.length === 0) {
+            showCartFeedback('No pudimos validar el catálogo actual. Intenta nuevamente.', { error: true });
+            return;
+        }
+
+        const reconciliation = cartStore.reconcile(misProductos);
+        if (!reconciliation.ok || !reconciliation.persisted) {
+            showStorageError();
+            return;
+        }
+
+        carrito = cartStore.getCart();
+        updateCartBadge();
+        updateVisibleProductButtons();
+        renderCartItems();
+
+        if (reconciliation.requiresReview) {
+            const messages = [];
+            if (reconciliation.removed.length > 0) {
+                messages.push('Uno o más productos ya no están disponibles y fueron retirados.');
+            }
+            if (reconciliation.priceChanged.length > 0) {
+                messages.push('Algunos productos o precios fueron actualizados. Revisa tu carrito antes de confirmar.');
+            }
+            showCartFeedback(messages.join(' '));
+            return;
+        }
+
         const entries = Object.values(carrito);
         if (entries.length === 0) return;
+
+        clearCartFeedback();
         let lines = ['*Nuevo Pedido Nanty Nails 💅*'];
         let total = 0;
         entries.forEach(i => {
@@ -985,8 +1106,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
         lines.push(`\n*Total estimado: ${formatPriceForDisplay(total)}*`);
-        const wa = localStorage.getItem('waNumber') || '5614782629';
-        window.open(`https://wa.me/${wa}?text=${encodeURIComponent(lines.join('\n'))}`, '_blank');
+        const shopConfig = window.NantyShopConfig;
+        if (!shopConfig || typeof shopConfig.createWhatsAppUrl !== 'function') {
+            showCartFeedback('No pudimos preparar el pedido. Intenta nuevamente.', { error: true });
+            return;
+        }
+
+        window.open(shopConfig.createWhatsAppUrl(lines.join('\n')), '_blank');
     });
 
     // -------------------------------------------------------

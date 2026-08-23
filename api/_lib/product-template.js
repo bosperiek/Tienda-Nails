@@ -314,14 +314,14 @@ function renderProductPage({
           </section>`
         : '';
 
-    const cartButton = price !== null
+    const cartButton = displayedPrice !== null
         ? `<button
               class="product-button product-button--primary"
               type="button"
               data-product-cart
               data-product-id="${escapedId}"
               data-product-name="${escapedName}"
-              data-product-price="${escapeHtml(price.toFixed(2))}"
+              data-product-price="${escapeHtml(displayedPrice.toFixed(2))}"
               data-product-image="${escapeHtml(cartImage)}"
               aria-live="polite"
             >
