@@ -53,6 +53,7 @@
   --text-light: #6a5d5d;
   --accent: #e67e9f;
   --accent-hover: #d85c82;
+  --accent-contrast: #a13f62;
   --accent-soft: rgba(230, 126, 159, 0.12);
   --navbar-bg: #2c2121;
   --navbar-surface: rgba(248, 240, 237, 0.94);
@@ -137,7 +138,7 @@ a {
 
 #main-navbar .nav-link:hover,
 #main-navbar .nav-link.active {
-  color: var(--accent) !important;
+  color: var(--accent-contrast) !important;
   background-color: var(--accent-soft);
 }
 
@@ -216,11 +217,11 @@ header {
 }
 
 #buscador::placeholder {
-  color: #b8a8a8;
+  color: var(--text-light);
 }
 
-#buscador:focus {
-  border-color: var(--accent);
+#buscador:focus-visible {
+  border-color: var(--accent-contrast);
   box-shadow: 0 0 0 4px rgba(230, 126, 159, 0.12);
 }
 
@@ -238,13 +239,14 @@ header {
   transition: border-color 0.25s;
 }
 
-#sort:focus {
-  border-color: var(--accent);
+#sort:focus-visible {
+  border-color: var(--accent-contrast);
+  box-shadow: 0 0 0 3px rgba(161, 63, 98, 0.2);
 }
 
 /* Botón carrito */
 #cart-button {
-  background-color: var(--accent);
+  background-color: var(--accent-contrast);
   color: #fff;
   border: none;
   border-radius: var(--radius-btn);
@@ -260,14 +262,14 @@ header {
 }
 
 #cart-button:hover {
-  background-color: var(--accent-hover);
+  background-color: var(--text-main);
   transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(230, 126, 159, 0.45);
 }
 
 .cart-badge {
   background: #fff;
-  color: var(--accent);
+  color: var(--accent-contrast);
   border-radius: 50px;
   font-size: 0.78rem;
   font-weight: 700;
@@ -301,15 +303,20 @@ header {
 }
 
 .category-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--accent-contrast);
+  color: var(--accent-contrast);
 }
 
 .category-btn.active {
-  background: var(--accent);
+  background: var(--accent-contrast);
   color: #fff;
-  border-color: var(--accent);
+  border-color: var(--accent-contrast);
   box-shadow: 0 2px 8px rgba(230, 126, 159, 0.3);
+}
+
+.category-btn:focus-visible {
+  outline: 3px solid var(--accent-contrast);
+  outline-offset: 2px;
 }
 
 /* -------------------------------------------------
@@ -388,7 +395,7 @@ main {
 }
 
 .card-price {
-  color: var(--accent);
+  color: var(--accent-contrast);
   font-weight: 700;
   font-family: var(--font-body);
   font-size: 1.1rem;
@@ -404,7 +411,7 @@ main {
   display: inline-flex;
   align-items: center;
   border-radius: var(--radius-btn);
-  color: var(--accent-hover);
+  color: var(--accent-contrast);
   font-size: 0.8rem;
   font-weight: 600;
   line-height: 1.2;
@@ -416,13 +423,13 @@ main {
 
 .card-product-link:hover {
   background: var(--accent-soft);
-  color: var(--accent-hover);
+  color: var(--accent-contrast);
   text-decoration-color: currentColor;
 }
 
 .card-product-link:focus-visible,
 .modal-product-link:focus-visible {
-  outline: 3px solid rgba(230, 126, 159, 0.4);
+  outline: 3px solid var(--accent-contrast);
   outline-offset: 2px;
 }
 
@@ -430,8 +437,7 @@ main {
 .btn-like {
   background: transparent;
   border: none;
-  outline: none;
-  color: #b0a0a0;
+  color: var(--text-light);
   font-size: 0.88rem;
   font-family: var(--font-body);
   font-weight: 500;
@@ -447,18 +453,23 @@ main {
 }
 
 .btn-like:hover {
-  color: var(--accent);
+  color: var(--accent-contrast);
   background: var(--accent-soft);
 }
 
 .btn-like.liked {
-  color: var(--accent);
+  color: var(--accent-contrast);
   font-weight: 600;
+}
+
+.btn-like:focus-visible {
+  outline: 3px solid var(--accent-contrast);
+  outline-offset: 2px;
 }
 
 /* Botón añadir */
 .btn-add {
-  background: var(--accent);
+  background: var(--accent-contrast);
   border: none;
   color: #fff;
   padding: 9px 14px;
@@ -473,7 +484,7 @@ main {
 }
 
 .btn-add:hover {
-  background: var(--accent-hover);
+  background: var(--text-main);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(230, 126, 159, 0.3);
 }
@@ -593,13 +604,13 @@ main {
 
 .pagination .page-link:hover {
   background: var(--accent-soft);
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--accent-contrast);
+  color: var(--accent-contrast);
 }
 
 .pagination .page-item.active .page-link {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent-contrast);
+  border-color: var(--accent-contrast);
   color: #fff;
   box-shadow: 0 2px 8px rgba(230, 126, 159, 0.35);
 }
@@ -667,7 +678,7 @@ main {
 .modal-image-tag {
   display: inline-block;
   background: var(--accent-soft);
-  color: var(--accent);
+  color: var(--accent-contrast);
   font-family: var(--font-body);
   font-size: 0.7rem;
   font-weight: 600;
@@ -704,7 +715,7 @@ main {
 .modal-nav-btn {
   background: #fff;
   border: 1px solid rgba(230, 126, 159, 0.3);
-  color: var(--accent);
+  color: var(--accent-contrast);
   border-radius: 50%;
   width: 32px;
   height: 32px;
@@ -718,9 +729,9 @@ main {
 }
 
 .modal-nav-btn:hover {
-  background: var(--accent);
+  background: var(--accent-contrast);
   color: #fff;
-  border-color: var(--accent);
+  border-color: var(--accent-contrast);
   transform: scale(1.1);
 }
 
@@ -731,7 +742,7 @@ main {
 
 .modal-nav-btn:disabled:hover {
   background: #fff;
-  color: var(--accent);
+  color: var(--accent-contrast);
   transform: none;
 }
 
@@ -754,7 +765,7 @@ main {
 
 .modal-close-btn:hover {
   background: var(--accent-soft);
-  color: var(--accent-hover);
+  color: var(--accent-contrast);
   transform: rotate(6deg);
 }
 
@@ -858,7 +869,7 @@ main {
   font-family: var(--font-body);
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--accent-contrast);
   letter-spacing: -0.02em;
 }
 
@@ -882,7 +893,7 @@ main {
   justify-content: center;
   border: 1px solid rgba(216, 92, 130, 0.42);
   border-radius: var(--radius-btn);
-  color: var(--accent-hover);
+  color: var(--accent-contrast);
   font-family: var(--font-body);
   font-size: 0.84rem;
   font-weight: 600;
@@ -893,11 +904,11 @@ main {
 
 .modal-product-link:hover {
   background: var(--accent-soft);
-  color: var(--accent-hover);
+  color: var(--accent-contrast);
 }
 
 .modal-add-btn {
-  background: var(--accent);
+  background: var(--accent-contrast);
   border: none;
   color: #fff;
   padding: 9px 20px;
@@ -912,7 +923,7 @@ main {
 }
 
 .modal-add-btn:hover {
-  background: var(--accent-hover);
+  background: var(--text-main);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(230, 126, 159, 0.45);
 }
@@ -938,7 +949,7 @@ main {
 }
 
 #cartModal .modal-header {
-  background: var(--accent);
+  background: var(--accent-contrast);
   color: #fff;
   border-top-left-radius: var(--radius-card);
   border-top-right-radius: var(--radius-card);
@@ -1005,7 +1016,7 @@ main {
 }
 
 .cart-item-price {
-  color: var(--accent);
+  color: var(--accent-contrast);
   font-weight: 600;
   font-size: 0.85rem;
   margin-top: 0.2rem;
@@ -1042,7 +1053,7 @@ main {
 .btn-qty {
   border: 1px solid transparent;
   background: var(--accent-soft);
-  color: var(--accent);
+  color: var(--accent-contrast);
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -1060,7 +1071,7 @@ main {
 }
 
 .btn-qty:hover {
-  background: var(--accent);
+  background: var(--accent-contrast);
   color: #fff;
 }
 
@@ -1096,7 +1107,7 @@ main {
 
 .cart-remove:hover {
   background: var(--accent-soft);
-  color: var(--accent-hover);
+  color: var(--accent-contrast);
 }
 
 .cart-empty {
@@ -1133,7 +1144,7 @@ main {
   font-family: var(--font-heading);
   font-size: 1.4rem;
   font-weight: 700;
-  color: var(--accent);
+  color: var(--accent-contrast);
 }
 
 #clear-cart {
@@ -1145,15 +1156,15 @@ main {
 }
 
 #clear-cart:hover:not(:disabled) {
-  color: var(--accent-hover);
-  border-color: var(--accent-hover);
+  color: var(--accent-contrast);
+  border-color: var(--accent-contrast);
   background: transparent;
 }
 
 #cartModal .modal-footer .btn-primary,
 #confirm-cart {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--accent-contrast);
+  border-color: var(--accent-contrast);
   color: #fff;
   border-radius: var(--radius-btn);
   font-weight: 600;
@@ -1165,8 +1176,8 @@ main {
 
 #cartModal .modal-footer .btn-primary:hover:not(:disabled),
 #confirm-cart:hover:not(:disabled) {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
+  background: var(--text-main);
+  border-color: var(--text-main);
   transform: translateY(-2px);
 }
 
@@ -1228,7 +1239,7 @@ main {
   position: fixed;
   bottom: 40px;
   right: 40px;
-  background-color: var(--accent);
+  background-color: var(--accent-contrast);
   color: #fff;
   padding: 12px 15px;
   border-radius: 30px;
