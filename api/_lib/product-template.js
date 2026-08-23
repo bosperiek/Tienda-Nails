@@ -172,9 +172,19 @@ function renderPrice({ price, salePrice }) {
     return '<p class="product-price product-price--unavailable">Precio no disponible</p>';
 }
 
-function renderProductPage({ product, canonicalUrl, siteUrl, imageUrl = null } = {}) {
+function renderProductPage({
+    product,
+    canonicalUrl,
+    siteUrl,
+    imageUrl = null,
+    indexable = true
+} = {}) {
     if (!product || typeof product !== 'object' || Array.isArray(product)) {
         throw new TypeError('product debe ser un producto normalizado.');
+    }
+
+    if (typeof indexable !== 'boolean') {
+        throw new TypeError('indexable debe ser un booleano.');
     }
 
     const productId = requireNonEmptyString(product.id, 'product.id');
@@ -256,6 +266,12 @@ function renderProductPage({ product, canonicalUrl, siteUrl, imageUrl = null } =
             priceCurrency: 'MXN',
             price: displayedPrice.toFixed(2)
         };
+
+        if (stock !== null) {
+            productStructuredData.offers.availability = stock > 0
+                ? 'https://schema.org/InStock'
+                : 'https://schema.org/OutOfStock';
+        }
     }
 
     const breadcrumbStructuredData = {
@@ -284,6 +300,12 @@ function renderProductPage({ product, canonicalUrl, siteUrl, imageUrl = null } =
         '@context': 'https://schema.org',
         '@graph': [productStructuredData, breadcrumbStructuredData]
     });
+    const robotsMetadata = indexable
+        ? ''
+        : '<meta name="robots" content="noindex, follow">';
+    const structuredDataContent = indexable
+        ? `<script type="application/ld+json">${structuredData}</script>`
+        : '';
 
     const categoryBreadcrumb = visibleCategory
         ? `<li><span>${escapedCategory}</span></li>`
@@ -358,6 +380,7 @@ function renderProductPage({ product, canonicalUrl, siteUrl, imageUrl = null } =
     <meta name="theme-color" content="#f8f0ed">
     <title>${escapedPageTitle}</title>
     <meta name="description" content="${escapedMetadataDescription}">
+    ${robotsMetadata}
     <link rel="canonical" href="${escapeHtml(safeCanonicalUrl)}">
     <meta property="og:title" content="${escapedPageTitle}">
     <meta property="og:type" content="website">
@@ -366,7 +389,7 @@ function renderProductPage({ product, canonicalUrl, siteUrl, imageUrl = null } =
     <meta property="og:site_name" content="${SITE_NAME}">
     <meta property="og:locale" content="es_MX">
     ${openGraphImages}
-    <script type="application/ld+json">${structuredData}</script>
+    ${structuredDataContent}
     <link rel="stylesheet" href="${escapeHtml(stylesheetUrl)}">
   </head>
   <body>

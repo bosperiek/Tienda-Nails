@@ -11,6 +11,7 @@ const {
 const { renderProductPage } = require('./_lib/product-template');
 
 const SITE_URL = process.env.SITE_URL || 'https://tienda-nails.vercel.app';
+const PRODUCT_ID_PATTERN = /^prod_[0-9]+$/;
 const ALLOWED_METHODS = 'GET, HEAD';
 const HTML_HEADERS = Object.freeze({
     'Content-Type': 'text/html; charset=utf-8',
@@ -68,6 +69,22 @@ function resolveProductImageUrl(image, siteUrl) {
     }
 }
 
+async function resolveActiveReplacementUrl(product, repository, siteUrl) {
+    const replacementId = product.replacementId;
+
+    if (product.active !== false
+        || typeof replacementId !== 'string'
+        || !PRODUCT_ID_PATTERN.test(replacementId)
+        || replacementId === product.id) {
+        return null;
+    }
+
+    const replacement = await repository.getProductById(replacementId);
+    if (!replacement || replacement.active !== true) return null;
+
+    return createProductUrl(replacement, siteUrl);
+}
+
 function createProductHandler({
     repository = productRepository,
     siteUrl = SITE_URL,
@@ -107,6 +124,23 @@ function createProductHandler({
                 return;
             }
 
+            if (product.active !== true && product.active !== false) {
+                sendResponse(request, response, 404, STATUS_PAGES[404]);
+                return;
+            }
+
+            const replacementUrl = await resolveActiveReplacementUrl(
+                product,
+                repository,
+                siteUrl
+            );
+            if (replacementUrl) {
+                sendResponse(request, response, 308, '', {
+                    Location: replacementUrl
+                });
+                return;
+            }
+
             const canonicalSlug = createProductSlug(product.name);
             const canonicalPath = createProductPath(product);
             const canonicalUrl = createProductUrl(product, siteUrl);
@@ -127,7 +161,8 @@ function createProductHandler({
                 product,
                 canonicalUrl,
                 siteUrl,
-                imageUrl
+                imageUrl,
+                indexable: product.active === true
             });
 
             sendResponse(request, response, 200, html);
