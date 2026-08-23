@@ -57,7 +57,7 @@ function hasInvalidQueryValue(value) {
     return Array.isArray(value) || (value !== undefined && typeof value !== 'string');
 }
 
-async function resolveActiveReplacementUrl(product, repository, siteUrl) {
+function resolveActiveReplacementUrl(product, products, siteUrl) {
     const replacementId = product.replacementId;
 
     if (product.active !== false
@@ -67,10 +67,92 @@ async function resolveActiveReplacementUrl(product, repository, siteUrl) {
         return null;
     }
 
-    const replacement = await repository.getProductById(replacementId);
+    const replacement = products.find(candidate => candidate.id === replacementId);
     if (!replacement || replacement.active !== true) return null;
 
     return createProductUrl(replacement, siteUrl);
+}
+
+function createStableHash(value) {
+    let hash = 2_166_136_261;
+
+    for (const character of String(value)) {
+        hash ^= character.codePointAt(0);
+        hash = Math.imul(hash, 16_777_619);
+    }
+
+    return hash >>> 0;
+}
+
+function getDisplayedPrice(product) {
+    const salePrice = Number.isFinite(product?.salePrice) && product.salePrice >= 0
+        ? product.salePrice
+        : null;
+    const price = Number.isFinite(product?.price) && product.price >= 0
+        ? product.price
+        : null;
+
+    return salePrice ?? price;
+}
+
+function selectRelatedProducts(product, products, {
+    siteUrl = SITE_URL,
+    limit = 4
+} = {}) {
+    if (!product || !Array.isArray(products)) return [];
+
+    const category = typeof product.category === 'string'
+        ? product.category.trim()
+        : '';
+    if (!category) return [];
+
+    const safeLimit = Number.isInteger(limit) && limit > 0
+        ? Math.min(limit, 4)
+        : 4;
+    const seenIds = new Set();
+    const seenUrls = new Set();
+    const candidates = [];
+
+    for (const candidate of products) {
+        if (!candidate
+            || candidate.active !== true
+            || candidate.id === product.id
+            || typeof candidate.id !== 'string'
+            || !PRODUCT_ID_PATTERN.test(candidate.id)
+            || candidate.category !== category
+            || seenIds.has(candidate.id)) {
+            continue;
+        }
+
+        const price = getDisplayedPrice(candidate);
+        const imageUrl = resolveProductImageUrl(candidate.image, siteUrl);
+        const canonicalUrl = createProductUrl(candidate, siteUrl);
+
+        if (price === null
+            || !imageUrl
+            || !canonicalUrl
+            || seenUrls.has(canonicalUrl)) {
+            continue;
+        }
+
+        seenIds.add(candidate.id);
+        seenUrls.add(canonicalUrl);
+        candidates.push({
+            product: candidate,
+            canonicalUrl,
+            imageUrl,
+            price,
+            score: createStableHash(`${product.id}:${candidate.id}`)
+        });
+    }
+
+    return candidates
+        .sort((firstCandidate, secondCandidate) => (
+            firstCandidate.score - secondCandidate.score
+            || firstCandidate.product.id.localeCompare(secondCandidate.product.id)
+        ))
+        .slice(0, safeLimit)
+        .map(({ score, ...candidate }) => candidate);
 }
 
 function createProductHandler({
@@ -78,8 +160,8 @@ function createProductHandler({
     siteUrl = SITE_URL,
     renderPage = renderProductPage
 } = {}) {
-    if (!repository || typeof repository.getProductById !== 'function') {
-        throw new TypeError('repository debe implementar getProductById().');
+    if (!repository || typeof repository.getAllProducts !== 'function') {
+        throw new TypeError('repository debe implementar getAllProducts().');
     }
 
     if (typeof renderPage !== 'function') {
@@ -99,13 +181,17 @@ function createProductHandler({
         const id = request.query?.id;
         const slug = request.query?.slug;
 
-        if (hasInvalidQueryValue(id) || hasInvalidQueryValue(slug)) {
+        if (hasInvalidQueryValue(id)
+            || hasInvalidQueryValue(slug)
+            || typeof id !== 'string'
+            || !PRODUCT_ID_PATTERN.test(id)) {
             sendResponse(request, response, 404, STATUS_PAGES[404]);
             return;
         }
 
         try {
-            const product = await repository.getProductById(id);
+            const products = await repository.getAllProducts();
+            const product = products.find(candidate => candidate.id === id) || null;
 
             if (!product) {
                 sendResponse(request, response, 404, STATUS_PAGES[404]);
@@ -117,9 +203,9 @@ function createProductHandler({
                 return;
             }
 
-            const replacementUrl = await resolveActiveReplacementUrl(
+            const replacementUrl = resolveActiveReplacementUrl(
                 product,
-                repository,
+                products,
                 siteUrl
             );
             if (replacementUrl) {
@@ -145,11 +231,15 @@ function createProductHandler({
             }
 
             const imageUrl = resolveProductImageUrl(product.image, siteUrl);
+            const relatedProducts = selectRelatedProducts(product, products, {
+                siteUrl
+            });
             const html = renderPage({
                 product,
                 canonicalUrl,
                 siteUrl,
                 imageUrl,
+                relatedProducts,
                 indexable: product.active === true
             });
 
@@ -175,3 +265,4 @@ const handler = createProductHandler();
 
 module.exports = handler;
 module.exports.createProductHandler = createProductHandler;
+module.exports.selectRelatedProducts = selectRelatedProducts;

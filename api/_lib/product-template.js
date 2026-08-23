@@ -8,9 +8,6 @@ const PRICE_FORMATTER = new Intl.NumberFormat('es-MX', {
     style: 'currency',
     currency: 'MXN'
 });
-const STOCK_FORMATTER = new Intl.NumberFormat('es-MX', {
-    maximumFractionDigits: 2
-});
 
 function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, character => ({
@@ -168,6 +165,7 @@ function renderProductPage({
     canonicalUrl,
     siteUrl,
     imageUrl = null,
+    relatedProducts = [],
     indexable = true
 } = {}) {
     if (!product || typeof product !== 'object' || Array.isArray(product)) {
@@ -203,7 +201,6 @@ function renderProductPage({
     const visibleCategoryLabel = formatCategoryLabel(visibleCategory);
     const description = normalizeOptionalText(product.description);
     const brand = normalizeOptionalText(product.brand);
-    const subcategory = normalizeOptionalText(product.subcategory);
     const price = normalizeOptionalNumber(product.price);
     const salePrice = normalizeOptionalNumber(product.salePrice);
     const stock = normalizeOptionalNumber(product.stock);
@@ -228,8 +225,6 @@ function renderProductPage({
     const escapedName = escapeHtml(productName);
     const escapedCategory = escapeHtml(visibleCategoryLabel);
     const escapedDescription = escapeHtml(description);
-    const escapedBrand = escapeHtml(brand);
-    const escapedSubcategory = escapeHtml(subcategory);
     const escapedAltText = escapeHtml(altText);
     const escapedPageTitle = escapeHtml(pageTitle);
     const escapedMetadataDescription = escapeHtml(metadataDescription);
@@ -309,15 +304,12 @@ function renderProductPage({
         ? `<script type="application/ld+json">${structuredData}</script>`
         : '';
 
-    const categoryBreadcrumb = visibleCategory
-        ? `<li><span>${escapedCategory}</span></li>`
-        : '';
     const categoryContent = visibleCategory
         ? `<p class="product-category">${escapedCategory}</p>`
         : '';
     const descriptionContent = description
         ? `<section class="product-description" aria-labelledby="product-description-heading">
-            <h2 id="product-description-heading">Descripción</h2>
+            <h2 id="product-description-heading">Detalles del producto</h2>
             <p>${escapedDescription}</p>
           </section>`
         : '';
@@ -369,21 +361,52 @@ function renderProductPage({
             <span>Imagen no disponible</span>
           </div>`;
 
-    const detailRows = [
-        visibleCategory
-            ? `<div><dt>Categoría</dt><dd>${escapedCategory}</dd></div>`
-            : '',
-        subcategory
-            ? `<div><dt>Subcategoría</dt><dd>${escapedSubcategory}</dd></div>`
-            : '',
-        brand
-            ? `<div><dt>Marca</dt><dd>${escapedBrand}</dd></div>`
-            : '',
-        stock !== null
-            ? `<div><dt>Existencias</dt><dd>${escapeHtml(STOCK_FORMATTER.format(stock))}</dd></div>`
-            : '',
-        `<div><dt>Referencia</dt><dd>${escapedId}</dd></div>`
-    ].filter(Boolean).join('');
+    const relatedCards = Array.isArray(relatedProducts)
+        ? relatedProducts.slice(0, 4).map(related => {
+            const relatedProduct = related?.product;
+            const relatedName = normalizeOptionalText(relatedProduct?.name);
+            const relatedCanonicalUrl = validateHttpUrl(related?.canonicalUrl, 'related.canonicalUrl');
+            const relatedImageUrl = resolveProductImageUrl(related?.imageUrl, safeSiteUrl);
+            const relatedPrice = normalizeOptionalNumber(related?.price);
+
+            if (!relatedName
+                || !relatedCanonicalUrl
+                || !relatedImageUrl
+                || relatedPrice === null) {
+                return '';
+            }
+
+            const relatedAltText = normalizeOptionalText(relatedProduct.altText)
+                || relatedName;
+
+            return `<a class="related-product-card" href="${escapeHtml(relatedCanonicalUrl)}">
+              <figure class="related-product-card__image">
+                <img
+                  src="${escapeHtml(relatedImageUrl)}"
+                  alt="${escapeHtml(relatedAltText)}"
+                  loading="lazy"
+                  decoding="async"
+                >
+              </figure>
+              <div class="related-product-card__body">
+                <h3>${escapeHtml(relatedName)}</h3>
+                <p>${escapeHtml(PRICE_FORMATTER.format(relatedPrice))}</p>
+                <span>Ver producto</span>
+              </div>
+            </a>`;
+        }).filter(Boolean)
+        : [];
+    const relatedProductsContent = relatedCards.length > 0
+        ? `<section class="related-products" aria-labelledby="related-products-heading">
+          <div class="related-products__heading">
+            <p>Descubre más</p>
+            <h2 id="related-products-heading">También te puede interesar</h2>
+          </div>
+          <div class="related-products__grid">
+            ${relatedCards.join('')}
+          </div>
+        </section>`
+        : '';
 
     return `<!DOCTYPE html>
 <html lang="es">
@@ -425,17 +448,6 @@ function renderProductPage({
       </div>
     </header>
 
-    <div class="breadcrumb-shell">
-      <nav class="breadcrumb" aria-label="Migas de pan">
-        <ol>
-          <li><a href="${escapeHtml(homeUrl)}">Inicio</a></li>
-          <li><a href="${escapeHtml(catalogUrl)}">Catálogo</a></li>
-          ${categoryBreadcrumb}
-          <li aria-current="page"><span>${escapedName}</span></li>
-        </ol>
-      </nav>
-    </div>
-
     <main id="contenido-principal" class="product-page">
       <article class="product-layout">
         <section class="product-gallery" aria-label="Imágenes de ${escapedName}">
@@ -455,28 +467,25 @@ function renderProductPage({
               Volver al catálogo
             </a>
           </div>
-
-          <section class="product-details" aria-labelledby="product-details-heading">
-            <div class="product-details__heading">
-              <p>Información</p>
-              <h2 id="product-details-heading">Detalles del producto</h2>
-            </div>
-            <dl>${detailRows}</dl>
-          </section>
         </div>
       </article>
+
+      ${relatedProductsContent}
     </main>
 
     <footer class="site-footer">
       <div class="site-footer__inner">
-        <div>
-          <p class="site-footer__brand">Nanty Nails Shop</p>
-          <p class="site-footer__copy">Tu aliado para transformar tu pasión por la belleza en una profesión rentable.</p>
+        <p class="site-footer__brand">Nanty Nails Shop</p>
+        <div class="site-footer__links">
+          <nav aria-label="Navegación del pie de página">
+            <a href="${escapeHtml(homeUrl)}">Inicio</a>
+            <a href="${escapeHtml(catalogUrl)}">Catálogo</a>
+          </nav>
+          <nav aria-label="Redes sociales">
+            <a href="https://www.facebook.com/nancy23juarezperez" target="_blank" rel="noopener noreferrer">Facebook</a>
+            <a href="https://www.tiktok.com/@nantynailsshop" target="_blank" rel="noopener noreferrer">TikTok</a>
+          </nav>
         </div>
-        <nav aria-label="Navegación del pie de página">
-          <a href="${escapeHtml(homeUrl)}">Inicio</a>
-          <a href="${escapeHtml(catalogUrl)}">Catálogo</a>
-        </nav>
       </div>
     </footer>
     <script src="${escapeHtml(cartScriptUrl)}"></script>
