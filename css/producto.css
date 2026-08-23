@@ -23,7 +23,7 @@
   --product-accent-hover: #d85c82;
   --product-accent-soft: rgba(230, 126, 159, 0.12);
   --product-border: rgba(59, 47, 47, 0.1);
-  --product-shadow: 0 16px 45px rgba(59, 47, 47, 0.08);
+  --product-shadow: 0 14px 36px rgba(59, 47, 47, 0.07);
   --product-heading: 'Cormorant Garamond', Georgia, serif;
   --product-body: 'DM Sans', Arial, sans-serif;
   --product-radius: 24px;
@@ -209,13 +209,13 @@ a:focus-visible {
 .product-page {
   width: min(calc(100% - 2rem), var(--product-content));
   margin: 0 auto;
-  padding: clamp(1.5rem, 4vw, 3.5rem) 0 clamp(4rem, 8vw, 7rem);
+  padding: clamp(1.25rem, 3vw, 2.5rem) 0 clamp(3.5rem, 6vw, 5.5rem);
 }
 
 .product-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(19rem, 0.92fr);
-  gap: clamp(2.5rem, 6vw, 5rem);
+  grid-template-columns: minmax(0, 1.02fr) minmax(20rem, 0.98fr);
+  gap: clamp(2rem, 4vw, 4rem);
   align-items: start;
 }
 
@@ -226,28 +226,27 @@ a:focus-visible {
 
 .product-gallery__primary {
   position: relative;
-  min-height: clamp(28rem, 48vw, 38rem);
+  min-height: clamp(24rem, 38vw, 32rem);
   margin: 0;
-  padding: clamp(1.5rem, 4vw, 3.5rem);
+  padding: clamp(1.25rem, 3vw, 2.5rem);
   display: grid;
   place-items: center;
   overflow: hidden;
   border: 1px solid var(--product-border);
   border-radius: var(--product-radius);
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(255, 250, 248, 0.98));
+  background: var(--product-surface);
   box-shadow: var(--product-shadow);
 }
 
 .product-gallery__primary::after {
   content: '';
   position: absolute;
-  right: -4rem;
-  bottom: -5rem;
-  width: 13rem;
-  height: 13rem;
+  right: -3.5rem;
+  bottom: -4rem;
+  width: 9rem;
+  height: 9rem;
   border-radius: 50%;
-  background: var(--product-accent-soft);
+  background: rgba(230, 126, 159, 0.08);
   pointer-events: none;
 }
 
@@ -256,7 +255,7 @@ a:focus-visible {
   z-index: 1;
   width: 100%;
   height: 100%;
-  max-height: 31rem;
+  max-height: 27rem;
   object-fit: contain;
 }
 
@@ -291,34 +290,34 @@ a:focus-visible {
 
 .product-summary {
   position: sticky;
-  top: 108px;
-  padding-top: clamp(0.25rem, 1vw, 1rem);
+  top: 96px;
+  padding-top: clamp(0.4rem, 1vw, 0.85rem);
 }
 
 .product-category {
   display: inline-flex;
-  margin: 0 0 1rem;
-  padding: 0.4rem 0.8rem;
+  margin: 0 0 0.85rem;
+  padding: 0.38rem 0.72rem;
+  border: 1px solid rgba(216, 92, 130, 0.14);
   border-radius: 999px;
   background: var(--product-accent-soft);
   color: var(--product-accent-hover);
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  line-height: 1.2;
-  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  line-height: 1.25;
 }
 
 .product-summary h1 {
-  max-width: 16ch;
+  max-width: 20ch;
   margin: 0;
   color: var(--product-text);
   font-family: var(--product-heading);
-  font-size: clamp(2.65rem, 5vw, 4.5rem);
+  font-size: clamp(2.35rem, 4vw, 3.6rem);
   font-weight: 700;
   letter-spacing: -0.035em;
-  line-height: 0.98;
-  overflow-wrap: anywhere;
+  line-height: 1.05;
+  overflow-wrap: break-word;
 }
 
 .product-price {
@@ -326,10 +325,10 @@ a:focus-visible {
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.65rem 0.9rem;
-  margin: clamp(1.5rem, 3vw, 2.25rem) 0 0;
+  margin: clamp(1.15rem, 2.5vw, 1.65rem) 0 0;
   color: var(--product-accent-hover);
   font-family: var(--product-body);
-  font-size: clamp(1.8rem, 3vw, 2.45rem);
+  font-size: clamp(1.8rem, 2.5vw, 2.25rem);
   font-weight: 600;
   letter-spacing: -0.025em;
   line-height: 1.15;
@@ -353,8 +352,9 @@ a:focus-visible {
 }
 
 .product-description {
-  margin-top: 2rem;
-  padding-top: 1.75rem;
+  max-width: 38rem;
+  margin-top: 1.5rem;
+  padding-top: 1.35rem;
   border-top: 1px solid var(--product-border);
 }
 
@@ -373,20 +373,21 @@ a:focus-visible {
 }
 
 .product-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  margin-top: 2.25rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.7rem;
+  margin-top: 1.75rem;
 }
 
 .product-button {
-  min-height: 3rem;
-  padding: 0.78rem 1.35rem;
+  width: 100%;
+  min-height: 3.125rem;
+  padding: 0.8rem 1.25rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: 1px solid transparent;
-  border-radius: 999px;
+  border-radius: 14px;
   font-size: 0.92rem;
   font-weight: 600;
   line-height: 1.2;
@@ -400,13 +401,13 @@ a:focus-visible {
 
 .product-button--primary {
   background: var(--product-accent);
-  box-shadow: 0 8px 22px rgba(230, 126, 159, 0.26);
+  box-shadow: 0 7px 18px rgba(230, 126, 159, 0.22);
   color: #2c2121;
 }
 
 .product-button--primary:hover {
   background: var(--product-accent-hover);
-  box-shadow: 0 10px 26px rgba(216, 92, 130, 0.32);
+  box-shadow: 0 9px 22px rgba(216, 92, 130, 0.28);
   color: #fff;
 }
 
@@ -422,11 +423,11 @@ a:focus-visible {
 }
 
 .product-details {
-  margin-top: clamp(3.5rem, 8vw, 6.5rem);
-  padding: clamp(1.5rem, 4vw, 2.5rem);
+  margin-top: clamp(2.75rem, 5vw, 4.5rem);
+  padding: clamp(1.3rem, 3vw, 2rem);
   display: grid;
   grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
-  gap: 2rem clamp(2rem, 6vw, 5rem);
+  gap: 1.5rem clamp(2rem, 4vw, 3.5rem);
   border: 1px solid var(--product-border);
   border-radius: var(--product-radius);
   background: rgba(255, 255, 255, 0.75);
@@ -445,8 +446,8 @@ a:focus-visible {
 .product-details__heading h2 {
   margin: 0;
   font-family: var(--product-heading);
-  font-size: clamp(1.9rem, 3vw, 2.55rem);
-  line-height: 1.05;
+  font-size: clamp(1.8rem, 2.5vw, 2.3rem);
+  line-height: 1.08;
 }
 
 .product-details dl {
@@ -482,6 +483,11 @@ a:focus-visible {
   color: var(--product-text);
   font-weight: 600;
   overflow-wrap: anywhere;
+}
+
+.product-details dl > div:last-child dd {
+  color: var(--product-muted);
+  font-size: 0.9rem;
 }
 
 .site-footer {
@@ -535,11 +541,11 @@ a:focus-visible {
 @media (max-width: 899px) {
   .product-layout {
     grid-template-columns: minmax(0, 1fr);
-    gap: 2.25rem;
+    gap: 2rem;
   }
 
   .product-gallery__primary {
-    min-height: clamp(21rem, 78vw, 34rem);
+    min-height: clamp(20rem, 64vw, 30rem);
   }
 
   .product-summary {
@@ -582,17 +588,18 @@ a:focus-visible {
   }
 
   .product-page {
-    padding-bottom: 3.5rem;
+    padding-top: 1.1rem;
+    padding-bottom: 3.25rem;
   }
 
   .product-gallery__primary {
-    min-height: clamp(18rem, 88vw, 26rem);
+    min-height: clamp(16.5rem, 76vw, 22rem);
     padding: 1.15rem;
     border-radius: 18px;
   }
 
   .product-summary h1 {
-    font-size: clamp(2.35rem, 12vw, 3.4rem);
+    font-size: clamp(2.2rem, 10vw, 2.8rem);
   }
 
   .product-actions {
@@ -605,6 +612,7 @@ a:focus-visible {
   }
 
   .product-details {
+    margin-top: 2.5rem;
     padding: 1.3rem;
     border-radius: 18px;
   }

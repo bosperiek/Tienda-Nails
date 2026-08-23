@@ -48,6 +48,20 @@ function normalizeOptionalText(value) {
     return normalized === '' ? null : normalized;
 }
 
+function formatCategoryLabel(value) {
+    const category = normalizeOptionalText(value);
+    if (!category) return null;
+
+    const label = category
+        .replace(/[-_]+/gu, ' ')
+        .replace(/\s+/gu, ' ')
+        .trim();
+
+    return label
+        ? `${label.charAt(0).toLocaleUpperCase('es-MX')}${label.slice(1)}`
+        : null;
+}
+
 function truncateMetadataText(value, maxLength = METADATA_DESCRIPTION_MAX_LENGTH) {
     const characters = Array.from(value);
     if (characters.length <= maxLength) return value;
@@ -197,6 +211,7 @@ function renderProductPage({
     const visibleCategory = category && !hasSameText(category, productName)
         ? category
         : null;
+    const visibleCategoryLabel = formatCategoryLabel(visibleCategory);
     const description = normalizeOptionalText(product.description);
     const brand = normalizeOptionalText(product.brand);
     const subcategory = normalizeOptionalText(product.subcategory);
@@ -213,7 +228,7 @@ function renderProductPage({
 
     const escapedId = escapeHtml(productId);
     const escapedName = escapeHtml(productName);
-    const escapedCategory = escapeHtml(visibleCategory);
+    const escapedCategory = escapeHtml(visibleCategoryLabel);
     const escapedDescription = escapeHtml(description);
     const escapedBrand = escapeHtml(brand);
     const escapedSubcategory = escapeHtml(subcategory);
