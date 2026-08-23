@@ -430,6 +430,22 @@ section .card {
   background-color: #ffffff;
 }
 
+.featured-products-status {
+  max-width: 620px;
+  margin: 0 auto 1.5rem;
+  color: var(--secondary-color);
+  text-align: center;
+}
+
+.featured-product-card {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.featured-product-image-link {
+  display: block;
+}
+
 .featured-products .service-card-img {
   object-fit: contain;
   padding: 0.75rem;
@@ -438,9 +454,46 @@ section .card {
 
 .featured-products .card-body {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 86px;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  min-height: 190px;
+  padding: 1.25rem 1rem;
+}
+
+.featured-products .card-title {
+  margin-bottom: 0.75rem;
+  overflow-wrap: anywhere;
+  line-height: 1.25;
+}
+
+.featured-product-title-link {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.featured-product-price {
+  max-width: 100%;
+  margin: 0 0 1rem;
+  color: var(--accent-contrast);
+  font-family: var(--font-family-headings);
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.featured-product-action {
+  align-self: center;
+  max-width: 100%;
+  margin-top: auto;
+  white-space: normal;
+}
+
+.featured-product-image-link:focus-visible,
+.featured-product-title-link:focus-visible,
+.featured-product-action:focus-visible {
+  outline: 3px solid var(--accent-contrast);
+  outline-offset: 3px;
 }
 
 /* Cursos con la misma elevación suave de las rutas y servicios. */
@@ -766,13 +819,18 @@ section .card {
   }
 
   .featured-products .card-body {
-    min-height: 76px;
-    padding: 0.85rem 0.65rem;
+    min-height: 200px;
+    padding: 1rem 0.65rem;
   }
 
   .featured-products .card-title {
     font-size: 1rem;
-    margin-bottom: 0;
+    margin-bottom: 0.65rem;
+  }
+
+  .featured-product-action {
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
   }
 
   #camino .camino-grid {

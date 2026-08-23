@@ -53,8 +53,163 @@ document.addEventListener("DOMContentLoaded", function () {
         observer.observe(el);
     });
 
+    // --- 4. PRODUCTOS DESTACADOS REALES ---
+    (function initFeaturedProducts() {
+        const grid = document.getElementById('featured-products-grid');
+        const status = document.getElementById('featured-products-status');
+        if (!grid || !status) return;
 
-    // --- 4. SCROLL SUAVE Y PAUSADO PARA LOS ENLACES INTERNOS ---
+        const endpoint = '/api/featured-products';
+        const maxProducts = 6;
+        const fallbackImage = 'https://placehold.co/600x600/f8f0ed/a13f62?text=Sin+Imagen';
+        const currencyFormatter = new Intl.NumberFormat('es-MX', {
+            style: 'currency',
+            currency: 'MXN'
+        });
+
+        function setStatus(message, { visible = true } = {}) {
+            status.textContent = message;
+            status.hidden = !visible;
+        }
+
+        function getSafeImageUrl(value) {
+            if (typeof value !== 'string' || !value.trim()) return fallbackImage;
+
+            try {
+                const parsed = new URL(value, window.location.origin);
+                if (parsed.protocol !== 'https:'
+                    || parsed.username
+                    || parsed.password) {
+                    return fallbackImage;
+                }
+                return parsed.href;
+            } catch (error) {
+                return fallbackImage;
+            }
+        }
+
+        function createFeaturedProductCard(product) {
+            if (!product || typeof product !== 'object') return null;
+
+            const name = typeof product.name === 'string' ? product.name.trim() : '';
+            const effectivePrice = Number.isFinite(product.effectivePrice)
+                && product.effectivePrice >= 0
+                ? product.effectivePrice
+                : null;
+            const productPath = window.NantyProductUrl?.createProductPath({
+                id: product.id,
+                name
+            });
+            if (!name || effectivePrice === null || !productPath) return null;
+
+            const column = document.createElement('div');
+            column.className = 'col-6 col-md-4 product-card';
+
+            const card = document.createElement('article');
+            card.className = 'card service-card featured-product-card h-100';
+
+            const imageLink = document.createElement('a');
+            imageLink.className = 'featured-product-image-link';
+            imageLink.href = productPath;
+            imageLink.setAttribute('aria-label', `Ver ${name}`);
+
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'service-card-img-container';
+
+            const image = document.createElement('img');
+            image.className = 'service-card-img';
+            image.src = getSafeImageUrl(product.image);
+            image.alt = typeof product.altText === 'string' && product.altText.trim()
+                ? product.altText.trim()
+                : name;
+            image.loading = 'lazy';
+            image.decoding = 'async';
+            image.addEventListener('error', () => {
+                if (image.src !== fallbackImage) image.src = fallbackImage;
+            });
+
+            const body = document.createElement('div');
+            body.className = 'card-body text-center';
+
+            const heading = document.createElement('h3');
+            heading.className = 'card-title h5';
+
+            const titleLink = document.createElement('a');
+            titleLink.className = 'featured-product-title-link';
+            titleLink.href = productPath;
+            titleLink.textContent = name;
+
+            const price = document.createElement('p');
+            price.className = 'featured-product-price';
+            price.textContent = currencyFormatter.format(effectivePrice);
+
+            const action = document.createElement('a');
+            action.className = 'btn btn-primary btn-sm featured-product-action';
+            action.href = productPath;
+            action.textContent = 'Ver producto';
+            action.setAttribute('aria-label', `Ver producto: ${name}`);
+
+            heading.appendChild(titleLink);
+            body.appendChild(heading);
+            body.appendChild(price);
+            body.appendChild(action);
+            imageContainer.appendChild(image);
+            imageLink.appendChild(imageContainer);
+            card.appendChild(imageLink);
+            card.appendChild(body);
+            column.appendChild(card);
+            return column;
+        }
+
+        async function loadFeaturedProducts() {
+            grid.setAttribute('aria-busy', 'true');
+            setStatus('Cargando productos destacados…');
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'GET',
+                    headers: { Accept: 'application/json' }
+                });
+                if (!response.ok) throw new Error('Respuesta no exitosa');
+
+                const products = await response.json();
+                if (!Array.isArray(products)) throw new TypeError('Respuesta inesperada');
+
+                const fragment = document.createDocumentFragment();
+                const seenIds = new Set();
+                let renderedProducts = 0;
+
+                for (const product of products) {
+                    if (renderedProducts >= maxProducts || seenIds.has(product?.id)) continue;
+                    const card = createFeaturedProductCard(product);
+                    if (!card) continue;
+
+                    seenIds.add(product.id);
+                    fragment.appendChild(card);
+                    renderedProducts += 1;
+                }
+
+                grid.replaceChildren(fragment);
+                if (renderedProducts === 0) {
+                    setStatus('Por ahora no hay productos destacados disponibles.');
+                    return;
+                }
+
+                setStatus('', { visible: false });
+                grid.querySelectorAll('.featured-product-card').forEach(card => observer.observe(card));
+            } catch (error) {
+                grid.replaceChildren();
+                setStatus('No pudimos cargar los productos destacados.');
+            } finally {
+                grid.setAttribute('aria-busy', 'false');
+            }
+        }
+
+        loadFeaturedProducts();
+    })();
+
+
+    // --- 5. SCROLL SUAVE Y PAUSADO PARA LOS ENLACES INTERNOS ---
     let scrollAnimationId = null;
 
     function scrollToSection(targetPosition) {
@@ -108,7 +263,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // --- 5 y 6. CARRUSEL RESPONSIVE DE TESTIMONIOS ---
+    // --- 6 y 7. CARRUSEL RESPONSIVE DE TESTIMONIOS ---
     (function initTestimonialCarousel() {
         const carousel = document.querySelector('.testimonial-carousel');
         const viewport = document.querySelector('.testimonial-viewport');

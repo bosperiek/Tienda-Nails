@@ -354,104 +354,19 @@
         <p class="section-intro">
           Una selección de básicos profesionales para tu mesa de trabajo.
         </p>
-        <div class="row g-4">
-          <div class="col-6 col-lg-4 product-card">
-            <div class="card service-card h-100">
-              <div class="service-card-img-container">
-                <img
-                  src="imagenes/acrilico-cover-strong-pink-fantasy-nails-1oz.webp"
-                  class="service-card-img"
-                  loading="lazy"
-                  decoding="async"
-                  alt="Acrílico Cover Strong Pink de Fantasy Nails"
-                />
-              </div>
-              <div class="card-body text-center">
-                <h3 class="card-title h5">Acrílico Cover Strong Pink</h3>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-lg-4 product-card">
-            <div class="card service-card h-100">
-              <div class="service-card-img-container">
-                <img
-                  src="imagenes/base-coat-gel-organic-nails-15ml.webp"
-                  class="service-card-img"
-                  loading="lazy"
-                  decoding="async"
-                  alt="Base Coat Gel de Organic Nails"
-                />
-              </div>
-              <div class="card-body text-center">
-                <h3 class="card-title h5">Base Coat Gel Organic Nails</h3>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-lg-4 product-card">
-            <div class="card service-card h-100">
-              <div class="service-card-img-container">
-                <img
-                  src="imagenes/drill-pulidor-unas-profesional-25000rpm-blanco.webp"
-                  class="service-card-img"
-                  loading="lazy"
-                  decoding="async"
-                  alt="Drill pulidor profesional blanco para uñas"
-                />
-              </div>
-              <div class="card-body text-center">
-                <h3 class="card-title h5">Drill Profesional 25,000 RPM</h3>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-lg-4 product-card">
-            <div class="card service-card h-100">
-              <div class="service-card-img-container">
-                <img
-                  src="imagenes/set-de-pinceles.webp"
-                  class="service-card-img"
-                  loading="lazy"
-                  decoding="async"
-                  alt="Set profesional de pinceles para uñas"
-                />
-              </div>
-              <div class="card-body text-center">
-                <h3 class="card-title h5">Set de Pinceles</h3>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-lg-4 product-card">
-            <div class="card service-card h-100">
-              <div class="service-card-img-container">
-                <img
-                  src="imagenes/top-coat-organic-brillo-finalizador.webp"
-                  class="service-card-img"
-                  loading="lazy"
-                  decoding="async"
-                  alt="Top Coat Organic Nails de brillo finalizador"
-                />
-              </div>
-              <div class="card-body text-center">
-                <h3 class="card-title h5">Top Coat Organic Nails</h3>
-              </div>
-            </div>
-          </div>
-          <div class="col-6 col-lg-4 product-card">
-            <div class="card service-card h-100">
-              <div class="service-card-img-container">
-                <img
-                  src="imagenes/kit-de-gel-miss-cherry-nude.webp"
-                  class="service-card-img"
-                  loading="lazy"
-                  decoding="async"
-                  alt="Kit de gel nude Miss Cherry"
-                />
-              </div>
-              <div class="card-body text-center">
-                <h3 class="card-title h5">Kit de Gel Miss Cherry Nude</h3>
-              </div>
-            </div>
-          </div>
-        </div>
+        <p
+          id="featured-products-status"
+          class="featured-products-status"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          hidden
+        ></p>
+        <div
+          id="featured-products-grid"
+          class="row g-4"
+          aria-busy="false"
+        ></div>
         <div class="text-center mt-4">
           <a href="tienda.html" class="btn btn-primary btn-lg"
             >Ver catálogo completo</a
@@ -1118,6 +1033,7 @@
     <!-- Bootstrap JS -->
     <script src="shop-config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="producto-url.js"></script>
     <script src="main.js"></script>
   </body>
 </html>
