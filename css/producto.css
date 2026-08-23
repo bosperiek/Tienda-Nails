@@ -66,7 +66,8 @@ a {
   text-decoration: none;
 }
 
-a:focus-visible {
+a:focus-visible,
+.product-button:focus-visible {
   outline: 3px solid rgba(216, 92, 130, 0.42);
   outline-offset: 4px;
 }
@@ -234,19 +235,19 @@ a:focus-visible {
   overflow: hidden;
   border: 1px solid var(--product-border);
   border-radius: var(--product-radius);
-  background: var(--product-surface);
+  background:
+    radial-gradient(circle at 50% 48%, rgba(230, 126, 159, 0.075), transparent 58%),
+    var(--product-surface);
   box-shadow: var(--product-shadow);
 }
 
 .product-gallery__primary::after {
   content: '';
   position: absolute;
-  right: -3.5rem;
-  bottom: -4rem;
-  width: 9rem;
-  height: 9rem;
+  inset: 16% 13%;
   border-radius: 50%;
-  background: rgba(230, 126, 159, 0.08);
+  background: rgba(255, 255, 255, 0.3);
+  filter: blur(18px);
   pointer-events: none;
 }
 
@@ -353,6 +354,7 @@ a:focus-visible {
 
 .product-description {
   max-width: 38rem;
+  height: auto;
   margin-top: 1.5rem;
   padding-top: 1.35rem;
   border-top: 1px solid var(--product-border);
@@ -368,6 +370,8 @@ a:focus-visible {
 .product-description p {
   margin: 0;
   color: var(--product-muted);
+  font-size: 0.96rem;
+  line-height: 1.7;
   white-space: pre-line;
   overflow-wrap: anywhere;
 }
@@ -388,6 +392,8 @@ a:focus-visible {
   justify-content: center;
   border: 1px solid transparent;
   border-radius: 14px;
+  cursor: pointer;
+  font-family: inherit;
   font-size: 0.92rem;
   font-weight: 600;
   line-height: 1.2;
@@ -411,6 +417,18 @@ a:focus-visible {
   color: #fff;
 }
 
+.product-button--primary.is-added {
+  background: var(--product-accent-hover);
+  color: #fff;
+}
+
+.product-button:disabled {
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.58;
+  transform: none;
+}
+
 .product-button--secondary {
   border-color: rgba(59, 47, 47, 0.22);
   background: rgba(255, 255, 255, 0.55);
@@ -423,15 +441,11 @@ a:focus-visible {
 }
 
 .product-details {
-  margin-top: clamp(2.75rem, 5vw, 4.5rem);
-  padding: clamp(1.3rem, 3vw, 2rem);
-  display: grid;
-  grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
-  gap: 1.5rem clamp(2rem, 4vw, 3.5rem);
+  margin-top: 2rem;
+  padding: 1.25rem 1.35rem;
   border: 1px solid var(--product-border);
-  border-radius: var(--product-radius);
-  background: rgba(255, 255, 255, 0.75);
-  box-shadow: 0 12px 36px rgba(59, 47, 47, 0.055);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.62);
 }
 
 .product-details__heading p {
@@ -446,12 +460,12 @@ a:focus-visible {
 .product-details__heading h2 {
   margin: 0;
   font-family: var(--product-heading);
-  font-size: clamp(1.8rem, 2.5vw, 2.3rem);
-  line-height: 1.08;
+  font-size: clamp(1.55rem, 2vw, 1.9rem);
+  line-height: 1.1;
 }
 
 .product-details dl {
-  margin: 0;
+  margin: 1rem 0 0;
 }
 
 .product-details dl > div {
@@ -557,9 +571,6 @@ a:focus-visible {
     max-width: 20ch;
   }
 
-  .product-details {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (max-width: 600px) {
@@ -612,8 +623,8 @@ a:focus-visible {
   }
 
   .product-details {
-    margin-top: 2.5rem;
-    padding: 1.3rem;
+    margin-top: 1.75rem;
+    padding: 1.15rem;
     border-radius: 18px;
   }
 

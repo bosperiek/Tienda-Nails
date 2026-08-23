@@ -5,6 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    if (!window.NantyCart || typeof window.NantyCart.createCartStore !== 'function') {
+        console.error('No se pudo inicializar el carrito compartido.');
+        return;
+    }
+
     console.log("✅ Datos cargados:", misProductos.length, "productos.");
 
     let activeCategory = '';
@@ -317,23 +322,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------
     // ORDENADO Y FILTRADO
     // -------------------------------------------------------
-    function parsePrice(val) {
-        if (typeof val === 'number') {
-            return Number.isFinite(val) && val >= 0 ? val : null;
-        }
-
-        if (typeof val !== 'string') return null;
-
-        const text = val.trim();
-        if (!text) return null;
-
-        const validFormat = /^\$?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/;
-        if (!validFormat.test(text)) return null;
-
-        const number = Number(text.replace(/^\$/, '').replace(/,/g, ''));
-        return Number.isFinite(number) && number >= 0 ? number : null;
-    }
-
     const currencyFormatter = new Intl.NumberFormat("es-MX", {
         style: "currency",
         currency: "MXN"
@@ -834,38 +822,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------
     // CARRITO
     // -------------------------------------------------------
-    const CART_KEY = 'miCarritoNanty_v2';
+    const cartStore = window.NantyCart.createCartStore({ storage: localStorage });
     let carrito = {};
 
     function loadCart() {
-        try {
-            const raw = localStorage.getItem(CART_KEY);
-            carrito = raw ? JSON.parse(raw) : {};
-        } catch (e) { carrito = {}; }
-
-        let cartUpdated = false;
-        Object.values(carrito).forEach(item => {
-            if (!item || typeof item !== 'object') return;
-
-            const currentPrice = parsePrice(item.precio);
-            const legacyPrice = currentPrice !== null ? currentPrice : parsePrice(item.precioRaw);
-
-            if (item.precio !== legacyPrice || Object.prototype.hasOwnProperty.call(item, 'precioRaw')) {
-                item.precio = legacyPrice;
-                delete item.precioRaw;
-                cartUpdated = true;
-            }
-        });
-
-        if (cartUpdated) {
-            try { localStorage.setItem(CART_KEY, JSON.stringify(carrito)); } catch (e) {}
-        }
-
-        updateCartBadge();
-    }
-
-    function saveCart() {
-        localStorage.setItem(CART_KEY, JSON.stringify(carrito));
+        carrito = cartStore.load();
         updateCartBadge();
     }
 
@@ -883,18 +844,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const nombre = product.data || product.nombre || product.name || 'Producto';
         const { imgUrl: img } = getProductData(product);
 
-        if (!carrito[id]) carrito[id] = { id, nombre, precio, qty: 0, img };
-        carrito[id].qty += 1;
-        saveCart();
+        const item = cartStore.add({ id, nombre, precio, img });
+        if (!item) return;
+
+        carrito = cartStore.getCart();
+        updateCartBadge();
         updateAddButtonForProduct(id);
     }
 
     function changeQty(id, qty) {
         id = String(id);
-        if (!carrito[id]) return;
-        carrito[id].qty = Math.max(0, qty);
-        if (carrito[id].qty === 0) delete carrito[id];
-        saveCart();
+        if (!cartStore.getItem(id)) return;
+
+        cartStore.changeQty(id, qty);
+        carrito = cartStore.getCart();
+        updateCartBadge();
         renderCartItems();
         updateAddButtonForProduct(id);
     }
@@ -919,8 +883,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (cartModalEl) cartModalEl.addEventListener('show.bs.modal', renderCartItems);
     if (clearCartBtn) clearCartBtn.addEventListener('click', () => {
-        carrito = {};
-        saveCart();
+        carrito = cartStore.clear();
+        updateCartBadge();
         renderCartItems();
         applyFilters();
     });

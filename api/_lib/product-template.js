@@ -2,7 +2,6 @@
 
 const { resolveProductImageUrl } = require('./product-image-url');
 
-const WHATSAPP_NUMBER = '525614782629';
 const SITE_NAME = 'Nanty Nails Shop';
 const METADATA_DESCRIPTION_MAX_LENGTH = 160;
 const PRICE_FORMATTER = new Intl.NumberFormat('es-MX', {
@@ -137,17 +136,6 @@ function hasSameText(firstValue, secondValue) {
     }) === 0;
 }
 
-function createWhatsAppUrl({ productName, price, canonicalUrl }) {
-    const message = [
-        `Hola, me gustaría consultar el producto: ${productName}.`,
-        price === null ? null : `Precio: ${PRICE_FORMATTER.format(price)}.`,
-        `Página: ${canonicalUrl}`
-    ].filter(Boolean).join('\n');
-    const whatsappUrl = new URL(`https://wa.me/${WHATSAPP_NUMBER}`);
-    whatsappUrl.searchParams.set('text', message);
-    return whatsappUrl.href;
-}
-
 function renderPrice({ price, salePrice }) {
     if (salePrice !== null) {
         const regularPrice = price === null
@@ -202,6 +190,7 @@ function renderProductPage({
     const catalogUrl = new URL('/tienda.html', safeSiteUrl).href;
     const logoUrl = new URL('/imagenesPrincipal/logo4.svg', safeSiteUrl).href;
     const stylesheetUrl = new URL('/css/producto.css', safeSiteUrl).href;
+    const cartScriptUrl = new URL('/carrito.js', safeSiteUrl).href;
     const socialFallbackImageUrl = new URL(
         '/imagenesPrincipal/og-nanty-nails-shop.jpg',
         safeSiteUrl
@@ -220,6 +209,15 @@ function renderProductPage({
     const stock = normalizeOptionalNumber(product.stock);
     const altText = normalizeOptionalText(product.altText) || productName;
     const displayedPrice = salePrice ?? price;
+    let cartImage = safeImageUrl;
+
+    if (cartImage
+        && typeof product.image === 'string'
+        && !/^[a-z][a-z0-9+.-]*:/iu.test(product.image.trim())) {
+        const parsedCartImage = new URL(cartImage);
+        cartImage = `${parsedCartImage.pathname}${parsedCartImage.search}`;
+    }
+
     const pageTitle = `${productName} | ${SITE_NAME}`;
     const metadataDescription = createMetadataDescription({
         description,
@@ -324,6 +322,23 @@ function renderProductPage({
           </section>`
         : '';
 
+    const cartButton = price !== null
+        ? `<button
+              class="product-button product-button--primary"
+              type="button"
+              data-product-cart
+              data-product-id="${escapedId}"
+              data-product-name="${escapedName}"
+              data-product-price="${escapeHtml(price.toFixed(2))}"
+              data-product-image="${escapeHtml(cartImage)}"
+              aria-live="polite"
+            >
+              <span class="product-button__label">Agregar al carrito</span>
+            </button>`
+        : `<button class="product-button product-button--primary" type="button" disabled>
+              Agregar al carrito
+            </button>`;
+
     const additionalImageUrls = Array.isArray(product.additionalImages)
         ? [...new Set(product.additionalImages
             .map(value => resolveProductImageUrl(value, safeSiteUrl))
@@ -369,12 +384,6 @@ function renderProductPage({
             : '',
         `<div><dt>Referencia</dt><dd>${escapedId}</dd></div>`
     ].filter(Boolean).join('');
-
-    const whatsappUrl = createWhatsAppUrl({
-        productName,
-        price: displayedPrice,
-        canonicalUrl: safeCanonicalUrl
-    });
 
     return `<!DOCTYPE html>
 <html lang="es">
@@ -441,23 +450,21 @@ function renderProductPage({
           ${descriptionContent}
 
           <div class="product-actions" aria-label="Acciones del producto">
-            <a class="product-button product-button--primary" href="${escapeHtml(whatsappUrl)}" target="_blank" rel="noopener noreferrer">
-              Consultar por WhatsApp
-            </a>
+            ${cartButton}
             <a class="product-button product-button--secondary" href="${escapeHtml(catalogUrl)}">
               Volver al catálogo
             </a>
           </div>
+
+          <section class="product-details" aria-labelledby="product-details-heading">
+            <div class="product-details__heading">
+              <p>Información</p>
+              <h2 id="product-details-heading">Detalles del producto</h2>
+            </div>
+            <dl>${detailRows}</dl>
+          </section>
         </div>
       </article>
-
-      <section class="product-details" aria-labelledby="product-details-heading">
-        <div class="product-details__heading">
-          <p>Información</p>
-          <h2 id="product-details-heading">Detalles del producto</h2>
-        </div>
-        <dl>${detailRows}</dl>
-      </section>
     </main>
 
     <footer class="site-footer">
@@ -472,6 +479,7 @@ function renderProductPage({
         </nav>
       </div>
     </footer>
+    <script src="${escapeHtml(cartScriptUrl)}"></script>
   </body>
 </html>`;
 }
