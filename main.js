@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+    document.documentElement.classList.add('animations-ready');
 
     // --- 1. EFECTO EN EL NAVBAR AL HACER SCROLL ---
     const navbar = document.getElementById('main-navbar');
@@ -13,6 +14,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // --- 2. LÓGICA PARA CERRAR EL MENÚ MÓVIL (DESPUÉS DEL DESPLIEGUE HACIA ABAJO) ---
     const navbarCollapse = document.getElementById('navbarNav');
+    const navbarToggler = document.querySelector('[data-bs-target="#navbarNav"]');
+
+    navbarCollapse?.addEventListener('shown.bs.collapse', () => {
+        navbarToggler?.setAttribute('aria-label', 'Cerrar menú de navegación');
+    });
+    navbarCollapse?.addEventListener('hidden.bs.collapse', () => {
+        navbarToggler?.setAttribute('aria-label', 'Abrir menú de navegación');
+    });
 
     // Función para cerrar el menú
     function closeMobileMenu() {
@@ -125,7 +134,9 @@ document.addEventListener("DOMContentLoaded", function () {
             image.loading = 'lazy';
             image.decoding = 'async';
             image.addEventListener('error', () => {
-                if (image.src !== fallbackImage) image.src = fallbackImage;
+                if (image.dataset.fallbackApplied === 'true') return;
+                image.dataset.fallbackApplied = 'true';
+                image.src = fallbackImage;
             });
 
             const body = document.createElement('div');

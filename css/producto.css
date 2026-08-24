@@ -21,6 +21,7 @@
   --product-muted: #6a5d5d;
   --product-accent: #e67e9f;
   --product-accent-hover: #d85c82;
+  --product-accent-contrast: #a13f62;
   --product-accent-soft: rgba(230, 126, 159, 0.12);
   --product-border: rgba(59, 47, 47, 0.1);
   --product-shadow: 0 14px 36px rgba(59, 47, 47, 0.07);
@@ -68,7 +69,7 @@ a {
 
 a:focus-visible,
 .product-button:focus-visible {
-  outline: 3px solid rgba(216, 92, 130, 0.42);
+  outline: 3px solid var(--product-accent-contrast);
   outline-offset: 4px;
 }
 
@@ -151,7 +152,7 @@ a:focus-visible,
 .site-navigation a:hover,
 .site-navigation a[aria-current='page'] {
   background: var(--product-accent-soft);
-  color: var(--product-accent-hover);
+  color: var(--product-accent-contrast);
 }
 
 .product-page {
@@ -249,7 +250,7 @@ a:focus-visible,
   border: 1px solid rgba(216, 92, 130, 0.14);
   border-radius: 999px;
   background: var(--product-accent-soft);
-  color: var(--product-accent-hover);
+  color: var(--product-accent-contrast);
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.025em;
@@ -359,13 +360,13 @@ a:focus-visible,
 }
 
 .product-button--primary:hover {
-  background: var(--product-accent-hover);
+  background: var(--product-accent-contrast);
   box-shadow: 0 9px 22px rgba(216, 92, 130, 0.28);
   color: #fff;
 }
 
 .product-button--primary.is-added {
-  background: var(--product-accent-hover);
+  background: var(--product-accent-contrast);
   color: #fff;
 }
 
@@ -397,7 +398,7 @@ a:focus-visible,
 
 .related-products__heading p {
   margin: 0 0 0.25rem;
-  color: var(--product-accent-hover);
+  color: var(--product-accent-contrast);
   font-size: 0.76rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -464,7 +465,7 @@ a:focus-visible,
 
 .related-product-card__body p {
   margin: 0.65rem 0 0;
-  color: var(--product-accent-hover);
+  color: var(--product-accent-contrast);
   font-size: 1rem;
   font-weight: 600;
 }

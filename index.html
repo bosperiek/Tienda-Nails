@@ -103,6 +103,7 @@
   </head>
 
   <body>
+    <a class="skip-link" href="#contenido-principal">Saltar al contenido principal</a>
     <!-- Navegación -->
     <nav id="main-navbar" class="navbar navbar-expand-lg navbar-dark fixed-top">
       <div class="container">
@@ -149,6 +150,7 @@
       </div>
     </nav>
 
+    <main id="contenido-principal" tabindex="-1">
     <!-- Hero Section -->
     <section id="inicio" class="hero-section">
       <div class="container text-center hero-content">
@@ -191,6 +193,8 @@
                   "
                   sizes="(min-width: 1200px) 370px, (min-width: 768px) 31vw, calc(100vw - 36px)"
                   class="card-img-top service-card-img"
+                  width="1024"
+                  height="1024"
                   loading="lazy"
                   decoding="async"
                   alt="Curso profesional de uñas con técnicas de aplicación y diseño"
@@ -218,6 +222,8 @@
                   "
                   sizes="(min-width: 1200px) 370px, (min-width: 768px) 31vw, calc(100vw - 36px)"
                   class="card-img-top service-card-img"
+                  width="2784"
+                  height="1536"
                   loading="lazy"
                   decoding="async"
                   alt="Paquete emprendedor de uñas con kit completo y curso incluido"
@@ -247,6 +253,8 @@
                   "
                   sizes="(min-width: 1200px) 370px, (min-width: 768px) 31vw, calc(100vw - 36px)"
                   class="card-img-top service-card-img"
+                  width="1024"
+                  height="1024"
                   loading="lazy"
                   decoding="async"
                   alt="Curso práctico de aplicación de uñas con técnicas profesionales"
@@ -366,7 +374,14 @@
           id="featured-products-grid"
           class="row g-4"
           aria-busy="false"
-        ></div>
+        >
+          <div class="col-6 col-md-4 featured-product-skeleton" aria-hidden="true"></div>
+          <div class="col-6 col-md-4 featured-product-skeleton" aria-hidden="true"></div>
+          <div class="col-6 col-md-4 featured-product-skeleton" aria-hidden="true"></div>
+          <div class="col-6 col-md-4 featured-product-skeleton" aria-hidden="true"></div>
+          <div class="col-6 col-md-4 featured-product-skeleton" aria-hidden="true"></div>
+          <div class="col-6 col-md-4 featured-product-skeleton" aria-hidden="true"></div>
+        </div>
         <div class="text-center mt-4">
           <a href="tienda.html" class="btn btn-primary btn-lg"
             >Ver catálogo completo</a
@@ -427,6 +442,8 @@
                 <img
                   src="./imagenesPrincipal/curso-basico-unas-acrilicas-profesional-kit-incluido-desde-cero.webp"
                   class="service-card-img"
+                  width="1024"
+                  height="1024"
                   loading="lazy"
                   decoding="async"
                   alt="Curso básico de uñas acrílicas."
@@ -454,6 +471,8 @@
                 <img
                   src="./imagenesPrincipal/curso-unas-avanzado-tecnicas-drill-poligel-rubber-base-press-on.webp"
                   class="service-card-img"
+                  width="2816"
+                  height="1536"
                   loading="lazy"
                   decoding="async"
                   alt="Curso avanzado de uñas."
@@ -480,6 +499,8 @@
                 <img
                   src="./imagenesPrincipal/curso-unas-express-tecnica-press-on-aplicacion-rapida.webp"
                   class="service-card-img"
+                  width="2816"
+                  height="1536"
                   loading="lazy"
                   decoding="async"
                   alt="Curso de uñas exprés."
@@ -550,6 +571,8 @@
                     class="rounded-circle me-3"
                     loading="lazy"
                     decoding="async"
+                    width="50"
+                    height="50"
                     alt="Cliente"
                   />
                   <div>
@@ -580,6 +603,8 @@
                     class="rounded-circle me-3"
                     loading="lazy"
                     decoding="async"
+                    width="50"
+                    height="50"
                     alt="Cliente"
                   />
                   <div>
@@ -606,6 +631,8 @@
                     class="rounded-circle me-3"
                     loading="lazy"
                     decoding="async"
+                    width="50"
+                    height="50"
                     alt="Cliente"
                   />
                   <div>
@@ -633,6 +660,8 @@
                     class="rounded-circle me-3"
                     loading="lazy"
                     decoding="async"
+                    width="50"
+                    height="50"
                     alt="Cliente"
                   />
                   <div>
@@ -660,6 +689,8 @@
                     class="rounded-circle me-3"
                     loading="lazy"
                     decoding="async"
+                    width="50"
+                    height="50"
                     alt="Cliente"
                   />
                   <div>
@@ -686,6 +717,8 @@
                     class="rounded-circle me-3"
                     loading="lazy"
                     decoding="async"
+                    width="50"
+                    height="50"
                     alt="Cliente"
                   />
                   <div>
@@ -735,6 +768,8 @@
       </div>
     </section>
 
+    </main>
+
     <!-- Footer -->
     <footer id="footer" class="content-section py-5">
       <div class="container">
@@ -750,11 +785,13 @@
               <a
                 href="https://www.facebook.com/nancy23juarezperez"
                 class="me-3 fs-4 text-white"
+                aria-label="Facebook"
                 ><i class="bi bi-facebook"></i
               ></a>
               <a
                 href="https://www.tiktok.com/@nantynailsshop"
                 class="me-3 fs-4 text-white"
+                aria-label="TikTok"
                 ><i class="bi bi-tiktok"></i
               ></a>
             </div>

@@ -98,6 +98,24 @@ a {
   color: inherit;
 }
 
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1100;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  background: var(--text-main);
+  color: #fff;
+  transform: translateY(-180%);
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+  color: #fff;
+  transform: translateY(0);
+}
+
 /* -------------------------------------------------
    3. NAVBAR — superficie clara integrada con la portada
    ------------------------------------------------- */

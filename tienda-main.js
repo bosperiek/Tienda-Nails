@@ -50,6 +50,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log("✅ Datos cargados:", misProductos.length, "productos.");
 
+    const navbarCollapse = document.getElementById('navbarNav');
+    const navbarToggler = document.querySelector('[data-bs-target="#navbarNav"]');
+    navbarCollapse?.addEventListener('shown.bs.collapse', () => {
+        navbarToggler?.setAttribute('aria-label', 'Cerrar menú');
+    });
+    navbarCollapse?.addEventListener('hidden.bs.collapse', () => {
+        navbarToggler?.setAttribute('aria-label', 'Abrir menú');
+    });
+
     let activeCategory = '';
     let searchText = '';
     const itemsPerPage = 24;
@@ -456,7 +465,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return copy;
     }
 
-    function applyFilters({ resetLimit = true, announceResults = true } = {}) {
+    function applyFilters({
+        resetLimit = true,
+        announceResults = true,
+        refreshCategories = true
+    } = {}) {
         const filtrados = getAvailableCatalogProducts().filter(producto => {
             const textoOK = searchText === '' || getCatalogProductSearchText(producto).includes(searchText);
             if (!textoOK) return false;
@@ -470,7 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentLimit = itemsPerPage;
         }
         renderPaginated();
-        renderCategoryButtons();
+        if (refreshCategories) renderCategoryButtons();
         if (announceResults) scheduleResultsAnnouncement();
     }
 
@@ -544,6 +557,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalProductLink = document.getElementById('modal-product-link');
     const modalPrevBtn  = document.getElementById('modal-prev');
     const modalNextBtn  = document.getElementById('modal-next');
+    const modalFallbackImage = 'https://placehold.co/400x400/f8f0ed/e67e9f?text=Sin+Imagen';
+    const catalogFallbackImage = 'https://placehold.co/300x300/f8f0ed/e67e9f?text=Sin+Imagen';
+    let modalImageDelayTimer = null;
+    let modalImageLoadToken = 0;
 
     function createCanonicalProductPath(prod, productName) {
         if (!window.NantyProductUrl || typeof window.NantyProductUrl.createProductPath !== 'function') {
@@ -603,6 +620,15 @@ document.addEventListener('DOMContentLoaded', () => {
             : ' Añadir al carrito';
 
         modalAddBtn.replaceChildren(icon, text);
+        const productName = currentModalProduct
+            ? getProductData(currentModalProduct).nombre
+            : 'producto';
+        modalAddBtn.setAttribute(
+            'aria-label',
+            item
+                ? `${productName} en el carrito, cantidad ${item.qty}`
+                : `Añadir ${productName} al carrito`
+        );
     }
 
     // Inicializar el modal de Bootstrap de forma diferida para asegurar
@@ -653,6 +679,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function loadModalImage(prod, index) {
         if (!modalImg || !modalTitle) return;
 
+        window.clearTimeout(modalImageDelayTimer);
+        const loadToken = ++modalImageLoadToken;
         resetModalImageZoom();
         currentModalIndex = index;
 
@@ -664,24 +692,32 @@ document.addEventListener('DOMContentLoaded', () => {
         modalImg.classList.add('changing');
 
         // Pequeño delay para la transición
-        setTimeout(() => {
+        modalImageDelayTimer = window.setTimeout(() => {
+            if (loadToken !== modalImageLoadToken) return;
             modalTitle.textContent = nombre;
             if (modalPrice) {
                 modalPrice.textContent = formatPriceForDisplay(precio);
             }
 
             modalImg.alt = altProducto;
+            delete modalImg.dataset.fallbackApplied;
 
             modalImg.onload = () => {
+                if (loadToken !== modalImageLoadToken) return;
                 if (modalLoader) modalLoader.classList.remove('visible');
                 modalImg.classList.remove('changing');
             };
             modalImg.onerror = () => {
-                modalImg.src = 'https://placehold.co/400x400/f8f0ed/e67e9f?text=Sin+Imagen';
+                if (loadToken !== modalImageLoadToken) return;
+                if (modalImg.dataset.fallbackApplied !== 'true') {
+                    modalImg.dataset.fallbackApplied = 'true';
+                    modalImg.src = modalFallbackImage;
+                    return;
+                }
                 if (modalLoader) modalLoader.classList.remove('visible');
                 modalImg.classList.remove('changing');
             };
-            modalImg.src = imgUrl || 'https://placehold.co/400x400/f8f0ed/e67e9f?text=Sin+Imagen';
+            modalImg.src = imgUrl || modalFallbackImage;
         }, 120);
 
         // Botón añadir al carrito desde el modal
@@ -811,6 +847,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         imageModalEl.addEventListener('hide.bs.modal', () => {
+            window.clearTimeout(modalImageDelayTimer);
+            modalImageLoadToken += 1;
             resetModalImageZoom();
             const activeElement = document.activeElement;
             if (activeElement && imageModalEl.contains(activeElement)) {
@@ -829,6 +867,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------
     // RENDER DE PRODUCTOS
     // -------------------------------------------------------
+    function updateCatalogAddButton(button, item) {
+        if (!button) return;
+        const productName = button.dataset.productName || 'producto';
+        button.textContent = item ? `En carrito (${item.qty})` : 'Agregar';
+        button.setAttribute(
+            'aria-label',
+            item
+                ? `${productName} en el carrito, cantidad ${item.qty}`
+                : `Agregar ${productName} al carrito`
+        );
+    }
+
     function renderizarProductos(lista) {
         const contenedor = document.getElementById('grid-productos');
         if (!contenedor) return;
@@ -873,10 +923,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             imgEl.onload = () => { imgEl.classList.add('visible'); };
             imgEl.onerror = () => {
-                imgEl.src = 'https://placehold.co/300x300/f8f0ed/e67e9f?text=Sin+Imagen';
+                if (imgEl.dataset.fallbackApplied === 'true') {
+                    imgEl.classList.add('visible');
+                    return;
+                }
+                imgEl.dataset.fallbackApplied = 'true';
+                imgEl.src = catalogFallbackImage;
                 imgEl.classList.add('visible');
             };
-            imgEl.src = imgUrl || 'https://placehold.co/300x300/f8f0ed/e67e9f?text=Sin+Imagen';
+            imgEl.src = imgUrl || catalogFallbackImage;
 
             imgContainer.appendChild(imgEl);
 
@@ -913,8 +968,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const btnAdd = document.createElement('button');
             btnAdd.className = 'btn-add';
             btnAdd.type = 'button';
+            btnAdd.dataset.productName = nombre;
             const inCart = carrito[String(prod.id)];
-            btnAdd.textContent = inCart ? `En carrito (${inCart.qty})` : 'Agregar';
+            updateCatalogAddButton(btnAdd, inCart);
             btnAdd.addEventListener('click', (e) => { e.stopPropagation(); addToCart(prod); });
 
             cuerpo.appendChild(h3);
@@ -1058,7 +1114,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = card.querySelector('.btn-add');
             if (btn) {
                 const item = carrito[String(id)];
-                btn.textContent = item ? `En carrito (${item.qty})` : 'Agregar';
+                updateCatalogAddButton(btn, item);
             }
         }
     }
@@ -1068,7 +1124,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const id = card.dataset.id;
             const button = card.querySelector('.btn-add');
             const item = carrito[String(id)];
-            if (button) button.textContent = item ? `En carrito (${item.qty})` : 'Agregar';
+            updateCatalogAddButton(button, item);
         });
 
         if (currentModalProduct) {
@@ -1343,28 +1399,44 @@ document.addEventListener('DOMContentLoaded', () => {
     // BUSCADOR Y ORDENADO
     // -------------------------------------------------------
     const inputBuscador = document.getElementById('buscador');
+    let searchInputTimer = null;
+
+    function applySearchValue(value) {
+        const nextSearchText = normalizeSearchText(value);
+        if (nextSearchText === searchText) return;
+        searchText = nextSearchText;
+        applyFilters({ refreshCategories: false });
+    }
+
+    function flushPendingSearch(value) {
+        window.clearTimeout(searchInputTimer);
+        searchInputTimer = null;
+        applySearchValue(value);
+    }
+
     if (inputBuscador) {
         inputBuscador.addEventListener('input', (e) => {
-            searchText = normalizeSearchText(e.target.value);
-            applyFilters();
+            window.clearTimeout(searchInputTimer);
+            searchInputTimer = window.setTimeout(() => {
+                searchInputTimer = null;
+                applySearchValue(e.target.value);
+            }, 200);
         });
         inputBuscador.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
-                searchText = normalizeSearchText(e.target.value);
-                applyFilters();
+                flushPendingSearch(e.target.value);
                 inputBuscador.blur();
             }
         });
         inputBuscador.addEventListener('blur', (e) => {
-            searchText = normalizeSearchText(e.target.value);
-            applyFilters();
+            flushPendingSearch(e.target.value);
         });
     }
 
     if (sortSelect) {
         sortSelect.addEventListener('change', (e) => {
             selectedSort = e.target.value;
-            applyFilters();
+            applyFilters({ refreshCategories: false });
         });
     }
 
@@ -1394,11 +1466,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         localStorage.setItem(LIKES_KEY, JSON.stringify(likesMap));
         localStorage.setItem(LIKED_FLAGS_KEY, JSON.stringify(likedFlags));
-        applyFilters({ resetLimit: false, announceResults: false });
         requestAnimationFrame(() => {
             const card = Array.from(document.querySelectorAll('#grid-productos .card'))
                 .find(productCard => String(productCard.dataset.id) === id);
-            card?.querySelector('.btn-like')?.focus();
+            const likeButton = card?.querySelector('.btn-like');
+            if (!likeButton) return;
+
+            const productName = card.querySelector('.card-title')?.textContent?.trim() || 'producto';
+            const isLiked = Boolean(likedFlags[id]);
+            likeButton.textContent = `❤ ${likesMap[id] || 0}`;
+            likeButton.classList.toggle('liked', isLiked);
+            likeButton.setAttribute('aria-pressed', String(isLiked));
+            likeButton.setAttribute(
+                'aria-label',
+                `${isLiked ? 'Quitar' : 'Agregar'} ${productName} ${isLiked ? 'de' : 'a'} favoritos`
+            );
+            likeButton.focus();
         });
     };
 

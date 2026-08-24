@@ -38,6 +38,24 @@ html {
   scroll-behavior: auto;
 }
 
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1100;
+  padding: 0.7rem 1rem;
+  border-radius: 999px;
+  background: var(--navbar-footer-color);
+  color: #fff;
+  transform: translateY(-180%);
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+  color: #fff;
+  transform: translateY(0);
+}
+
 /* -------------------------------------------------
    ESTILOS DE LA BARRA DE NAVEGACIÓN
    ------------------------------------------------- */
@@ -245,9 +263,14 @@ html {
   margin-bottom: 50px;
   position: relative;
   text-align: center;
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.animations-ready .section-title {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
 }
 
 .section-title.visible {
@@ -265,6 +288,11 @@ html {
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   transition: transform 0.5s ease, box-shadow 0.5s ease;
+  opacity: 1;
+  transform: none;
+}
+
+.animations-ready .card {
   opacity: 0;
   transform: translateY(30px);
 }
@@ -435,6 +463,23 @@ section .card {
   margin: 0 auto 1.5rem;
   color: var(--secondary-color);
   text-align: center;
+}
+
+.featured-product-skeleton::before {
+  content: '';
+  display: block;
+  height: 390px;
+  border: 1px solid #eee;
+  border-radius: 15px;
+  background: linear-gradient(100deg, #f3eaed 30%, #fbf6f4 50%, #f3eaed 70%);
+  background-size: 220% 100%;
+  animation: featured-skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes featured-skeleton-pulse {
+  to {
+    background-position-x: -220%;
+  }
 }
 
 .featured-product-card {
@@ -816,6 +861,10 @@ section .card {
 
   .featured-products .service-card-img-container {
     height: 155px;
+  }
+
+  .featured-product-skeleton::before {
+    height: 355px;
   }
 
   .featured-products .card-body {
@@ -1241,6 +1290,16 @@ section .card {
   #cursos .service-card,
   #cursos .service-card .service-card-img {
     transition-duration: 0.01ms !important;
+  }
+
+  .animations-ready .section-title,
+  .animations-ready .card {
+    opacity: 1;
+    transform: none;
+  }
+
+  .featured-product-skeleton::before {
+    animation: none;
   }
 }
 

@@ -45,6 +45,7 @@ function alCargarProductos(callback) {
 function guardarCatalogoCache(products) {
     if (!Array.isArray(products) || products.length === 0) return;
 
+    const serializedProducts = JSON.stringify(products);
     const cache = {
         version: 1,
         savedAt: Date.now(),
@@ -52,6 +53,14 @@ function guardarCatalogoCache(products) {
     };
 
     try {
+        const storedCache = leerCatalogoCache();
+        if (
+            storedCache
+            && JSON.stringify(storedCache.products) === serializedProducts
+        ) {
+            return;
+        }
+
         localStorage.setItem(CATALOGO_CACHE_KEY, JSON.stringify(cache));
     } catch (err) {
         console.warn('No se pudo guardar el respaldo local del catálogo:', err);
@@ -240,10 +249,49 @@ if (misProductos.length === 0 && catalogoCache) {
 }
 
 const PRODUCTOS_REFRESH_MS = 5 * 60 * 1000;
+let productosRefreshTimer = null;
+let ultimaActualizacionPeriodica = 0;
+let actualizacionPeriodicaEnCurso = false;
 
-async function actualizarProductosPeriodicamente() {
-    await cargarProductosDesdeSheet();
-    setTimeout(actualizarProductosPeriodicamente, PRODUCTOS_REFRESH_MS);
+function cancelarProductosRefreshTimer() {
+    if (productosRefreshTimer === null) return;
+    clearTimeout(productosRefreshTimer);
+    productosRefreshTimer = null;
 }
 
-actualizarProductosPeriodicamente();
+function programarProductosRefresh() {
+    cancelarProductosRefreshTimer();
+    if (document.hidden || actualizacionPeriodicaEnCurso) return;
+
+    const elapsed = Date.now() - ultimaActualizacionPeriodica;
+    const delay = ultimaActualizacionPeriodica === 0
+        ? 0
+        : Math.max(0, PRODUCTOS_REFRESH_MS - elapsed);
+
+    productosRefreshTimer = setTimeout(actualizarProductosPeriodicamente, delay);
+}
+
+async function actualizarProductosPeriodicamente() {
+    cancelarProductosRefreshTimer();
+    if (document.hidden || actualizacionPeriodicaEnCurso) return;
+
+    actualizacionPeriodicaEnCurso = true;
+    try {
+        await cargarProductosDesdeSheet();
+    } finally {
+        ultimaActualizacionPeriodica = Date.now();
+        actualizacionPeriodicaEnCurso = false;
+        programarProductosRefresh();
+    }
+}
+
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        cancelarProductosRefreshTimer();
+        return;
+    }
+
+    programarProductosRefresh();
+});
+
+programarProductosRefresh();

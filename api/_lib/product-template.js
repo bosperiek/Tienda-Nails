@@ -354,6 +354,7 @@ function renderProductPage({
               src="${escapeHtml(safeImageUrl)}"
               alt="${escapedAltText}"
               loading="eager"
+              fetchpriority="high"
               decoding="async"
             >
           </figure>`
