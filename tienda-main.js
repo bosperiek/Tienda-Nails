@@ -21,9 +21,9 @@ function getCatalogProductSearchText(product) {
     if (typeof cached === 'string') return cached;
 
     const commercialFields = [
+        product.name,
         product.data,
         product.nombre,
-        product.name,
         product.category,
         product.brand,
         product.subcategory,
@@ -458,9 +458,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 return sortVal === 'price-asc' ? priceA - priceB : priceB - priceA;
             });
         } else if (sortVal === 'name-asc') {
-            copy.sort((a, b) => (a.data || a.nombre || '').toString().toLowerCase().localeCompare((b.data || b.nombre || '').toString().toLowerCase()));
+            copy.sort((a, b) => (a.name || a.data || a.nombre || '').toString().toLowerCase().localeCompare((b.name || b.data || b.nombre || '').toString().toLowerCase()));
         } else if (sortVal === 'name-desc') {
-            copy.sort((a, b) => (b.data || b.nombre || '').toString().toLowerCase().localeCompare((a.data || a.nombre || '').toString().toLowerCase()));
+            copy.sort((a, b) => (b.name || b.data || b.nombre || '').toString().toLowerCase().localeCompare((a.name || a.data || a.nombre || '').toString().toLowerCase()));
         }
         return copy;
     }
@@ -665,11 +665,13 @@ document.addEventListener('DOMContentLoaded', () => {
             .map(resolveProductImageUrl)
             .find(Boolean) || '';
         const altProducto =
-            String(prod.altTexto || '').trim()
+            String(prod.altText || '').trim()
+            || String(prod.altTexto || '').trim()
+            || String(prod.name || '').trim()
             || String(prod.data || '').trim()
             || 'Producto';
         return {
-            nombre: prod[keyNombre] || 'Producto',
+            nombre: prod.name || prod[keyNombre] || 'Producto',
             precio: window.NantyCart.getEffectivePrice(prod),
             imgUrl,
             altProducto
@@ -1059,7 +1061,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const precio = window.NantyCart.getEffectivePrice(product);
         if (precio === null) return null;
 
-        const nombre = product.data || product.nombre || product.name || 'Producto';
+        const nombre = product.name || product.data || product.nombre || 'Producto';
         const { imgUrl: img } = getProductData(product);
 
         const item = cartStore.add({ id: product.id, nombre, precio, img });
