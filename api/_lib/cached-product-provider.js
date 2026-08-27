@@ -2,6 +2,7 @@
 
 const { getCache } = require('@vercel/functions');
 const openSheetProvider = require('./opensheet-provider');
+const { normalizeProduct } = require('./product-normalizer');
 
 const FRESH_CACHE_KEY = 'catalog:rows:v1:fresh';
 const LAST_GOOD_CACHE_KEY = 'catalog:rows:v1:last-good';
@@ -9,7 +10,21 @@ const FRESH_TTL_SECONDS = 300;
 const LAST_GOOD_TTL_SECONDS = 86_400;
 
 function isValidRows(rows) {
-    return Array.isArray(rows) && rows.length > 0;
+    if (!Array.isArray(rows) || rows.length === 0) return false;
+
+    const normalizedProducts = rows.map(normalizeProduct);
+    if (normalizedProducts.some(product => product === null)) return false;
+
+    const ids = normalizedProducts.map(product => product.id);
+    return new Set(ids).size === ids.length;
+}
+
+function preservesHistoricalIds(rows, lastGoodRows) {
+    if (!isValidRows(rows)) return false;
+    if (!isValidRows(lastGoodRows)) return true;
+
+    const currentIds = new Set(rows.map(row => normalizeProduct(row).id));
+    return lastGoodRows.every(row => currentIds.has(normalizeProduct(row).id));
 }
 
 function validateCacheKey(key, name) {
@@ -67,12 +82,13 @@ function createCachedProductProvider({
 
         if (freshRows) return freshRows;
 
+        const lastGoodRows = await readValidRows(lastGoodKey);
         let originError;
 
         try {
             const rows = await provider.fetchRows();
 
-            if (!isValidRows(rows)) {
+            if (!preservesHistoricalIds(rows, lastGoodRows)) {
                 throw new TypeError('El proveedor de origen devolvió un catálogo inválido.');
             }
 
@@ -85,8 +101,6 @@ function createCachedProductProvider({
         } catch (error) {
             originError = error;
         }
-
-        const lastGoodRows = await readValidRows(lastGoodKey);
 
         if (lastGoodRows) {
             console.warn('Using last-good product catalog fallback');

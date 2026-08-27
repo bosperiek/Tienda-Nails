@@ -85,7 +85,9 @@ function esProductoCanonicoValido(producto) {
 }
 
 function esCatalogoCanonicoValido(products) {
-    return Array.isArray(products) && products.every(esProductoCanonicoValido);
+    return Array.isArray(products)
+        && products.length > 0
+        && products.every(esProductoCanonicoValido);
 }
 
 function guardarCatalogoCache(products) {
