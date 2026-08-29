@@ -14,3 +14,5 @@ Thumbs.db
 # Archivos de entorno (Si usaras claves secretas en el futuro)
 .env
 .env.local
+.vercel
+
