@@ -1,11 +1,17 @@
 'use strict';
 
-const cachedProductProvider = require('./cached-product-provider');
+const useRuntimeCache = process.env.VERCEL_ENV === 'production'
+    || process.env.VERCEL_ENV === 'preview';
+
+const productProvider = useRuntimeCache
+    ? require('./cached-product-provider')
+    : require('./opensheet-provider');
+
 const { normalizeProduct } = require('./product-normalizer');
 
 const PRODUCT_ID_PATTERN = /^prod_[0-9]+$/;
 
-function createProductRepository(provider = cachedProductProvider) {
+function createProductRepository(provider = productProvider) {
     if (!provider || typeof provider.fetchRows !== 'function') {
         throw new TypeError('El proveedor debe implementar fetchRows().');
     }

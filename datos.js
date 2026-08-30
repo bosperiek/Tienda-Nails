@@ -1,5 +1,5 @@
 const PRODUCTS_API_URL = '/api/products';
-const PRODUCTS_API_TIMEOUT_MS = 10_000;
+const PRODUCTS_API_TIMEOUT_MS = 35_000;
 const CATALOGO_CACHE_KEY = 'tiendaCatalogoCache_v2';
 const CATALOGO_CACHE_VERSION = 2;
 const PRODUCT_ID_PATTERN = /^prod_[0-9]+$/;
