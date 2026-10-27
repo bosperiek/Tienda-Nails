@@ -1,5 +1,4 @@
 
-
 'use strict';
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -12,7 +11,10 @@ async function fetchRows() {
         );
     }
 
-    const baseUrl = SUPABASE_URL.replace(/\/+$/, '');
+    const baseUrl = SUPABASE_URL
+        .replace(/\/+$/, '')
+        .replace(/\/rest\/v1$/i, '');
+
     const url = new URL(`${baseUrl}/rest/v1/products`);
 
     url.searchParams.set('select', '*');
