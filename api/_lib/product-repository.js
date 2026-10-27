@@ -3,9 +3,15 @@
 const useRuntimeCache = process.env.VERCEL_ENV === 'production'
     || process.env.VERCEL_ENV === 'preview';
 
-const productProvider = useRuntimeCache
-    ? require('./cached-product-provider')
-    : require('./opensheet-provider');
+
+const useSupabase = process.env.PRODUCTS_PROVIDER === 'supabase';
+
+const productProvider = useSupabase
+    ? require('./supabase-product-provider')
+    : useRuntimeCache
+        ? require('./cached-product-provider')
+        : require('./opensheet-provider');
+
 
 const { normalizeProduct } = require('./product-normalizer');
 
