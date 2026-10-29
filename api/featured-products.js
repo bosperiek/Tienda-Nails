@@ -1,4 +1,3 @@
-
 'use strict';
 
 const productRepository = require('./_lib/product-repository');
@@ -7,14 +6,6 @@ const { resolveProductImageUrl } = require('./_lib/product-image-url');
 const SITE_URL = process.env.SITE_URL || 'https://tienda-nails.vercel.app';
 const PRODUCT_ID_PATTERN = /^prod_[0-9]+$/;
 const MAX_FEATURED_PRODUCTS = 6;
-const FALLBACK_PRODUCT_IDS = Object.freeze([
-    'prod_0191',
-    'prod_0195',
-    'prod_0142',
-    'prod_0348',
-    'prod_0243',
-    'prod_0456'
-]);
 const ALLOWED_METHODS = 'GET, HEAD';
 const FEATURED_CACHE_CONTROL = 'public, max-age=0, s-maxage=300, stale-while-revalidate=300, must-revalidate';
 const NO_STORE_CACHE_CONTROL = 'no-store';
@@ -32,21 +23,16 @@ function getEffectivePrice(product) {
 }
 
 function isFeaturedProductAvailable(product) {
-    if (!product
-        || typeof product.id !== 'string'
-        || !PRODUCT_ID_PATTERN.test(product.id)
-        || product.active !== true
-        || getEffectivePrice(product) === null) {
-        return false;
-    }
-
-    return product.stock === null
-        || typeof product.stock === 'undefined'
-        || (Number.isFinite(product.stock) && product.stock > 0);
+    return Boolean(
+        product
+        && typeof product.id === 'string'
+        && PRODUCT_ID_PATTERN.test(product.id)
+        && product.active === true
+        && getEffectivePrice(product) !== null
+    );
 }
 
 function selectFeaturedProducts(products, {
-    fallbackIds = FALLBACK_PRODUCT_IDS,
     limit = MAX_FEATURED_PRODUCTS
 } = {}) {
     if (!Array.isArray(products)) return [];
@@ -54,6 +40,7 @@ function selectFeaturedProducts(products, {
     const safeLimit = Number.isInteger(limit) && limit > 0
         ? Math.min(limit, MAX_FEATURED_PRODUCTS)
         : MAX_FEATURED_PRODUCTS;
+
     const eligibleFeatured = [];
     const featuredIds = new Set();
 
@@ -66,32 +53,19 @@ function selectFeaturedProducts(products, {
 
         featuredIds.add(product.id);
         eligibleFeatured.push(product);
+
+        if (eligibleFeatured.length >= safeLimit) break;
     }
 
-    if (eligibleFeatured.length > 0) {
-        return eligibleFeatured.slice(0, safeLimit);
-    }
-
-    const productsById = new Map(
-        products.map(product => [product?.id, product])
-    );
-    const seenIds = new Set();
-    const fallbackProducts = [];
-
-    for (const id of fallbackIds) {
-        if (fallbackProducts.length >= safeLimit || seenIds.has(id)) continue;
-        seenIds.add(id);
-
-        const product = productsById.get(id);
-        if (isFeaturedProductAvailable(product)) fallbackProducts.push(product);
-    }
-
-    return fallbackProducts;
+    return eligibleFeatured;
 }
 
 function toFeaturedProductResponse(product, { siteUrl = SITE_URL } = {}) {
     const effectivePrice = getEffectivePrice(product);
-    if (!isFeaturedProductAvailable(product) || effectivePrice === null) return null;
+
+    if (!isFeaturedProductAvailable(product) || effectivePrice === null) {
+        return null;
+    }
 
     const name = typeof product.name === 'string' ? product.name.trim() : '';
     if (!name) return null;
@@ -121,7 +95,11 @@ function sendJson(request, response, statusCode, payload, headers = {}) {
         'Cache-Control',
         statusCode === 200 ? FEATURED_CACHE_CONTROL : NO_STORE_CACHE_CONTROL
     );
-    Object.entries(headers).forEach(([name, value]) => response.setHeader(name, value));
+
+    Object.entries(headers).forEach(([name, value]) => {
+        response.setHeader(name, value);
+    });
+
     response.end(request.method === 'HEAD' ? undefined : JSON.stringify(payload));
 }
 
@@ -145,6 +123,11 @@ function createFeaturedProductsHandler({
 
         try {
             const products = await repository.getAllProducts();
+
+            if (!Array.isArray(products)) {
+                throw new TypeError('El repositorio devolvió un catálogo inválido.');
+            }
+
             const featuredProducts = selectFeaturedProducts(products)
                 .map(product => toFeaturedProductResponse(product, { siteUrl }))
                 .filter(product => product !== null);
@@ -171,5 +154,5 @@ module.exports.getEffectivePrice = getEffectivePrice;
 module.exports.isFeaturedProductAvailable = isFeaturedProductAvailable;
 module.exports.selectFeaturedProducts = selectFeaturedProducts;
 module.exports.toFeaturedProductResponse = toFeaturedProductResponse;
-module.exports.FALLBACK_PRODUCT_IDS = FALLBACK_PRODUCT_IDS;
 module.exports.MAX_FEATURED_PRODUCTS = MAX_FEATURED_PRODUCTS;
+```
