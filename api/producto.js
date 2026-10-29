@@ -1,7 +1,6 @@
 'use strict';
 
 const productRepository = require('./_lib/product-repository');
-const { OpenSheetProviderError } = require('./_lib/opensheet-provider');
 const {
     createProductPath,
     createProductSlug,
@@ -25,8 +24,7 @@ const NO_STORE_CACHE_CONTROL = 'no-store';
 const STATUS_PAGES = Object.freeze({
     404: '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Producto no encontrado | Nanty Nails Shop</title></head><body><main><h1>Producto no encontrado</h1><p>No encontramos el producto solicitado.</p></main></body></html>',
     405: '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Método no permitido | Nanty Nails Shop</title></head><body><main><h1>Método no permitido</h1><p>Este recurso sólo admite GET y HEAD.</p></main></body></html>',
-    500: '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Error interno | Nanty Nails Shop</title></head><body><main><h1>No pudimos mostrar este producto</h1><p>Ocurrió un error inesperado.</p></main></body></html>',
-    503: '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Servicio temporalmente no disponible | Nanty Nails Shop</title></head><body><main><h1>Servicio temporalmente no disponible</h1><p>No pudimos cargar este producto temporalmente.</p></main></body></html>'
+    500: '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Error interno | Nanty Nails Shop</title></head><body><main><h1>No pudimos mostrar este producto</h1><p>Ocurrió un error inesperado.</p></main></body></html>'
 });
 
 function setHeaders(response, headers = {}) {
@@ -208,6 +206,7 @@ function createProductHandler({
                 products,
                 siteUrl
             );
+
             if (replacementUrl) {
                 sendResponse(request, response, 308, '', {
                     Location: replacementUrl
@@ -234,6 +233,7 @@ function createProductHandler({
             const relatedProducts = selectRelatedProducts(product, products, {
                 siteUrl
             });
+
             const html = renderPage({
                 product,
                 canonicalUrl,
@@ -245,17 +245,11 @@ function createProductHandler({
 
             sendResponse(request, response, 200, html);
         } catch (error) {
-            if (error instanceof OpenSheetProviderError) {
-                sendResponse(request, response, 503, STATUS_PAGES[503], {
-                    'Retry-After': '60'
-                });
-                return;
-            }
-
             console.error('Error interno al resolver un producto.', {
                 name: error?.name,
                 message: error?.message
             });
+
             sendResponse(request, response, 500, STATUS_PAGES[500]);
         }
     };
