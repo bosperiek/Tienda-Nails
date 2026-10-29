@@ -1,7 +1,7 @@
 'use strict';
 
 const productRepository = require('./_lib/product-repository');
-const { OpenSheetProviderError } = require('./_lib/opensheet-provider');
+
 
 const PRODUCT_ID_PATTERN = /^prod_[0-9]+$/;
 const ALLOWED_METHODS = 'GET, HEAD';
@@ -94,6 +94,7 @@ function sendJson(request, response, statusCode, payload, headers = {}) {
     response.end(request.method === 'HEAD' ? undefined : body);
 }
 
+
 function createProductsHandler({ repository = productRepository } = {}) {
     if (!repository || typeof repository.getAllProducts !== 'function') {
         throw new TypeError('repository debe implementar getAllProducts().');
@@ -111,6 +112,7 @@ function createProductsHandler({ repository = productRepository } = {}) {
 
         try {
             const products = await repository.getAllProducts();
+
             if (!Array.isArray(products)) {
                 throw new TypeError('El repositorio devolvió un catálogo inválido.');
             }
@@ -121,18 +123,14 @@ function createProductsHandler({ repository = productRepository } = {}) {
 
             sendJson(request, response, 200, publicProducts);
         } catch (error) {
-            if (error instanceof OpenSheetProviderError) {
-                sendJson(request, response, 503, { error: 'PRODUCTS_UNAVAILABLE' }, {
-                    'Retry-After': '60'
-                });
-                return;
-            }
-
             console.error('Error interno al obtener el catálogo público.', {
                 name: error?.name,
                 message: error?.message
             });
-            sendJson(request, response, 500, { error: 'INTERNAL_SERVER_ERROR' });
+
+            sendJson(request, response, 500, {
+                error: 'INTERNAL_SERVER_ERROR'
+            });
         }
     };
 }
