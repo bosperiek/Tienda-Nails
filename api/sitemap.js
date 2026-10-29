@@ -1,7 +1,7 @@
+
 'use strict';
 
 const productRepository = require('./_lib/product-repository');
-const { OpenSheetProviderError } = require('./_lib/opensheet-provider');
 const { createProductUrl } = require('./_lib/product-url');
 
 const CANONICAL_SITE_URL = 'https://tienda-nails.vercel.app';
@@ -33,6 +33,7 @@ function normalizeSiteUrl(value) {
 
     try {
         const parsed = new URL(value.trim());
+
         if (parsed.protocol !== 'https:') {
             throw new TypeError('siteUrl debe utilizar HTTPS.');
         }
@@ -51,8 +52,10 @@ function normalizeLastModified(value) {
     if (typeof value !== 'string') return null;
 
     const normalized = value.trim();
+
     if (/^\d{4}-\d{2}-\d{2}$/.test(normalized)) {
         const date = new Date(`${normalized}T00:00:00.000Z`);
+
         return Number.isNaN(date.getTime())
             || date.toISOString().slice(0, 10) !== normalized
             ? null
@@ -64,7 +67,10 @@ function normalizeLastModified(value) {
     }
 
     const timestamp = Date.parse(normalized);
-    return Number.isNaN(timestamp) ? null : new Date(timestamp).toISOString();
+
+    return Number.isNaN(timestamp)
+        ? null
+        : new Date(timestamp).toISOString();
 }
 
 function createSitemapEntries(products, { siteUrl = SITE_URL } = {}) {
@@ -96,6 +102,7 @@ function createSitemapEntries(products, { siteUrl = SITE_URL } = {}) {
 
     for (const product of indexableProducts) {
         const productUrl = createProductUrl(product, safeSiteUrl);
+
         if (!productUrl) continue;
 
         addEntry(productUrl, normalizeLastModified(product.updatedAt));
@@ -106,6 +113,7 @@ function createSitemapEntries(products, { siteUrl = SITE_URL } = {}) {
 
 function createSitemapXml(products, options) {
     const entries = createSitemapEntries(products, options);
+
     const urlElements = entries.map(({ loc, lastmod }) => {
         const lastModifiedElement = lastmod
             ? `\n    <lastmod>${escapeXml(lastmod)}</lastmod>`
@@ -123,6 +131,7 @@ function setHeaders(response, statusCode, headers = {}) {
     Object.entries({ ...BASE_HEADERS, ...headers }).forEach(([name, value]) => {
         response.setHeader(name, value);
     });
+
     response.setHeader(
         'Cache-Control',
         statusCode === 200 ? SUCCESS_CACHE_CONTROL : NO_STORE_CACHE_CONTROL
@@ -159,22 +168,16 @@ function createSitemapHandler({
         try {
             const products = await repository.getAllProducts();
             const xml = createSitemapXml(products, { siteUrl: safeSiteUrl });
+
             sendResponse(request, response, 200, xml, {
                 'Content-Type': 'application/xml; charset=utf-8'
             });
         } catch (error) {
-            if (error instanceof OpenSheetProviderError) {
-                sendResponse(request, response, 503, 'Servicio temporalmente no disponible.', {
-                    'Content-Type': 'text/plain; charset=utf-8',
-                    'Retry-After': '60'
-                });
-                return;
-            }
-
             console.error('Error interno al generar el sitemap.', {
                 name: error?.name,
                 message: error?.message
             });
+
             sendResponse(request, response, 500, 'Error interno.', {
                 'Content-Type': 'text/plain; charset=utf-8'
             });
