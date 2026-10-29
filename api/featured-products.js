@@ -1,7 +1,7 @@
+
 'use strict';
 
 const productRepository = require('./_lib/product-repository');
-const { OpenSheetProviderError } = require('./_lib/opensheet-provider');
 const { resolveProductImageUrl } = require('./_lib/product-image-url');
 
 const SITE_URL = process.env.SITE_URL || 'https://tienda-nails.vercel.app';
@@ -56,6 +56,7 @@ function selectFeaturedProducts(products, {
         : MAX_FEATURED_PRODUCTS;
     const eligibleFeatured = [];
     const featuredIds = new Set();
+
     for (const product of products) {
         if (product?.featured !== true
             || featuredIds.has(product.id)
@@ -134,6 +135,7 @@ function createFeaturedProductsHandler({
 
     return async function featuredProductsHandler(request, response) {
         const method = request.method || '';
+
         if (method !== 'GET' && method !== 'HEAD') {
             sendJson(request, response, 405, { error: 'METHOD_NOT_ALLOWED' }, {
                 Allow: ALLOWED_METHODS
@@ -149,18 +151,14 @@ function createFeaturedProductsHandler({
 
             sendJson(request, response, 200, featuredProducts);
         } catch (error) {
-            if (error instanceof OpenSheetProviderError) {
-                sendJson(request, response, 503, { error: 'FEATURED_PRODUCTS_UNAVAILABLE' }, {
-                    'Retry-After': '60'
-                });
-                return;
-            }
-
             console.error('Error interno al obtener productos destacados.', {
                 name: error?.name,
                 message: error?.message
             });
-            sendJson(request, response, 500, { error: 'INTERNAL_SERVER_ERROR' });
+
+            sendJson(request, response, 500, {
+                error: 'INTERNAL_SERVER_ERROR'
+            });
         }
     };
 }
