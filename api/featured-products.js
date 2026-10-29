@@ -155,4 +155,3 @@ module.exports.isFeaturedProductAvailable = isFeaturedProductAvailable;
 module.exports.selectFeaturedProducts = selectFeaturedProducts;
 module.exports.toFeaturedProductResponse = toFeaturedProductResponse;
 module.exports.MAX_FEATURED_PRODUCTS = MAX_FEATURED_PRODUCTS;
-```
