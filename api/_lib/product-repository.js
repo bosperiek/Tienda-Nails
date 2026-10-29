@@ -1,18 +1,7 @@
+
 'use strict';
 
-const useRuntimeCache = process.env.VERCEL_ENV === 'production'
-    || process.env.VERCEL_ENV === 'preview';
-
-
-const useSupabase = process.env.PRODUCTS_PROVIDER === 'supabase';
-
-const productProvider = useSupabase
-    ? require('./supabase-product-provider')
-    : useRuntimeCache
-        ? require('./cached-product-provider')
-        : require('./opensheet-provider');
-
-
+const productProvider = require('./supabase-product-provider');
 const { normalizeProduct } = require('./product-normalizer');
 
 const PRODUCT_ID_PATTERN = /^prod_[0-9]+$/;
@@ -52,3 +41,4 @@ module.exports = {
     getAllProducts: defaultRepository.getAllProducts,
     getProductById: defaultRepository.getProductById
 };
+
