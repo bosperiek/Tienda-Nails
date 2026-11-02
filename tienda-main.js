@@ -1,5 +1,9 @@
+function isCatalogProductVisible(product) {
+    return Boolean(product && product.active === true);
+}
+
 function isCatalogProductAvailable(product) {
-    if (!product || product.active !== true) return false;
+    if (!isCatalogProductVisible(product)) return false;
     if (product.stock === null || typeof product.stock === 'undefined') return true;
     if (typeof product.stock !== 'number') return false;
     return Number.isFinite(product.stock) && product.stock > 0;
@@ -194,8 +198,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const categoriesMap = {};
 
-    function getAvailableCatalogProducts() {
-        return misProductos.filter(isCatalogProductAvailable);
+    function getVisibleCatalogProducts() {
+        return misProductos.filter(isCatalogProductVisible);
     }
 
     function rebuildCatalogProductIndex() {
@@ -208,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function rebuildCategoriesMap() {
         Object.keys(categoriesMap).forEach(key => delete categoriesMap[key]);
-        getAvailableCatalogProducts().forEach(product => {
+        getVisibleCatalogProducts().forEach(product => {
             const slug = extractCategorySlug(product);
             categoriesMap[slug] = (categoriesMap[slug] || 0) + 1;
         });
@@ -239,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const allBtn = document.createElement('button');
         allBtn.type = 'button';
         allBtn.className = 'category-btn' + (activeCategory === '' ? ' active' : '');
-        allBtn.textContent = `Todas (${getAvailableCatalogProducts().length})`;
+        allBtn.textContent = `Todas (${getVisibleCatalogProducts().length})`;
         allBtn.dataset.categoryFilter = '';
         allBtn.setAttribute('aria-pressed', String(activeCategory === ''));
         allBtn.addEventListener('click', () => selectCategory(''));
@@ -475,7 +479,7 @@ document.addEventListener('DOMContentLoaded', () => {
         refreshCategories = true
     } = {}) {
         const previousRenderedCount = renderedCount;
-        const filtrados = getAvailableCatalogProducts().filter(producto => {
+        const filtrados = getVisibleCatalogProducts().filter(producto => {
             const textoOK = searchText === '' || getCatalogProductSearchText(producto).includes(searchText);
             if (!textoOK) return false;
             if (!activeCategory) return true;
@@ -564,20 +568,24 @@ document.addEventListener('DOMContentLoaded', () => {
             icon.appendChild(path);
         });
 
+        const isAvailable = isCatalogProductAvailable(currentModalProduct);
         const text = document.createElement('span');
-        text.textContent = item
-            ? ` En carrito (${item.qty})`
-            : ' Añadir al carrito';
+        text.textContent = !isAvailable
+            ? ' Producto agotado'
+            : (item ? ` En carrito (${item.qty})` : ' Añadir al carrito');
 
+        modalAddBtn.disabled = !isAvailable;
         modalAddBtn.replaceChildren(icon, text);
         const productName = currentModalProduct
             ? getProductData(currentModalProduct).nombre
             : 'producto';
         modalAddBtn.setAttribute(
             'aria-label',
-            item
-                ? `${productName} en el carrito, cantidad ${item.qty}`
-                : `Añadir ${productName} al carrito`
+            !isAvailable
+                ? `${productName}, producto agotado`
+                : (item
+                    ? `${productName} en el carrito, cantidad ${item.qty}`
+                    : `Añadir ${productName} al carrito`)
         );
     }
 
@@ -822,12 +830,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateCatalogAddButton(button, item) {
         if (!button) return;
         const productName = button.dataset.productName || 'producto';
-        button.textContent = item ? `En carrito (${item.qty})` : 'Agregar';
+        const product = catalogProductsById.get(String(button.dataset.productId || ''));
+        const available = isCatalogProductAvailable(product);
+        button.disabled = !available;
+        button.textContent = available
+            ? (item ? `En carrito (${item.qty})` : 'Agregar')
+            : 'Agotado';
         button.setAttribute(
             'aria-label',
-            item
-                ? `${productName} en el carrito, cantidad ${item.qty}`
-                : `Agregar ${productName} al carrito`
+            available
+                ? (item
+                    ? `${productName} en el carrito, cantidad ${item.qty}`
+                    : `Agregar ${productName} al carrito`)
+                : `${productName}, producto agotado`
         );
     }
 
@@ -839,7 +854,8 @@ document.addEventListener('DOMContentLoaded', () => {
         col.className = 'col-6 col-md-4 col-lg-3';
 
         const tarjeta = document.createElement('div');
-        tarjeta.className = 'card h-100';
+        const isOutOfStock = !isCatalogProductAvailable(prod);
+        tarjeta.className = 'card h-100' + (isOutOfStock ? ' product-out-of-stock' : '');
         tarjeta.dataset.id = productId;
 
         const imgContainer = document.createElement('div');
@@ -868,6 +884,14 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         imgEl.src = imgUrl || catalogFallbackImage;
         imgContainer.appendChild(imgEl);
+
+        if (isOutOfStock) {
+            const stockBadge = document.createElement('span');
+            stockBadge.className = 'product-stock-badge';
+            stockBadge.textContent = 'Producto agotado';
+            stockBadge.setAttribute('aria-label', 'Producto agotado');
+            imgContainer.appendChild(stockBadge);
+        }
 
         const cuerpo = document.createElement('div');
         cuerpo.className = 'card-body';
