@@ -9,6 +9,13 @@ function isCatalogProductAvailable(product) {
     return Number.isFinite(product.stock) && product.stock > 0;
 }
 
+function isCatalogProductOutOfStock(product) {
+    return isCatalogProductVisible(product)
+        && typeof product.stock === 'number'
+        && Number.isFinite(product.stock)
+        && product.stock <= 0;
+}
+
 function normalizeSearchText(value) {
     return String(value ?? '')
         .trim()
@@ -854,7 +861,7 @@ document.addEventListener('DOMContentLoaded', () => {
         col.className = 'col-6 col-md-4 col-lg-3';
 
         const tarjeta = document.createElement('div');
-        const isOutOfStock = !isCatalogProductAvailable(prod);
+        const isOutOfStock = isCatalogProductOutOfStock(prod);
         tarjeta.className = 'card h-100' + (isOutOfStock ? ' product-out-of-stock' : '');
         tarjeta.dataset.id = productId;
 
