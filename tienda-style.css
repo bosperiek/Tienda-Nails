@@ -1553,3 +1553,44 @@ footer .text-center {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* Productos agotados: permanecen visibles, pero no se pueden comprar. */
+.product-out-of-stock {
+  filter: saturate(0.78);
+}
+
+.product-stock-badge {
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: 10px;
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #8b3038;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
+.product-out-of-stock .btn-add:disabled,
+.btn-add:disabled,
+.modal-add-btn:disabled {
+  background: #8b8b8b;
+  border-color: #8b8b8b;
+  color: #fff;
+  cursor: not-allowed;
+  opacity: 0.85;
+  transform: none;
+  box-shadow: none;
+}
+
+.product-out-of-stock .btn-add:disabled:hover,
+.btn-add:disabled:hover,
+.modal-add-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
