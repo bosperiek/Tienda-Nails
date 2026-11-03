@@ -275,8 +275,9 @@
     saveButton.disabled = true;
     editorStatus.textContent = 'Guardando cambios…';
     try {
+      const wasCreating = creatingProduct;
       let savedId = editingProductId;
-      if (creatingProduct) {
+      if (wasCreating) {
         savedId = `prod_${Date.now()}`;
         const { data, error } = await supabaseClient.from('products')
           .insert({ id: savedId, ...payload })
@@ -289,10 +290,10 @@
         if (error) throw error;
         if (!data) throw new Error('Supabase no confirmó la actualización. Comprueba los permisos de administrador.');
       }
-      editorStatus.textContent = creatingProduct ? 'Producto creado correctamente.' : 'Cambios guardados correctamente.';
+      editorStatus.textContent = wasCreating ? 'Producto creado correctamente.' : 'Cambios guardados correctamente.';
       await loadProducts();
       closeEditor();
-      inventoryStatus.textContent = creatingProduct ? 'Producto creado y verificado en Supabase.' : 'Producto actualizado y datos verificados en Supabase.';
+      inventoryStatus.textContent = wasCreating ? 'Producto creado y verificado en Supabase.' : 'Producto actualizado y datos verificados en Supabase.';
       renderProducts();
     } catch (error) {
       console.error('No se pudo actualizar el producto:', error);
