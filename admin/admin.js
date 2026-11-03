@@ -151,10 +151,81 @@
         <td>${escapeHtml(product.stock ?? 0)}</td>
         <td><span class="status-pill ${active ? '' : 'inactive'}">${active ? 'Activo' : 'Inactivo'}</span></td>
         <td>${featured}</td>
-        <td><button class="secondary-button edit-product-button" type="button" data-edit-product="${escapeHtml(product.id)}">Editar</button></td>
+        <td class="product-actions-cell">
+          <button class="secondary-button edit-product-button" type="button" data-edit-product="${escapeHtml(product.id)}">Editar</button>
+          <button class="danger-button delete-product-button" type="button" data-delete-product="${escapeHtml(product.id)}">Eliminar</button>
+        </td>
       </tr>`;
     }).join('');
   }
+
+
+  async function listProductStorageFiles(folderPath) {
+    const storage = supabaseClient.storage.from('product-images');
+    const collected = [];
+    async function walk(path) {
+      let offset = 0;
+      const limit = 100;
+      while (true) {
+        const { data, error } = await storage.list(path, { limit, offset, sortBy: { column: 'name', order: 'asc' } });
+        if (error) throw error;
+        const entries = Array.isArray(data) ? data : [];
+        for (const entry of entries) {
+          const fullPath = path ? `${path}/${entry.name}` : entry.name;
+          if (entry.id === null) await walk(fullPath);
+          else collected.push(fullPath);
+        }
+        if (entries.length < limit) break;
+        offset += limit;
+      }
+    }
+    await walk(folderPath);
+    return collected;
+  }
+
+  async function deleteProduct(productId) {
+    const product = allProducts.find(item => String(item.id) === String(productId));
+    if (!product) return;
+    const confirmed = window.confirm(
+      `¿Eliminar definitivamente "${product.name}"?\\n\\nSe borrará el registro de Supabase y también las imágenes de su carpeta en Storage. Esta acción no se puede deshacer.`
+    );
+    if (!confirmed) return;
+
+    const row = productsTableBody.querySelector(`[data-delete-product="${CSS.escape(String(productId))}"]`);
+    if (row) row.disabled = true;
+    inventoryStatus.textContent = `Eliminando "${product.name}"…`;
+    try {
+      const { data, error } = await supabaseClient.from('products')
+        .delete().eq('id', productId).select('id').maybeSingle();
+      if (error) throw error;
+      if (!data) throw new Error('Supabase no confirmó la eliminación. Comprueba los permisos de administrador.');
+
+      let storageWarning = '';
+      try {
+        const paths = await listProductStorageFiles(String(productId));
+        if (paths.length) {
+          const { error: storageError } = await supabaseClient.storage.from('product-images').remove(paths);
+          if (storageError) throw storageError;
+        }
+      } catch (storageError) {
+        console.error('El producto se eliminó, pero no se pudieron limpiar todas sus imágenes:', storageError);
+        storageWarning = ' El registro se eliminó, pero algunas imágenes podrían permanecer en Storage.';
+      }
+
+      allProducts = allProducts.filter(item => String(item.id) !== String(productId));
+      renderProducts();
+      inventoryStatus.textContent = `Producto "${product.name}" eliminado de Supabase.${storageWarning}`;
+    } catch (error) {
+      console.error('No se pudo eliminar el producto:', error);
+      inventoryStatus.textContent = `No se pudo eliminar el producto: ${error.message || 'Error desconocido'}`;
+      if (row) row.disabled = false;
+    }
+  }
+
+  productsTableBody.addEventListener('click', event => {
+    const deleteButton = event.target.closest('[data-delete-product]');
+    if (deleteButton) deleteProduct(deleteButton.dataset.deleteProduct);
+  });
 
   async function loadProducts() {
     if (!supabaseClient) return;
