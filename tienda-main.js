@@ -1610,6 +1610,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // -------------------------------------------------------
     // INICIALIZACIÓN
     // -------------------------------------------------------
+    // Reconsulta tras registrar el listener para no perder la primera respuesta de Supabase.
+    if (typeof cargarProductosDesdeSheet === 'function') cargarProductosDesdeSheet();
     loadCart();
     renderCartItems();
     loadLikes();
