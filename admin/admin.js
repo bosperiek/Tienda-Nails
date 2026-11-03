@@ -253,8 +253,8 @@
   }
 
   document.getElementById('edit-image-files').addEventListener('change', event => {
-    resetPendingImages();
     const files = Array.from(event.target.files || []);
+    resetPendingImages();
     const invalid = files.find(file => !['image/jpeg', 'image/png', 'image/webp', 'image/avif'].includes(file.type));
     if (invalid) {
       document.getElementById('editor-status').textContent = `Formato no permitido: ${invalid.name}. Usa JPG, PNG, WebP o AVIF.`;
@@ -276,6 +276,8 @@
     const index = Number(button.dataset.removeImage);
     const removed = pendingImageFiles.splice(index, 1)[0];
     if (removed) URL.revokeObjectURL(removed.previewUrl);
+    if (selectedPrimaryFileIndex === index) selectedPrimaryFileIndex = 0;
+    else if (selectedPrimaryFileIndex > index) selectedPrimaryFileIndex -= 1;
     if (selectedPrimaryFileIndex >= pendingImageFiles.length) selectedPrimaryFileIndex = Math.max(0, pendingImageFiles.length - 1);
     renderPendingImages();
   });
@@ -393,7 +395,8 @@
         const primaryUrl = uploadedUrls[selectedPrimaryFileIndex] || currentMain || uploadedUrls[0];
         const otherUploaded = uploadedUrls.filter(url => url !== primaryUrl);
         const existingAdditional = wasCreating ? [] : (allProducts.find(product => product.id === savedId)?.additional_images || []);
-        const additionalImages = [...existingAdditional, ...otherUploaded].filter(url => url && url !== primaryUrl);
+        const additionalImages = [...existingAdditional, ...(currentMain && currentMain !== primaryUrl ? [currentMain] : []), ...otherUploaded]
+          .filter((url, index, urls) => url && url !== primaryUrl && urls.indexOf(url) === index);
         const { error: imageUpdateError } = await supabaseClient.from('products')
           .update({ image: primaryUrl, additional_images: additionalImages })
           .eq('id', savedId);
