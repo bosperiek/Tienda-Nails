@@ -4,9 +4,12 @@ function isCatalogProductVisible(product) {
 
 function isCatalogProductAvailable(product) {
     if (!isCatalogProductVisible(product)) return false;
-    if (product.stock === null || typeof product.stock === 'undefined') return true;
-    if (typeof product.stock !== 'number') return false;
-    return Number.isFinite(product.stock) && product.stock > 0;
+
+    // Regla de inventario: solo se puede comprar si existe stock numérico y es mayor que cero.
+    // Stock nulo, ausente o inválido se trata como no disponible por seguridad.
+    return typeof product.stock === 'number'
+        && Number.isFinite(product.stock)
+        && product.stock > 0;
 }
 
 function isCatalogProductOutOfStock(product) {
