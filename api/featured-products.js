@@ -7,7 +7,7 @@ const SITE_URL = process.env.SITE_URL || 'https://tienda-nails.vercel.app';
 const PRODUCT_ID_PATTERN = /^prod_[0-9]+$/;
 const MAX_FEATURED_PRODUCTS = 6;
 const ALLOWED_METHODS = 'GET, HEAD';
-const FEATURED_CACHE_CONTROL = 'public, max-age=0, s-maxage=300, stale-while-revalidate=300, must-revalidate';
+const FEATURED_CACHE_CONTROL = 'no-store, no-cache, must-revalidate, proxy-revalidate';
 const NO_STORE_CACHE_CONTROL = 'no-store';
 const FALLBACK_IMAGE_URL = 'https://placehold.co/600x600/f8f0ed/a13f62?text=Sin+Imagen';
 
