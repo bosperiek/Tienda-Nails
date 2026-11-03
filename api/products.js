@@ -5,7 +5,7 @@ const productRepository = require('./_lib/product-repository');
 
 const PRODUCT_ID_PATTERN = /^prod_[0-9]+$/;
 const ALLOWED_METHODS = 'GET, HEAD';
-const SUCCESS_CACHE_CONTROL = 'public, max-age=0, s-maxage=300, stale-while-revalidate=300, stale-if-error=86400';
+const SUCCESS_CACHE_CONTROL = 'no-store, no-cache, must-revalidate, proxy-revalidate';
 const NO_STORE_CACHE_CONTROL = 'no-store';
 
 function isNullableString(value) {
