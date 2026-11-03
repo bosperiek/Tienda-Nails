@@ -207,3 +207,8 @@ button:disabled { cursor: wait; opacity: .65; }
 .image-upload-item small { overflow-wrap: anywhere; color: var(--muted); font-size: .68rem; }
 .image-upload-item button { min-height: 30px; border: 1px solid var(--line); border-radius: 7px; color: var(--rose-dark); background: #fff; cursor: pointer; font-size: .72rem; }
 .image-upload-empty, .image-upload-help { margin-bottom: 0; }
+
+.product-actions-cell { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+.danger-button { min-height: 38px; padding: 8px 12px; border: 1px solid #e5b8c0; border-radius: 9px; color: #a33c53; background: #fff5f6; cursor: pointer; font: inherit; font-size: .84rem; }
+.danger-button:hover { background: #fde8ec; }
+.danger-button:disabled { opacity: .55; cursor: wait; }
