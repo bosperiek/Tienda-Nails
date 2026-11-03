@@ -222,6 +222,36 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         loadFeaturedProducts();
+
+        // Actualiza los destacados al cambiar productos, con Realtime y respaldo periódico.
+        let featuredRefreshTimer = null;
+        let featuredChannel = null;
+        const refreshFeatured = () => {
+            if (document.hidden) return;
+            loadFeaturedProducts();
+        };
+        const scheduleFeaturedRefresh = () => {
+            if (featuredRefreshTimer !== null) window.clearTimeout(featuredRefreshTimer);
+            if (!document.hidden) featuredRefreshTimer = window.setTimeout(() => {
+                refreshFeatured();
+                scheduleFeaturedRefresh();
+            }, 10000);
+        };
+        window.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                if (featuredRefreshTimer !== null) window.clearTimeout(featuredRefreshTimer);
+                featuredRefreshTimer = null;
+            } else {
+                refreshFeatured();
+                scheduleFeaturedRefresh();
+            }
+        });
+        scheduleFeaturedRefresh();
+        window.NantySupabase.getClient().then(client => {
+            featuredChannel = client.channel('nanty-featured-products')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'products' }, refreshFeatured)
+                .subscribe();
+        }).catch(error => console.warn('Realtime de destacados no disponible; se usará actualización periódica.', error));
     })();
 
 
