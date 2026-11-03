@@ -82,6 +82,14 @@
               <div class="editor-field"><label for="edit-image">URL de imagen principal</label><input id="edit-image" type="url" maxlength="2000" placeholder="https://…"></div>
               <div class="editor-field"><label for="edit-alt-text">Texto alternativo de imagen</label><input id="edit-alt-text" maxlength="240"></div>
             </div>
+            <section class="image-upload-section" aria-labelledby="image-upload-title">
+              <h4 id="image-upload-title">Galería de imágenes</h4>
+              <p>Selecciona varias fotos. Se optimizarán y convertirán a WebP antes de subirlas.</p>
+              <label for="edit-image-files">Seleccionar imágenes</label>
+              <input id="edit-image-files" type="file" accept="image/jpeg,image/png,image/webp,image/avif" multiple>
+              <div id="image-upload-preview" class="image-upload-preview" aria-live="polite"></div>
+              <p class="image-upload-help">Máximo 10 MB por imagen original. Se guardarán en Supabase Storage.</p>
+            </section>
             <div class="editor-checks">
               <label><input id="edit-active" type="checkbox"> Producto activo (visible en la tienda)</label>
               <label><input id="edit-featured" type="checkbox"> Producto destacado</label>
