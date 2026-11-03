@@ -57,7 +57,7 @@ async function fetchRows() {
         salePrice: product.sale_price,
         description: product.description,
         stock: product.stock,
-        additionalImages: product.additional_image,
+        additionalImages: product.additional_images,
         featured: product.featured,
         active: product.active,
         updatedAt: product.updated_at,
