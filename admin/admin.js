@@ -361,6 +361,7 @@
     document.getElementById('save-product').textContent = 'Guardar cambios';
     editingProductId = product.id;
     document.getElementById('editor-product-id').textContent = `ID: ${product.id}`;
+    document.getElementById('product-id-field').hidden = true;
     document.getElementById('edit-name').value = product.name || '';
     document.getElementById('edit-category').value = product.category || '';
     document.getElementById('edit-price').value = product.price ?? '';
@@ -383,7 +384,9 @@
     document.getElementById('product-edit-form').reset();
     document.getElementById('editor-title').textContent = 'Agregar producto';
     document.getElementById('save-product').textContent = 'Crear producto';
-    document.getElementById('editor-product-id').textContent = 'Se asignará un ID automáticamente.';
+    document.getElementById('editor-product-id').textContent = 'Asigna un ID propio para este producto.';
+    document.getElementById('product-id-field').hidden = false;
+    document.getElementById('edit-product-id').value = '';
     document.getElementById('edit-stock').value = '0';
     document.getElementById('edit-active').checked = true;
     document.getElementById('edit-featured').checked = false;
@@ -410,6 +413,7 @@
 
     const saveButton = document.getElementById('save-product');
     const editorStatus = document.getElementById('editor-status');
+    const requestedProductId = document.getElementById('edit-product-id').value.trim();
     const name = document.getElementById('edit-name').value.trim();
     const category = document.getElementById('edit-category').value.trim();
     const price = Number(document.getElementById('edit-price').value);
@@ -417,6 +421,10 @@
     const stock = Number(document.getElementById('edit-stock').value);
     const sale_price = saleValue === '' ? null : Number(saleValue);
 
+    if (creatingProduct && !/^[A-Za-z0-9_-]{2,80}$/.test(requestedProductId)) {
+      editorStatus.textContent = 'Escribe un ID de 2 a 80 caracteres usando solo letras, números, guiones o guion bajo.';
+      return;
+    }
     if (!name || !category || !Number.isFinite(price) || price < 0 ||
         !Number.isInteger(stock) || stock < 0 ||
         (sale_price !== null && (!Number.isFinite(sale_price) || sale_price < 0))) {
@@ -447,7 +455,7 @@
       const wasCreating = creatingProduct;
       let savedId = editingProductId;
       if (wasCreating) {
-        savedId = `prod_${Date.now()}`;
+        savedId = requestedProductId;
         const { data, error } = await supabaseClient.from('products')
           .insert({ id: savedId, ...payload })
           .select('id').maybeSingle();
