@@ -33,7 +33,7 @@ module.exports = function adminConfigHandler(request, response) {
     // Nunca devolver SUPABASE_SERVICE_ROLE_KEY ni secretos del servidor.
     response.statusCode = 200;
     response.end(method === 'HEAD' ? undefined : JSON.stringify({
-        supabaseUrl: supabaseUrl.replace(/\/+$/, ''),
+        supabaseUrl: supabaseUrl.replace(/\/+$/, '').replace(/\/rest\/v1$/i, ''),
         supabaseAnonKey
     }));
 };
