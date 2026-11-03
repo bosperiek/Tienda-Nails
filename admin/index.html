@@ -73,7 +73,7 @@
           <p id="editor-product-id" class="editor-product-id"></p>
           <form id="product-edit-form">
             <div class="editor-grid">
-              <div class="editor-field" id="product-id-field"><label for="edit-product-id">ID del producto</label><input id="edit-product-id" required maxlength="80" pattern="[A-Za-z0-9_-]+" placeholder="Ej. DN-001" autocomplete="off"><small>Usa letras, números, guiones o guion bajo. Debe ser único.</small></div>
+              <div class="editor-field" id="product-id-field"><label for="edit-product-id">ID del producto</label><input id="edit-product-id" required maxlength="80" pattern="[-A-Za-z0-9_]+" placeholder="Ej. DN-001" autocomplete="off"><small>Usa letras, números, guiones o guion bajo. Debe ser único.</small></div>
                <div class="editor-field"><label for="edit-name">Nombre</label><input id="edit-name" required maxlength="180"></div>
               <div class="editor-field"><label for="edit-category">Categoría</label><input id="edit-category" required maxlength="120"></div>
               <div class="editor-field"><label for="edit-price">Precio normal (MXN)</label><input id="edit-price" type="number" min="0" step="0.01" required></div>
