@@ -80,7 +80,7 @@ async function cargarProductosDesdeSheet() {
   return cargaProductosEnCurso;
 }
 
-const PRODUCTOS_REFRESH_MS = 30000;
+const PRODUCTOS_REFRESH_MS = 10000;
 let productosRefreshTimer = null;
 async function actualizarProductosPeriodicamente() {
   if (document.hidden) return;
