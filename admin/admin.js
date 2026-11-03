@@ -283,7 +283,8 @@
     renderPendingImages();
   });
 
-  function openEditor(product) {\n    resetPendingImages();
+  function openEditor(product) {
+    resetPendingImages();
     creatingProduct = false;
     document.getElementById('editor-title').textContent = 'Editar producto';
     document.getElementById('save-product').textContent = 'Guardar cambios';
