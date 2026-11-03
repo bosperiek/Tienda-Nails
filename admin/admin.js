@@ -379,6 +379,13 @@
           .select('id').maybeSingle();
         if (error) throw error;
         if (!data) throw new Error('Supabase no confirmó la creación del producto.');
+        // Si falla la subida de imágenes, el siguiente intento editará este registro
+        // en lugar de crear un producto duplicado.
+        creatingProduct = false;
+        editingProductId = savedId;
+        document.getElementById('editor-title').textContent = 'Editar producto';
+        document.getElementById('editor-product-id').textContent = `ID: ${savedId}`;
+        document.getElementById('save-product').textContent = 'Guardar cambios';
       } else {
         const { data, error } = await supabaseClient.from('products')
           .update(payload).eq('id', editingProductId).select('id').maybeSingle();
