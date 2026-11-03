@@ -167,3 +167,23 @@ button:disabled { cursor: wait; opacity: .65; }
   .inventory-toolbar .secondary-button { width: 100%; }
   .pagination { gap: 10px; }
 }
+
+
+/* Editor de producto */
+.products-table td:last-child .edit-product-button { width: auto; min-height: 34px; padding: 0 12px; margin: 0; font-size: .76rem; }
+.product-editor { margin-top: 28px; padding: clamp(18px, 3vw, 28px); border: 1px solid var(--line); border-radius: 16px; background: #fff; }
+.editor-heading { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.editor-heading .eyebrow { margin: 0 0 5px; }
+.editor-heading h3 { margin: 0; font-family: "Cormorant Garamond", serif; font-size: 1.8rem; }
+.editor-close { width: auto; padding: 0 14px; margin: 0; }
+.editor-product-id { color: var(--muted); font-size: .78rem; }
+.editor-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 16px; }
+.editor-field label { margin: 12px 0 7px; }
+.editor-field textarea { width: 100%; min-height: 90px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 11px; color: var(--ink); font: inherit; resize: vertical; }
+.editor-checks { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 18px; }
+.editor-checks label { display: flex; align-items: center; gap: 8px; margin: 0; }
+.editor-checks input { width: 17px; min-height: 17px; accent-color: var(--rose); }
+.editor-actions { display: flex; gap: 12px; }
+.editor-actions button { width: auto; min-width: 150px; padding: 0 18px; }
+.editor-actions .secondary-button { margin-top: 23px; }
+@media (max-width: 650px) { .editor-grid { grid-template-columns: 1fr; } .editor-actions { flex-direction: column; } .editor-actions button { width: 100%; } }
