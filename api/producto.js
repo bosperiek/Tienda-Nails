@@ -201,6 +201,11 @@ function createProductHandler({
                 return;
             }
 
+            if (product.active !== true && !resolveActiveReplacementUrl(product, products, siteUrl)) {
+                sendResponse(request, response, 404, STATUS_PAGES[404]);
+                return;
+            }
+
             const replacementUrl = resolveActiveReplacementUrl(
                 product,
                 products,
