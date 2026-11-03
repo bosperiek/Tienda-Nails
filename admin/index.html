@@ -38,11 +38,37 @@
       </div>
 
       <section id="dashboard-view" class="dashboard-view" hidden aria-live="polite">
-        <div class="success-mark" aria-hidden="true">✓</div>
-        <h2>Acceso verificado</h2>
-        <p id="signed-in-email" class="signed-in-email"></p>
-        <p class="coming-soon">La conexión segura está lista. Estamos preparando las herramientas para administrar tus productos.</p>
-        <button class="secondary-button" id="signout-button" type="button">Cerrar sesión</button>
+        <div class="dashboard-header">
+          <div>
+            <p class="eyebrow">ÁREA PRIVADA</p>
+            <h2>Inventario de productos</h2>
+            <p id="signed-in-email" class="signed-in-email"></p>
+          </div>
+          <button class="secondary-button signout-compact" id="signout-button" type="button">Cerrar sesión</button>
+        </div>
+        <div class="inventory-summary">
+          <div class="summary-card"><span>Total encontrados</span><strong id="products-total">—</strong></div>
+          <div class="summary-card"><span>Activos en esta página</span><strong id="products-active">—</strong></div>
+          <div class="summary-card"><span>Inactivos en esta página</span><strong id="products-inactive">—</strong></div>
+        </div>
+        <div class="inventory-toolbar">
+          <label class="search-label" for="product-search">Buscar producto por nombre o ID</label>
+          <input id="product-search" type="search" placeholder="Escribe un nombre o ID…">
+          <button class="secondary-button" id="refresh-products" type="button">Actualizar lista</button>
+        </div>
+        <p id="inventory-status" class="inventory-status" role="status" aria-live="polite">Cargando productos…</p>
+        <div class="table-wrap">
+          <table class="products-table">
+            <thead><tr><th>Producto</th><th>ID</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Estado</th><th>Destacado</th></tr></thead>
+            <tbody id="products-table-body"><tr><td colspan="7">Cargando…</td></tr></tbody>
+          </table>
+        </div>
+        <div class="pagination">
+          <button class="secondary-button" id="previous-page" type="button" disabled>Anterior</button>
+          <span id="page-indicator">Página 1</span>
+          <button class="secondary-button" id="next-page" type="button" disabled>Siguiente</button>
+        </div>
+        <p class="read-only-note">Vista de consulta: en esta etapa no se realizan cambios en los productos.</p>
       </section>
 
       <p id="status-message" class="status-message" role="status" aria-live="polite"></p>
