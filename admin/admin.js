@@ -421,7 +421,7 @@
     const stock = Number(document.getElementById('edit-stock').value);
     const sale_price = saleValue === '' ? null : Number(saleValue);
 
-    if (creatingProduct && !/^[A-Za-z0-9_-]{2,80}$/.test(requestedProductId)) {
+    if (creatingProduct && !/^[-A-Za-z0-9_]{2,80}$/.test(requestedProductId)) {
       editorStatus.textContent = 'Escribe un ID de 2 a 80 caracteres usando solo letras, números, guiones o guion bajo.';
       return;
     }
