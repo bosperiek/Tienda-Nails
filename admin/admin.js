@@ -156,17 +156,29 @@
       return;
     }
 
-    setBusy(true);
-    const { error } = await supabaseClient.auth.signInWithPassword({
-      email: ADMIN_EMAIL,
-      password
-    });
-    if (error) {
-      setBusy(false);
-      setStatus('No se pudo iniciar sesión. Revisa tu correo y contraseña.');
+    if (!supabaseClient) {
+      setStatus('El servicio de acceso todavía no está listo. Recarga la página e intenta nuevamente.');
       return;
     }
-    await verifyAdministrator();
+
+    setBusy(true);
+    try {
+      const { error } = await supabaseClient.auth.signInWithPassword({
+        email: ADMIN_EMAIL,
+        password
+      });
+      if (error) {
+        console.error('Error de inicio de sesión de Supabase:', error);
+        setBusy(false);
+        setStatus(`Supabase: ${error.message || 'No se pudo validar el acceso.'} (código: ${error.code || error.status || 'no disponible'})`);
+        return;
+      }
+      await verifyAdministrator();
+    } catch (error) {
+      console.error('Fallo inesperado al iniciar sesión:', error);
+      setBusy(false);
+      setStatus('Ocurrió un error al comunicarse con Supabase. Revisa la conexión e intenta nuevamente.');
+    }
   });
 
   googleButton.addEventListener('click', async () => {
