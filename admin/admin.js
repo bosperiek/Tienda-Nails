@@ -24,6 +24,9 @@
   let currentPage = 1;
   let editingProductId = null;
   let creatingProduct = false;
+  let pendingImageFiles = [];
+  let selectedPrimaryFileIndex = 0;
+
 
   let supabaseClient = null;
   let verificationInProgress = false;
@@ -161,7 +164,7 @@
     try {
       const { data, error } = await supabaseClient
         .from('products')
-        .select('id,name,category,price,sale_price,stock,active,featured,description,image,alt_text')
+        .select('id,name,category,price,sale_price,stock,active,featured,description,image,alt_text,additional_images')
         .order('id', { ascending: true });
       if (error) throw error;
       allProducts = Array.isArray(data) ? data : [];
@@ -177,7 +180,7 @@
     }
   }
 
-  function closeEditor() {
+  function closeEditor() {\n    resetPendingImages();
     document.getElementById('product-editor').hidden = true;
     document.getElementById('product-edit-form').reset();
     document.getElementById('editor-status').textContent = '';
@@ -187,7 +190,97 @@
     document.getElementById('save-product').textContent = 'Guardar cambios';
   }
 
-  function openEditor(product) {
+  function resetPendingImages() {
+    pendingImageFiles.forEach(item => URL.revokeObjectURL(item.previewUrl));
+    pendingImageFiles = [];
+    selectedPrimaryFileIndex = 0;
+    const input = document.getElementById('edit-image-files');
+    if (input) input.value = '';
+    renderPendingImages();
+  }
+
+  function renderPendingImages() {
+    const preview = document.getElementById('image-upload-preview');
+    if (!preview) return;
+    if (!pendingImageFiles.length) {
+      preview.innerHTML = '<p class="image-upload-empty">Todavía no has seleccionado imágenes.</p>';
+      return;
+    }
+    preview.innerHTML = pendingImageFiles.map((item, index) => `
+      <label class="image-upload-item">
+        <img src="${item.previewUrl}" alt="Vista previa de ${escapeHtml(item.file.name)}">
+        <span><input type="radio" name="primary-upload-image" value="${index}" ${index === selectedPrimaryFileIndex ? 'checked' : ''}> Imagen principal</span>
+        <small>${escapeHtml(item.file.name)}</small>
+        <button type="button" class="remove-upload-image" data-remove-image="${index}">Quitar</button>
+      </label>
+    `).join('');
+  }
+
+  async function convertImageToWebP(file) {
+    if (!file.type.startsWith('image/')) throw new Error(`"${file.name}" no es una imagen válida.`);
+    if (file.size > 10 * 1024 * 1024) throw new Error(`"${file.name}" supera el máximo de 10 MB.`);
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, 1800 / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    const context = canvas.getContext('2d', { alpha: false });
+    if (!context) throw new Error('No se pudo preparar la imagen en este navegador.');
+    context.fillStyle = '#ffffff';
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    bitmap.close();
+    for (const quality of [0.84, 0.76, 0.68, 0.58]) {
+      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/webp', quality));
+      if (blob && blob.size <= 4.8 * 1024 * 1024) return blob;
+    }
+    throw new Error(`No se pudo reducir "${file.name}" al límite de almacenamiento.`);
+  }
+
+  async function uploadProductImage(file, productId) {
+    const blob = await convertImageToWebP(file);
+    const safeName = file.name.normalize('NFKD').replace(/[^a-zA-Z0-9.-]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 70) || 'imagen';
+    const objectPath = `${productId}/${crypto.randomUUID()}-${safeName}.webp`;
+    const { error } = await supabaseClient.storage.from('product-images').upload(objectPath, blob, {
+      contentType: 'image/webp',
+      cacheControl: '31536000',
+      upsert: false
+    });
+    if (error) throw error;
+    const { data } = supabaseClient.storage.from('product-images').getPublicUrl(objectPath);
+    if (!data?.publicUrl) throw new Error('Supabase no devolvió la URL pública de la imagen.');
+    return data.publicUrl;
+  }
+
+  document.getElementById('edit-image-files').addEventListener('change', event => {
+    resetPendingImages();
+    const files = Array.from(event.target.files || []);
+    const invalid = files.find(file => !['image/jpeg', 'image/png', 'image/webp', 'image/avif'].includes(file.type));
+    if (invalid) {
+      document.getElementById('editor-status').textContent = `Formato no permitido: ${invalid.name}. Usa JPG, PNG, WebP o AVIF.`;
+      event.target.value = '';
+      return;
+    }
+    pendingImageFiles = files.map(file => ({ file, previewUrl: URL.createObjectURL(file) }));
+    renderPendingImages();
+  });
+
+  document.getElementById('image-upload-preview').addEventListener('change', event => {
+    if (event.target.matches('input[name="primary-upload-image"]')) {
+      selectedPrimaryFileIndex = Number(event.target.value) || 0;
+    }
+  });
+  document.getElementById('image-upload-preview').addEventListener('click', event => {
+    const button = event.target.closest('[data-remove-image]');
+    if (!button) return;
+    const index = Number(button.dataset.removeImage);
+    const removed = pendingImageFiles.splice(index, 1)[0];
+    if (removed) URL.revokeObjectURL(removed.previewUrl);
+    if (selectedPrimaryFileIndex >= pendingImageFiles.length) selectedPrimaryFileIndex = Math.max(0, pendingImageFiles.length - 1);
+    renderPendingImages();
+  });
+
+  function openEditor(product) {\n    resetPendingImages();
     creatingProduct = false;
     document.getElementById('editor-title').textContent = 'Editar producto';
     document.getElementById('save-product').textContent = 'Guardar cambios';
@@ -208,7 +301,7 @@
     document.getElementById('product-editor').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  function openNewProductEditor() {
+  function openNewProductEditor() {\n    resetPendingImages();
     creatingProduct = true;
     editingProductId = null;
     document.getElementById('product-edit-form').reset();
@@ -289,6 +382,22 @@
           .update(payload).eq('id', editingProductId).select('id').maybeSingle();
         if (error) throw error;
         if (!data) throw new Error('Supabase no confirmó la actualización. Comprueba los permisos de administrador.');
+      }
+      if (pendingImageFiles.length) {
+        editorStatus.textContent = 'Optimizando y subiendo imágenes…';
+        const uploadedUrls = [];
+        for (const item of pendingImageFiles) {
+          uploadedUrls.push(await uploadProductImage(item.file, savedId));
+        }
+        const currentMain = payload.image || '';
+        const primaryUrl = uploadedUrls[selectedPrimaryFileIndex] || currentMain || uploadedUrls[0];
+        const otherUploaded = uploadedUrls.filter(url => url !== primaryUrl);
+        const existingAdditional = wasCreating ? [] : (allProducts.find(product => product.id === savedId)?.additional_images || []);
+        const additionalImages = [...existingAdditional, ...otherUploaded].filter(url => url && url !== primaryUrl);
+        const { error: imageUpdateError } = await supabaseClient.from('products')
+          .update({ image: primaryUrl, additional_images: additionalImages })
+          .eq('id', savedId);
+        if (imageUpdateError) throw imageUpdateError;
       }
       editorStatus.textContent = wasCreating ? 'Producto creado correctamente.' : 'Cambios guardados correctamente.';
       await loadProducts();
