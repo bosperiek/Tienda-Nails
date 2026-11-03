@@ -362,6 +362,7 @@
     editingProductId = product.id;
     document.getElementById('editor-product-id').textContent = `ID: ${product.id}`;
     document.getElementById('product-id-field').hidden = true;
+    document.getElementById('edit-product-id').required = false;
     document.getElementById('edit-name').value = product.name || '';
     document.getElementById('edit-category').value = product.category || '';
     document.getElementById('edit-price').value = product.price ?? '';
@@ -386,6 +387,7 @@
     document.getElementById('save-product').textContent = 'Crear producto';
     document.getElementById('editor-product-id').textContent = 'Asigna un ID propio para este producto.';
     document.getElementById('product-id-field').hidden = false;
+    document.getElementById('edit-product-id').required = true;
     document.getElementById('edit-product-id').value = '';
     document.getElementById('edit-stock').value = '0';
     document.getElementById('edit-active').checked = true;
