@@ -68,7 +68,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const status = document.getElementById('featured-products-status');
         if (!grid || !status) return;
 
-        const endpoint = '/api/featured-products';
         const maxProducts = 6;
         const fallbackImage = 'https://placehold.co/600x600/f8f0ed/a13f62?text=Sin+Imagen';
         const currencyFormatter = new Intl.NumberFormat('es-MX', {
@@ -177,14 +176,20 @@ document.addEventListener("DOMContentLoaded", function () {
             setStatus('Cargando productos destacados…');
 
             try {
-                const response = await fetch(endpoint, {
-                    method: 'GET',
-                    headers: { Accept: 'application/json' }
-                });
-                if (!response.ok) throw new Error('Respuesta no exitosa');
+                const client = await window.NantySupabase.getClient();
+                const { data, error } = await client.from('products')
+                    .select('id,name,category,price,sale_price,image,alt_text,featured,active,stock')
+                    .eq('active', true)
+                    .eq('featured', true)
+                    .order('id', { ascending: true })
+                    .limit(maxProducts);
+                if (error) throw error;
 
-                const products = await response.json();
-                if (!Array.isArray(products)) throw new TypeError('Respuesta inesperada');
+                const products = (data || []).map(product => ({
+                    ...product,
+                    altText: product.alt_text || product.name,
+                    effectivePrice: product.sale_price ?? product.price
+                }));
 
                 const fragment = document.createDocumentFragment();
                 const seenIds = new Set();
