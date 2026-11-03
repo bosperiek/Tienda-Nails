@@ -490,6 +490,35 @@ function renderProductPage({
       </div>
     </footer>
     <script src="${escapeHtml(cartScriptUrl)}"></script>
+    <script>
+      (function () {
+        const productId = ${JSON.stringify(product.id)};
+        let checking = false;
+        async function verifyProductAvailability() {
+          if (checking || document.hidden) return;
+          checking = true;
+          try {
+            const response = await fetch('/api/product-status?id=' + encodeURIComponent(productId), {
+              cache: 'no-store',
+              headers: { Accept: 'application/json' }
+            });
+            if (response.status === 404) {
+              window.location.replace('/tienda.html?producto=no-disponible');
+              return;
+            }
+          } catch (error) {
+            console.warn('No se pudo comprobar la disponibilidad del producto.', error);
+          } finally {
+            checking = false;
+          }
+        }
+        window.setInterval(verifyProductAvailability, 10000);
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden) verifyProductAvailability();
+        });
+      })();
+    </script>
+
   </body>
 </html>`;
 }
