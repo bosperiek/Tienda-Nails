@@ -22,6 +22,7 @@
   const pageSize = 25;
   let allProducts = [];
   let currentPage = 1;
+  let editingProductId = null;
 
   let supabaseClient = null;
   let verificationInProgress = false;
@@ -131,7 +132,7 @@
     nextPageButton.disabled = currentPage >= totalPages;
 
     if (!pageProducts.length) {
-      productsTableBody.innerHTML = '<tr><td colspan="7">No se encontraron productos.</td></tr>';
+      productsTableBody.innerHTML = '<tr><td colspan="8">No se encontraron productos.</td></tr>';
       return;
     }
 
@@ -146,6 +147,7 @@
         <td>${escapeHtml(product.stock ?? 0)}</td>
         <td><span class="status-pill ${active ? '' : 'inactive'}">${active ? 'Activo' : 'Inactivo'}</span></td>
         <td>${featured}</td>
+        <td><button class="secondary-button edit-product-button" type="button" data-edit-product="${escapeHtml(product.id)}">Editar</button></td>
       </tr>`;
     }).join('');
   }
@@ -153,12 +155,12 @@
   async function loadProducts() {
     if (!supabaseClient) return;
     inventoryStatus.textContent = 'Consultando productos en Supabase…';
-    productsTableBody.innerHTML = '<tr><td colspan="7">Cargando productos…</td></tr>';
+    productsTableBody.innerHTML = '<tr><td colspan="8">Cargando productos…</td></tr>';
     refreshProductsButton.disabled = true;
     try {
       const { data, error } = await supabaseClient
         .from('products')
-        .select('id,name,category,price,sale_price,stock,active,featured')
+        .select('id,name,category,price,sale_price,stock,active,featured,description')
         .order('id', { ascending: true });
       if (error) throw error;
       allProducts = Array.isArray(data) ? data : [];
@@ -167,12 +169,113 @@
       inventoryStatus.textContent = `Se cargaron ${allProducts.length} productos desde Supabase.`;
     } catch (error) {
       console.error('No se pudo consultar el inventario:', error);
-      productsTableBody.innerHTML = '<tr><td colspan="7">No fue posible cargar los productos.</td></tr>';
+      productsTableBody.innerHTML = '<tr><td colspan="8">No fue posible cargar los productos.</td></tr>';
       inventoryStatus.textContent = `Error al consultar inventario: ${error.message || 'Error desconocido'}`;
     } finally {
       refreshProductsButton.disabled = false;
     }
   }
+
+  function closeEditor() {
+    document.getElementById('product-editor').hidden = true;
+    document.getElementById('product-edit-form').reset();
+    document.getElementById('editor-status').textContent = '';
+    editingProductId = null;
+  }
+
+  function openEditor(product) {
+    editingProductId = product.id;
+    document.getElementById('editor-product-id').textContent = `ID: ${product.id}`;
+    document.getElementById('edit-name').value = product.name || '';
+    document.getElementById('edit-category').value = product.category || '';
+    document.getElementById('edit-price').value = product.price ?? '';
+    document.getElementById('edit-sale-price').value = product.sale_price ?? '';
+    document.getElementById('edit-stock').value = product.stock ?? 0;
+    document.getElementById('edit-description').value = product.description || '';
+    document.getElementById('edit-active').checked = product.active === true;
+    document.getElementById('edit-featured').checked = product.featured === true;
+    document.getElementById('editor-status').textContent = '';
+    document.getElementById('product-editor').hidden = false;
+    document.getElementById('product-editor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  productsTableBody.addEventListener('click', event => {
+    const button = event.target.closest('[data-edit-product]');
+    if (!button) return;
+    const product = allProducts.find(item => item.id === button.dataset.editProduct);
+    if (product) openEditor(product);
+  });
+
+  document.getElementById('cancel-edit').addEventListener('click', closeEditor);
+  document.getElementById('cancel-edit-bottom').addEventListener('click', closeEditor);
+
+  document.getElementById('product-edit-form').addEventListener('submit', async event => {
+    event.preventDefault();
+    if (!editingProductId || !supabaseClient) return;
+
+    const saveButton = document.getElementById('save-product');
+    const editorStatus = document.getElementById('editor-status');
+    const name = document.getElementById('edit-name').value.trim();
+    const category = document.getElementById('edit-category').value.trim();
+    const price = Number(document.getElementById('edit-price').value);
+    const saleValue = document.getElementById('edit-sale-price').value;
+    const stock = Number(document.getElementById('edit-stock').value);
+    const sale_price = saleValue === '' ? null : Number(saleValue);
+
+    if (!name || !category || !Number.isFinite(price) || price < 0 ||
+        !Number.isInteger(stock) || stock < 0 ||
+        (sale_price !== null && (!Number.isFinite(sale_price) || sale_price < 0))) {
+      editorStatus.textContent = 'Revisa nombre, categoría, precios y existencias. El stock debe ser un entero igual o mayor que cero.';
+      return;
+    }
+    if (sale_price !== null && sale_price >= price) {
+      editorStatus.textContent = 'El precio de oferta debe ser menor que el precio normal.';
+      return;
+    }
+
+    const payload = {
+      name,
+      category,
+      price,
+      sale_price,
+      stock,
+      description: document.getElementById('edit-description').value.trim() || null,
+      active: document.getElementById('edit-active').checked,
+      featured: document.getElementById('edit-featured').checked
+    };
+
+    saveButton.disabled = true;
+    editorStatus.textContent = 'Guardando cambios…';
+    try {
+      const { data, error } = await supabaseClient
+        .from('products')
+        .update(payload)
+        .eq('id', editingProductId)
+        .select('id')
+        .maybeSingle();
+      if (error) throw error;
+      if (!data) throw new Error('Supabase no confirmó la actualización. Comprueba los permisos de administrador.');
+      editorStatus.textContent = 'Cambios guardados correctamente.';
+      await loadProducts();
+      const { data: refreshed, error: readError } = await supabaseClient
+        .from('products')
+        .select('id,name,category,price,sale_price,stock,active,featured,description')
+        .eq('id', editingProductId)
+        .maybeSingle();
+      if (readError) throw readError;
+      if (refreshed) {
+        allProducts = allProducts.filter(item => item.id !== refreshed.id).concat(refreshed);
+        closeEditor();
+        inventoryStatus.textContent = 'Producto actualizado y datos verificados en Supabase.';
+        renderProducts();
+      }
+    } catch (error) {
+      console.error('No se pudo actualizar el producto:', error);
+      editorStatus.textContent = `No se pudieron guardar los cambios: ${error.message || 'Error desconocido'}`;
+    } finally {
+      saveButton.disabled = false;
+    }
+  });
 
   productSearch.addEventListener('input', () => {
     currentPage = 1;
