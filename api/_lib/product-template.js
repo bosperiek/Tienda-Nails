@@ -498,11 +498,14 @@ function renderProductPage({
           if (checking || document.hidden) return;
           checking = true;
           try {
-            const response = await fetch('/api/product-status?id=' + encodeURIComponent(productId), {
+            const response = await fetch('/api/products', {
               cache: 'no-store',
               headers: { Accept: 'application/json' }
             });
-            if (response.status === 404) {
+            if (!response.ok) return;
+            const products = await response.json();
+            const stillAvailable = Array.isArray(products) && products.some(product => String(product.id) === String(productId) && product.active === true);
+            if (!stillAvailable) {
               window.location.replace('/tienda.html?producto=no-disponible');
               return;
             }
