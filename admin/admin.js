@@ -23,6 +23,7 @@
   let allProducts = [];
   let currentPage = 1;
   let editingProductId = null;
+  let creatingProduct = false;
 
   let supabaseClient = null;
   let verificationInProgress = false;
@@ -160,7 +161,7 @@
     try {
       const { data, error } = await supabaseClient
         .from('products')
-        .select('id,name,category,price,sale_price,stock,active,featured,description')
+        .select('id,name,category,price,sale_price,stock,active,featured,description,image,alt_text')
         .order('id', { ascending: true });
       if (error) throw error;
       allProducts = Array.isArray(data) ? data : [];
@@ -181,9 +182,15 @@
     document.getElementById('product-edit-form').reset();
     document.getElementById('editor-status').textContent = '';
     editingProductId = null;
+    creatingProduct = false;
+    document.getElementById('editor-title').textContent = 'Editar producto';
+    document.getElementById('save-product').textContent = 'Guardar cambios';
   }
 
   function openEditor(product) {
+    creatingProduct = false;
+    document.getElementById('editor-title').textContent = 'Editar producto';
+    document.getElementById('save-product').textContent = 'Guardar cambios';
     editingProductId = product.id;
     document.getElementById('editor-product-id').textContent = `ID: ${product.id}`;
     document.getElementById('edit-name').value = product.name || '';
@@ -192,12 +199,31 @@
     document.getElementById('edit-sale-price').value = product.sale_price ?? '';
     document.getElementById('edit-stock').value = product.stock ?? 0;
     document.getElementById('edit-description').value = product.description || '';
+    document.getElementById('edit-image').value = product.image || '';
+    document.getElementById('edit-alt-text').value = product.alt_text || product.name || '';
     document.getElementById('edit-active').checked = product.active === true;
     document.getElementById('edit-featured').checked = product.featured === true;
     document.getElementById('editor-status').textContent = '';
     document.getElementById('product-editor').hidden = false;
     document.getElementById('product-editor').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+
+  function openNewProductEditor() {
+    creatingProduct = true;
+    editingProductId = null;
+    document.getElementById('product-edit-form').reset();
+    document.getElementById('editor-title').textContent = 'Agregar producto';
+    document.getElementById('save-product').textContent = 'Crear producto';
+    document.getElementById('editor-product-id').textContent = 'Se asignará un ID automáticamente.';
+    document.getElementById('edit-stock').value = '0';
+    document.getElementById('edit-active').checked = true;
+    document.getElementById('edit-featured').checked = false;
+    document.getElementById('editor-status').textContent = '';
+    document.getElementById('product-editor').hidden = false;
+    document.getElementById('product-editor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  document.getElementById('add-product').addEventListener('click', openNewProductEditor);
 
   productsTableBody.addEventListener('click', event => {
     const button = event.target.closest('[data-edit-product]');
@@ -211,7 +237,7 @@
 
   document.getElementById('product-edit-form').addEventListener('submit', async event => {
     event.preventDefault();
-    if (!editingProductId || !supabaseClient) return;
+    if ((!editingProductId && !creatingProduct) || !supabaseClient) return;
 
     const saveButton = document.getElementById('save-product');
     const editorStatus = document.getElementById('editor-status');
@@ -241,34 +267,33 @@
       stock,
       description: document.getElementById('edit-description').value.trim() || null,
       active: document.getElementById('edit-active').checked,
-      featured: document.getElementById('edit-featured').checked
+      featured: document.getElementById('edit-featured').checked,
+      image: document.getElementById('edit-image').value.trim(),
+      alt_text: document.getElementById('edit-alt-text').value.trim() || name
     };
 
     saveButton.disabled = true;
     editorStatus.textContent = 'Guardando cambios…';
     try {
-      const { data, error } = await supabaseClient
-        .from('products')
-        .update(payload)
-        .eq('id', editingProductId)
-        .select('id')
-        .maybeSingle();
-      if (error) throw error;
-      if (!data) throw new Error('Supabase no confirmó la actualización. Comprueba los permisos de administrador.');
-      editorStatus.textContent = 'Cambios guardados correctamente.';
-      await loadProducts();
-      const { data: refreshed, error: readError } = await supabaseClient
-        .from('products')
-        .select('id,name,category,price,sale_price,stock,active,featured,description')
-        .eq('id', editingProductId)
-        .maybeSingle();
-      if (readError) throw readError;
-      if (refreshed) {
-        allProducts = allProducts.filter(item => item.id !== refreshed.id).concat(refreshed);
-        closeEditor();
-        inventoryStatus.textContent = 'Producto actualizado y datos verificados en Supabase.';
-        renderProducts();
+      let savedId = editingProductId;
+      if (creatingProduct) {
+        savedId = `prod_${Date.now()}`;
+        const { data, error } = await supabaseClient.from('products')
+          .insert({ id: savedId, ...payload })
+          .select('id').maybeSingle();
+        if (error) throw error;
+        if (!data) throw new Error('Supabase no confirmó la creación del producto.');
+      } else {
+        const { data, error } = await supabaseClient.from('products')
+          .update(payload).eq('id', editingProductId).select('id').maybeSingle();
+        if (error) throw error;
+        if (!data) throw new Error('Supabase no confirmó la actualización. Comprueba los permisos de administrador.');
       }
+      editorStatus.textContent = creatingProduct ? 'Producto creado correctamente.' : 'Cambios guardados correctamente.';
+      await loadProducts();
+      closeEditor();
+      inventoryStatus.textContent = creatingProduct ? 'Producto creado y verificado en Supabase.' : 'Producto actualizado y datos verificados en Supabase.';
+      renderProducts();
     } catch (error) {
       console.error('No se pudo actualizar el producto:', error);
       editorStatus.textContent = `No se pudieron guardar los cambios: ${error.message || 'Error desconocido'}`;
