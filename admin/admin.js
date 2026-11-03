@@ -12,6 +12,16 @@
   const signoutButton = document.getElementById('signout-button');
   const statusMessage = document.getElementById('status-message');
   const signedInEmail = document.getElementById('signed-in-email');
+  const productsTableBody = document.getElementById('products-table-body');
+  const inventoryStatus = document.getElementById('inventory-status');
+  const productSearch = document.getElementById('product-search');
+  const refreshProductsButton = document.getElementById('refresh-products');
+  const previousPageButton = document.getElementById('previous-page');
+  const nextPageButton = document.getElementById('next-page');
+  const pageIndicator = document.getElementById('page-indicator');
+  const pageSize = 25;
+  let allProducts = [];
+  let currentPage = 1;
 
   let supabaseClient = null;
   let verificationInProgress = false;
@@ -79,6 +89,7 @@
 
       showDashboard(email);
       setStatus('');
+      await loadProducts();
     } catch (error) {
       console.error('Error al verificar acceso administrativo.', error);
       await rejectSession('No fue posible verificar los permisos. Intenta nuevamente.');
@@ -87,6 +98,95 @@
       verificationInProgress = false;
     }
   }
+
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, character => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[character]);
+  }
+
+  function formatPrice(value) {
+    if (value === null || value === undefined || value === '') return '—';
+    return new Intl.NumberFormat('es-MX', {
+      style: 'currency', currency: 'MXN', maximumFractionDigits: 2
+    }).format(Number(value));
+  }
+
+  function renderProducts() {
+    const term = (productSearch.value || '').trim().toLocaleLowerCase('es-MX');
+    const filtered = allProducts.filter(product =>
+      String(product.name || '').toLocaleLowerCase('es-MX').includes(term) ||
+      String(product.id || '').toLocaleLowerCase('es-MX').includes(term)
+    );
+    const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+    currentPage = Math.min(currentPage, totalPages);
+    const start = (currentPage - 1) * pageSize;
+    const pageProducts = filtered.slice(start, start + pageSize);
+
+    document.getElementById('products-total').textContent = String(filtered.length);
+    document.getElementById('products-active').textContent = String(pageProducts.filter(p => p.active === true).length);
+    document.getElementById('products-inactive').textContent = String(pageProducts.filter(p => p.active === false).length);
+    pageIndicator.textContent = `Página ${currentPage} de ${totalPages}`;
+    previousPageButton.disabled = currentPage <= 1;
+    nextPageButton.disabled = currentPage >= totalPages;
+
+    if (!pageProducts.length) {
+      productsTableBody.innerHTML = '<tr><td colspan="7">No se encontraron productos.</td></tr>';
+      return;
+    }
+
+    productsTableBody.innerHTML = pageProducts.map(product => {
+      const active = product.active === true;
+      const featured = product.featured === true ? 'Sí' : 'No';
+      return `<tr>
+        <td class="product-name-cell">${escapeHtml(product.name || 'Sin nombre')}</td>
+        <td>${escapeHtml(product.id || '—')}</td>
+        <td>${escapeHtml(product.category || '—')}</td>
+        <td>${formatPrice(product.sale_price ?? product.price)}</td>
+        <td>${escapeHtml(product.stock ?? 0)}</td>
+        <td><span class="status-pill ${active ? '' : 'inactive'}">${active ? 'Activo' : 'Inactivo'}</span></td>
+        <td>${featured}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  async function loadProducts() {
+    if (!supabaseClient) return;
+    inventoryStatus.textContent = 'Consultando productos en Supabase…';
+    productsTableBody.innerHTML = '<tr><td colspan="7">Cargando productos…</td></tr>';
+    refreshProductsButton.disabled = true;
+    try {
+      const { data, error } = await supabaseClient
+        .from('products')
+        .select('id,name,category,price,sale_price,stock,active,featured')
+        .order('id', { ascending: true });
+      if (error) throw error;
+      allProducts = Array.isArray(data) ? data : [];
+      currentPage = 1;
+      renderProducts();
+      inventoryStatus.textContent = `Se cargaron ${allProducts.length} productos desde Supabase.`;
+    } catch (error) {
+      console.error('No se pudo consultar el inventario:', error);
+      productsTableBody.innerHTML = '<tr><td colspan="7">No fue posible cargar los productos.</td></tr>';
+      inventoryStatus.textContent = `Error al consultar inventario: ${error.message || 'Error desconocido'}`;
+    } finally {
+      refreshProductsButton.disabled = false;
+    }
+  }
+
+  productSearch.addEventListener('input', () => {
+    currentPage = 1;
+    renderProducts();
+  });
+  refreshProductsButton.addEventListener('click', loadProducts);
+  previousPageButton.addEventListener('click', () => {
+    currentPage = Math.max(1, currentPage - 1);
+    renderProducts();
+  });
+  nextPageButton.addEventListener('click', () => {
+    currentPage += 1;
+    renderProducts();
+  });
 
   async function initialize() {
     try {
