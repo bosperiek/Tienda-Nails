@@ -59,8 +59,8 @@
         <p id="inventory-status" class="inventory-status" role="status" aria-live="polite">Cargando productos…</p>
         <div class="table-wrap">
           <table class="products-table">
-            <thead><tr><th>Producto</th><th>ID</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Estado</th><th>Destacado</th></tr></thead>
-            <tbody id="products-table-body"><tr><td colspan="7">Cargando…</td></tr></tbody>
+            <thead><tr><th>Producto</th><th>ID</th><th>Categoría</th><th>Precio</th><th>Stock</th><th>Estado</th><th>Destacado</th><th>Acción</th></tr></thead>
+            <tbody id="products-table-body"><tr><td colspan="8">Cargando…</td></tr></tbody>
           </table>
         </div>
         <div class="pagination">
@@ -68,7 +68,26 @@
           <span id="page-indicator">Página 1</span>
           <button class="secondary-button" id="next-page" type="button" disabled>Siguiente</button>
         </div>
-        <p class="read-only-note">Vista de consulta: en esta etapa no se realizan cambios en los productos.</p>
+        <section id="product-editor" class="product-editor" hidden>
+          <div class="editor-heading"><div><p class="eyebrow">EDICIÓN DE CATÁLOGO</p><h3>Editar producto</h3></div><button class="secondary-button editor-close" id="cancel-edit" type="button">Cerrar</button></div>
+          <p id="editor-product-id" class="editor-product-id"></p>
+          <form id="product-edit-form">
+            <div class="editor-grid">
+              <div class="editor-field"><label for="edit-name">Nombre</label><input id="edit-name" required maxlength="180"></div>
+              <div class="editor-field"><label for="edit-category">Categoría</label><input id="edit-category" required maxlength="120"></div>
+              <div class="editor-field"><label for="edit-price">Precio normal (MXN)</label><input id="edit-price" type="number" min="0" step="0.01" required></div>
+              <div class="editor-field"><label for="edit-sale-price">Precio de oferta (MXN)</label><input id="edit-sale-price" type="number" min="0" step="0.01"></div>
+              <div class="editor-field"><label for="edit-stock">Existencias</label><input id="edit-stock" type="number" min="0" step="1" required></div>
+              <div class="editor-field"><label for="edit-description">Descripción</label><textarea id="edit-description" rows="3"></textarea></div>
+            </div>
+            <div class="editor-checks">
+              <label><input id="edit-active" type="checkbox"> Producto activo (visible en la tienda)</label>
+              <label><input id="edit-featured" type="checkbox"> Producto destacado</label>
+            </div>
+            <p id="editor-status" class="inventory-status" role="status" aria-live="polite"></p>
+            <div class="editor-actions"><button class="primary-button" id="save-product" type="submit">Guardar cambios</button><button class="secondary-button" id="cancel-edit-bottom" type="button">Cancelar</button></div>
+          </form>
+        </section>
       </section>
 
       <p id="status-message" class="status-message" role="status" aria-live="polite"></p>
