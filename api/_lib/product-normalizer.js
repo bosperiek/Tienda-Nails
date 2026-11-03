@@ -7,18 +7,18 @@ const FIELD_ALIASES = Object.freeze({
     name: ['name', 'data', 'nombre'],
     category: ['category', 'categoria', 'categoría'],
     price: ['price', 'data2', 'precio'],
-    altText: ['altText', 'altTexto', 'textoAlternativo'],
+    altText: ['altText', 'alt_text', 'altTexto', 'textoAlternativo'],
     image: ['image', 'imagen'],
     brand: ['brand', 'marca'],
     subcategory: ['subcategory', 'subcategoria', 'subcategoría'],
-    salePrice: ['salePrice', 'precioOferta'],
+    salePrice: ['salePrice', 'sale_price', 'precioOferta'],
     description: ['description', 'descripcion', 'descripción'],
     stock: ['stock'],
-    additionalImages: ['additionalImages', 'imagenesAdicionales', 'imágenesAdicionales'],
+    additionalImages: ['additionalImages', 'additional_images', 'imagenesAdicionales', 'imágenesAdicionales'],
     featured: ['featured', 'destacado'],
     active: ['active', 'activo'],
-    updatedAt: ['updatedAt'],
-    replacementId: ['replacementId']
+    updatedAt: ['updatedAt', 'updated_at'],
+    replacementId: ['replacementId', 'replacement_id']
 });
 
 function getAliasedField(row, aliases) {
