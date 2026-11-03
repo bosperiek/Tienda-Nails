@@ -180,7 +180,8 @@
     }
   }
 
-  function closeEditor() {\n    resetPendingImages();
+  function closeEditor() {
+    resetPendingImages();
     document.getElementById('product-editor').hidden = true;
     document.getElementById('product-edit-form').reset();
     document.getElementById('editor-status').textContent = '';
@@ -303,7 +304,8 @@
     document.getElementById('product-editor').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  function openNewProductEditor() {\n    resetPendingImages();
+  function openNewProductEditor() {
+    resetPendingImages();
     creatingProduct = true;
     editingProductId = null;
     document.getElementById('product-edit-form').reset();
