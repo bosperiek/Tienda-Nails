@@ -184,11 +184,11 @@ function renderProductPage({
     const safeSiteUrl = validateHttpUrl(siteUrl, 'siteUrl', { required: true });
     const safeImageUrl = resolveProductImageUrl(imageUrl, safeSiteUrl);
 
-    const homeUrl = new URL('/', safeSiteUrl).href;
-    const catalogUrl = new URL('/tienda.html', safeSiteUrl).href;
-    const logoUrl = new URL('/imagenesPrincipal/logo4.svg', safeSiteUrl).href;
-    const stylesheetUrl = new URL('/css/producto.css', safeSiteUrl).href;
-    const cartScriptUrl = new URL('/carrito.js', safeSiteUrl).href;
+    const homeUrl = '/';
+    const catalogUrl = '/tienda.html';
+    const logoUrl = '/imagenesPrincipal/logo4.svg';
+    const stylesheetUrl = '/css/producto.css';
+    const cartScriptUrl = '/carrito.js';
     const socialFallbackImageUrl = new URL(
         '/imagenesPrincipal/og-nanty-nails-shop.jpg',
         safeSiteUrl
@@ -367,11 +367,18 @@ function renderProductPage({
             const relatedProduct = related?.product;
             const relatedName = normalizeOptionalText(relatedProduct?.name);
             const relatedCanonicalUrl = validateHttpUrl(related?.canonicalUrl, 'related.canonicalUrl');
+            const relatedPath = relatedCanonicalUrl
+                ? (() => {
+                    const parsedUrl = new URL(relatedCanonicalUrl);
+                    return `${parsedUrl.pathname}${parsedUrl.search}${parsedUrl.hash}`;
+                })()
+                : null;
             const relatedImageUrl = resolveProductImageUrl(related?.imageUrl, safeSiteUrl);
             const relatedPrice = normalizeOptionalNumber(related?.price);
 
             if (!relatedName
                 || !relatedCanonicalUrl
+                || !relatedPath
                 || !relatedImageUrl
                 || relatedPrice === null) {
                 return '';
@@ -380,7 +387,7 @@ function renderProductPage({
             const relatedAltText = normalizeOptionalText(relatedProduct.altText)
                 || relatedName;
 
-            return `<a class="related-product-card" href="${escapeHtml(relatedCanonicalUrl)}">
+            return `<a class="related-product-card" href="${escapeHtml(relatedPath)}">
               <figure class="related-product-card__image">
                 <img
                   src="${escapeHtml(relatedImageUrl)}"
