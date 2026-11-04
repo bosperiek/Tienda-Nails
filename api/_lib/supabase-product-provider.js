@@ -20,29 +20,35 @@ async function fetchRows() {
     url.searchParams.set('select', '*');
     url.searchParams.set('order', 'id.asc');
 
-    const response = await fetch(url.toString(), {
-        method: 'GET',
-        headers: {
-            apikey: SUPABASE_ANON_KEY,
-            Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-            Accept: 'application/json'
+    const pageSize = 1000;
+    const products = [];
+
+    for (let offset = 0; ; offset += pageSize) {
+        const response = await fetch(url.toString(), {
+            method: 'GET',
+            headers: {
+                apikey: SUPABASE_ANON_KEY,
+                Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+                Accept: 'application/json',
+                'Range-Unit': 'items',
+                Range: `${offset}-${offset + pageSize - 1}`
+            }
+        });
+
+        if (!response.ok) {
+            const details = await response.text();
+            throw new Error(
+                `Error al consultar Supabase (${response.status}): ${details}`
+            );
         }
-    });
 
-    if (!response.ok) {
-        const details = await response.text();
+        const page = await response.json();
+        if (!Array.isArray(page)) {
+            throw new Error('Supabase devolvió una respuesta de productos inválida.');
+        }
 
-        throw new Error(
-            `Error al consultar Supabase (${response.status}): ${details}`
-        );
-    }
-
-    const products = await response.json();
-
-    if (!Array.isArray(products)) {
-        throw new Error(
-            'Supabase devolvió una respuesta de productos inválida.'
-        );
+        products.push(...page);
+        if (page.length < pageSize) break;
     }
 
     return products.map(product => ({
