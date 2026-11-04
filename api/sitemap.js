@@ -9,7 +9,7 @@ const SITE_URL = process.env.SITE_URL === CANONICAL_SITE_URL
     ? process.env.SITE_URL
     : CANONICAL_SITE_URL;
 const ALLOWED_METHODS = 'GET, HEAD';
-const SUCCESS_CACHE_CONTROL = 'public, max-age=0, s-maxage=300, stale-while-revalidate=300, must-revalidate';
+const SUCCESS_CACHE_CONTROL = 'no-store, no-cache, must-revalidate, proxy-revalidate';
 const NO_STORE_CACHE_CONTROL = 'no-store';
 const BASE_HEADERS = Object.freeze({
     'X-Content-Type-Options': 'nosniff',
