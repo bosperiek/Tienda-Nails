@@ -18,7 +18,7 @@ const HTML_HEADERS = Object.freeze({
     'X-Content-Type-Options': 'nosniff',
     'Referrer-Policy': 'strict-origin-when-cross-origin'
 });
-const PRODUCT_CACHE_CONTROL = 'public, max-age=0, s-maxage=300, stale-while-revalidate=300, must-revalidate';
+const PRODUCT_CACHE_CONTROL = 'no-store, no-cache, must-revalidate, proxy-revalidate';
 const NO_STORE_CACHE_CONTROL = 'no-store';
 
 const STATUS_PAGES = Object.freeze({
