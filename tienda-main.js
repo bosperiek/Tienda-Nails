@@ -387,6 +387,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (estado.status === 'loading') {
             hideCatalog = !hasProducts;
+        } else if (estado.status === 'online') {
+            hideCatalog = false;
         } else if (estado.status === 'error') {
             message = 'No pudimos consultar el catálogo en Supabase. No mostraremos información anterior. Revisa tu conexión e inténtalo nuevamente.';
             showStatus = true;
