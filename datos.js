@@ -13,7 +13,7 @@ function actualizarEstadoProductos(status, { hasProducts = misProductos.length >
 }
 
 function alCargarProductos(callback) {
-  if (misProductos.length) callback(misProductos);
+  if (productosEstadoActual.status === 'online') callback(misProductos);
   else listenersProductos.push(callback);
 }
 
@@ -55,7 +55,7 @@ async function consultarCatalogoSupabase() {
   return rows.map(mapSupabaseProduct);
 }
 
-async function cargarProductosDesdeSheet() {
+async function cargarProductosDesdeSupabase() {
   if (cargaProductosEnCurso) return cargaProductosEnCurso;
   actualizarEstadoProductos('loading');
   cargaProductosEnCurso = (async () => {
@@ -70,7 +70,12 @@ async function cargarProductosDesdeSheet() {
       }
       return misProductos;
     } catch (error) {
-      actualizarEstadoProductos('error');
+      const hadProducts = misProductos.length > 0;
+      misProductos = [];
+      actualizarEstadoProductos('error', { hasProducts: false });
+      if (hadProducts) {
+        document.dispatchEvent(new CustomEvent('productosActualizados', { detail: [] }));
+      }
       console.error('No se pudo consultar el catálogo directamente en Supabase:', error);
       return [];
     } finally {
@@ -84,7 +89,7 @@ const PRODUCTOS_REFRESH_MS = 10000;
 let productosRefreshTimer = null;
 async function actualizarProductosPeriodicamente() {
   if (document.hidden) return;
-  await cargarProductosDesdeSheet();
+  await cargarProductosDesdeSupabase();
   programarProductosRefresh();
 }
 function programarProductosRefresh() {
@@ -96,7 +101,7 @@ document.addEventListener('visibilitychange', () => {
     if (productosRefreshTimer !== null) clearTimeout(productosRefreshTimer);
     productosRefreshTimer = null;
   } else {
-    cargarProductosDesdeSheet().finally(programarProductosRefresh);
+    cargarProductosDesdeSupabase().finally(programarProductosRefresh);
   }
 });
-cargarProductosDesdeSheet().finally(programarProductosRefresh);
+cargarProductosDesdeSupabase().finally(programarProductosRefresh);
