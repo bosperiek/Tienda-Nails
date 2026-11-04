@@ -68,7 +68,7 @@ function resolveActiveReplacementUrl(product, products, siteUrl) {
     const replacement = products.find(candidate => candidate.id === replacementId);
     if (!replacement || replacement.active !== true) return null;
 
-    return createProductUrl(replacement, siteUrl);
+    return createProductPath(replacement);
 }
 
 function createStableHash(value) {
@@ -229,7 +229,7 @@ function createProductHandler({
 
             if (!slug || !isCanonicalProductSlug(product, slug)) {
                 sendResponse(request, response, 308, '', {
-                    Location: canonicalUrl
+                    Location: canonicalPath
                 });
                 return;
             }
