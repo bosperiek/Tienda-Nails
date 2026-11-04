@@ -387,23 +387,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (estado.status === 'loading') {
             hideCatalog = !hasProducts;
-        } else if (estado.status === 'cache') {
-            message = 'Mostrando una copia guardada del catálogo. Algunos precios o productos podrían haber cambiado.';
-            showStatus = true;
-            showRetry = true;
-        } else if (estado.status === 'error' && hasProducts) {
-            message = 'Mostrando una copia guardada del catálogo. No pudimos verificar la actualización.';
-            showStatus = true;
-            showRetry = true;
-        } else if (estado.status === 'empty' && hasProducts) {
-            message = 'No pudimos verificar la actualización. Se conserva el catálogo disponible.';
-            showStatus = true;
-            showRetry = true;
-        } else if (
-            (estado.status === 'error' || estado.status === 'empty')
-            && !hasProducts
-        ) {
-            message = 'No pudimos cargar el catálogo. Revisa tu conexión e inténtalo nuevamente.';
+        } else if (estado.status === 'error') {
+            message = 'No pudimos consultar el catálogo en Supabase. No mostraremos información anterior. Revisa tu conexión e inténtalo nuevamente.';
             showStatus = true;
             showRetry = true;
             hideCatalog = true;
@@ -441,7 +426,7 @@ document.addEventListener('DOMContentLoaded', () => {
             retryProductsBtn.disabled = true;
             retryProductsBtn.textContent = 'Reintentando…';
             try {
-                await cargarProductosDesdeSheet();
+                await cargarProductosDesdeSupabase();
             } finally {
                 retryProductsBtn.textContent = 'Reintentar';
                 retryProductsBtn.disabled = false;
@@ -1611,7 +1596,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // INICIALIZACIÓN
     // -------------------------------------------------------
     // Reconsulta tras registrar el listener para no perder la primera respuesta de Supabase.
-    if (typeof cargarProductosDesdeSheet === 'function') cargarProductosDesdeSheet();
+    if (typeof cargarProductosDesdeSupabase === 'function') cargarProductosDesdeSupabase();
     loadCart();
     renderCartItems();
     loadLikes();
